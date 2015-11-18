@@ -1,0 +1,45 @@
+# The PicoLisp system is originally written and maintained by
+Alexander Burger <abu@software-lab.de>
+
+# For many years, ideas and application concepts were contributed by
+Josef Bartl <josef.bartl@7fach.org>
+
+# Build procedure for Mac OS X (Darwin)
+Rick Hanson <rick@tamos.net>
+
+# Port to Cygwin/Win32
+Doug Snead <doug@drugsense.org>
+
+# Documentation, CSS styles, Mac OS support, OpenGL library, Norwegian localization
+Jon Kleiser <jon.kleiser@usit.uio.no>
+
+# Russian localization, FreeBSD port
+Mansur Mamkin <mmamkin@mail.ru>
+
+# XML parser (and other) improvements
+Tomas Hlavaty <kvietaag@seznam.cz>
+
+# Spanish localization and emacs picolisp-mode
+Armadillo <tc.rucho@gmail.com>
+José Ignacio Romero <jose.cyborg@gmail.com>
+
+# Documentation
+Christophe Gragnic <christophegragnic@gmail.com>
+
+# Port of 64-bit version to SunOS
+Nikolai Zobnin <nikolai.zobnin@gmail.com>
+
+# Package maintenance
+Kan-Ru Chen <koster@debian.org>
+
+# Emacs-style editing
+Thorsten Jolitz <tjolitz@gmail.com>
+
+# Swedish localization
+Mattias Sundblad <mattias.sun@gmail.com>
+
+# pil32 OpenBSD, SunOS and AIX ports, SSL optimization
+Mihail Pechkin <mike.pechkin@gmail.com>
+
+# @lib/openGl.l additions
+Oscar Roca <e21777eonwe@yahoo.com>

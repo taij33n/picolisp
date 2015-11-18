@@ -1,0 +1,79 @@
+# 06may14abu
+# (c) Software Lab. Alexander Burger
+
+"(@1 Positions)" "(ポジション数：@1)"
+
+"Address" "住所"
+
+"Can't print order" "注文書の印刷ができない"
+"Change" "変換"
+"City" "都市"
+"Contact" "問い合わせ"
+"Continued on page @1" "@1ページに続く"
+"Country" "国"
+"Customer" "カスタマー"
+"Customer/Supplier" "カスタマー/注文先"
+"Customers/Suppliers" "カスタマー/注文先"
+
+"Data" "データ"
+"Date" "日付"
+"Dear Sir or Madam," "拝啓,"
+"Description" "仕様"
+
+"EMail" "eメール"
+
+"Fax" "Fax"
+
+"Greeting" "手紙の書きだし"
+
+"Home" "ホーム"
+
+"Incomplete customer address" "カスタマーの住所不十分"
+"Install" "インストール"
+"Inventory" "在庫目録"
+"Item" "商品"
+"Items" "商品"
+
+"Memo" "メモ"
+"Mobile" "携帯電話"
+
+"Name 2" "名前 2"
+"No customer" "カスタマーなし"
+"No customer name" "カスタマー名なし"
+"No customer number" "カスタマー番号なし"
+"No item description" "商品仕様なし"
+"No item number" "商品番号なし"
+"No order date" "注文書日付なし"
+"No order number" "注文番号なし"
+"No positions" "ポジションなし"
+"Number" "番号"
+
+"Order" "注文"
+"Orders" "注文"
+
+"Page @1" "@1 ページ"
+"PDF-Print" "PDF印刷"
+"Picture" "写真"
+"Position without item" "ポジションに商品がない"
+"Position without price" "ポジションに価格がない"
+"Position without quantity" "ポジションに数量がない"
+"Price" "価格"
+
+"Quantity" "数量"
+
+"Report" "レポート"
+
+"Sales" "セールス"
+"Salutation" "敬称"
+"Salutations" "敬称"
+"Sex" "性別"
+"Street" "住所"
+"Supplier" "注文先"
+"System" "システム"
+
+"Total" "総計"
+
+"Uninstall" "アンインストール"
+"Uninstall Picture?" "写真をアンインストールしますか？"
+
+"Zip" "郵便番号"

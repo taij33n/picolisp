@@ -1,0 +1,597 @@
+####### 3.1.11.14 #######
+16nov15
+   Fine-tuned and optimized 64-bit version for ARMv8 (arm64)
+      README
+      INSTALL
+      doc64/README
+      doc/refC.html
+      src64/Makefile
+      src64/lib/asm.l
+      src64/arch/arm64.l
+
+####### 3.1.11.13 #######
+11nov15
+   'catch' and 'throw' flow control instructions
+      doc64/asm
+      src64/lib/asm.l
+      src64/arch/*.l
+      {src64,pilos/src}/flow.l
+
+####### 3.1.11.12 #######
+06nov15
+   Omit message-body in 'noContent'
+      lib/http.l
+   '+ObjVal' GUI prefix class
+      lib/form.l
+
+31oct15
+   64-bit version for ARMv8 (arm64)
+      src64/arch/arm64.l
+
+30oct15
+   Condition code instructions: Separate borrow [b] from carry [c]
+      doc64/asm
+      src64/lib/asm.l
+      src64/arch/*.l
+      {src64,pilos/src}/flow.l
+      {src64,pilos/src}/big.l
+      {src64,pilos/src}/db.l
+
+26oct15
+   Condition code instructions: Removed 'ldc' and 'ldnc'
+      doc64/asm
+      src64/lib/asm.l
+      src64/arch/*.l
+      {src64,pilos/src}/db.l
+      {src64,pilos/src}/io.l
+      {src64,pilos/src}/sym.l
+      src64/ext.l
+
+20oct15
+   Removed 'movm' instruction
+      doc64/asm
+      src64/lib/asm.l
+      src64/arch/*.l
+      {src64,pilos/src}/io.l
+
+####### 3.1.11.11 #######
+12oct15
+   Simplified unit test setup
+      lib/test.l
+      test/src/net.l
+
+12oct15
+   Switched ppc64 version to ppc64le (little endian)
+      src64/Makefile
+      src64/arch/ppc64.l
+      src64/sys/ppc64.linux.defs.l
+
+10oct15
+   Changed asm syntax 'push/pop F' to 'push/pop zsc' and 'push/pop x'
+      src64/arch/x86-64.l
+      src64/arch/ppc64.l
+      src64/arch/emu.l
+      {src64,pilos/src}/main.l
+      {src64,pilos/src}/big.l
+      {src64,pilos/src}/err.l
+
+04oct15
+   Condition code instructions: New extension bit [x] in addition to carry [c]
+      doc64/asm
+      src64/lib/asm.l
+      src64/arch/x86-64.l
+      src64/arch/ppc64.l
+      src64/arch/emu.l
+      {src64,pilos/src}/main.l
+      {src64,pilos/src}/gc.l
+      {src64,pilos/src}/flow.l
+      {src64,pilos/src}/sym.l
+      {src64,pilos/src}/subr.l
+      {src64,pilos/src}/big.l
+      {src64,pilos/src}/io.l
+      {src64,pilos/src}/db.l
+      src64/net.l
+      src64/err.l
+      src64/ext.l
+      src64/ht.l
+
+####### 3.1.11.10 #######
+03oct15
+   Check for FD overflow in 'waitFdCEX_A'
+      src64/glob.l
+      src64/io.l
+
+####### 3.1.11.9 #######
+29sep15
+   Minor ref and comment fixex
+      doc/refI.html
+      {src64,pilos/src}/flow.l
+      src/flow.c
+      mini/src/flow.c
+      ersatz/fun.src
+
+16sep15
+   'cache' without 'prg' argument returns internal 'var'
+      lib.l
+      ersatz/lib.l
+      pilos/init/lib.l
+      test/lib.l
+      test/src/sym.l
+
+####### 3.1.11.8 #######
+06sep15
+   Minor reference details for 'eval' and 'run'
+      doc/refE.html
+      doc/refR.html
+
+03sep15
+   '+Chg' prefix crashes without JS
+      lib/form.l
+
+####### 3.1.11.7 #######
+02sep15
+   Minor cosmetics
+      lib/heartbeat.l
+      bin/watchdog
+
+   Use (lock) to be on the safe side
+      bin/replica
+
+01sep15
+   Extensions and additions by Oscar Roca
+      lib/openGl.l
+
+####### 3.1.11.6 #######
+26aug15
+   Omit keyfile lock. Not needed, because only a single 'ssl' process feeds it
+      bin/replica
+
+####### 3.1.11.5 #######
+04aug15
+   Removed '<tree>' function
+      lib/xhtml.l
+
+####### 3.1.11.4 #######
+18jul15
+   Synchronize exernal changes in '+E/R' prefix class
+      lib/form.l
+
+####### 3.1.11.3 #######
+13jul15
+   Added all-uppercase rule to the naming conventions
+      doc/ref.html
+
+08jul15
+   Revert 'ssl' to alarm()
+      src/ssl.c
+
+####### 3.1.11.2 #######
+06jul15
+   Check for empty date in 'day'
+      lib/misc.l
+      ersatz/lib.l
+      doc/tut.html
+
+02jul15
+   Slightly improve 'scrape' for 'href' with nested 'img'
+      lib/scrape.l
+
+####### 3.1.11.1 #######
+25jun15
+   Forgotten file
+      lib/svg.l
+
+####### 3.1.10.9 #######
+18jun15
+   Optional 'T' argument to 'asm' function
+      src64/lib/asm.l
+
+17jun15
+   Slightly extended 'idObj' formatting
+      lib/form.l
+
+13jun15
+   Generic 'asm' directive
+      src64/lib/asm.l
+
+####### 3.1.10.8 #######
+09jun15
+   Enable "Delete" button only in enabled form
+      lib/form.l
+
+01jun15
+   Bug in binary print of partial circular lists
+      src64/io.l
+      pilMCU/src/io.l
+      src/io.c
+
+27may15
+   Clean up circular checks (64-bit)
+   Check for circularity in 'funqE_FE' + 'funq'
+      src64/main.l
+      src64/subr.l
+      src64/io.l
+      pilMCU/src/main.l
+      pilMCU/src/subr.l
+      pilMCU/src/io.l
+      ersatz/sys.src
+      src/main.c
+      mini/src/main.c
+      mini/src/sym.c
+      doc/refC.html
+
+####### 3.1.10.7 #######
+26may15
+   Remove setpgid() from 'doExec'
+      src64/flow.l
+      src/flow.c
+   SVG Printing
+      lib/svg.l
+      app/main.l
+      app/ord.l
+      app/lib.l
+
+24may15
+   '=1' function
+      src64/subr.l
+      src64/glob.l
+      pilMCU/src/subr.l
+      pilMCU/src/glob.l
+      src/subr.c
+      src/tab.c
+      src/pico.h
+      mini/src/subr.c
+      mini/src/init.s
+      ersatz/fun.src
+      doc/ref.html
+      doc/ref_.html
+      test/src/subr.l
+
+####### 3.1.10.6 #######
+23may15
+   Need 'note' instead of 'alert'
+      misc/calc.l
+
+21may15
+   Check meta 'hook' in '+Obj' prefix
+      lib/form.l
+   Fix 'dump' for keys with hooks
+      lib/too.l
+
+19may15
+   Bug in 'compareAE_F' for external symbols
+      src64/main.l
+      pilMCU/src/main.l
+
+####### 3.1.10.5 #######
+18may15
+   Update reference to describe the 64-bit structures
+      doc/ref.html
+
+06may15
+   Slightly simplified
+      lib/role.l
+
+05may15
+   Imported 'choUser'
+      lib/adm.l
+      lib/user.l
+
+03may15
+   Accept \ddd\ in strings
+      src64/io.l
+      pilMCU/src/io.l
+      src/io.c
+      ersatz/sys.src
+      doc/ref.html
+
+02may15
+   Changed HTTP parsing to use 'till' instead of 'match'
+      lib/http.l
+
+####### 3.1.10.4 #######
+01may15
+   Reference entry for 'prBase64'
+      doc/refP.html
+   More examples for 'in' and 'out'
+      doc/refI.html
+      doc/refO.html
+
+30apr15
+   Accept \n, \r and \t in strings
+      src64/io.l
+      pilMCU/src/io.l
+      src/io.c
+      ersatz/sys.src
+      doc/ref.html
+
+####### 3.1.10.3 #######
+30apr15
+   'prBase64' multiline Base64 printing
+      lib/misc.l
+   Catch "undefined" arguments in Canvas drawing
+      lib/canvas.js
+
+28apr15
+   Changes to 'seed' and 'rand' in Ersatz suggested by Christophe Gragnic
+      ersatz/fun.src
+
+####### 3.1.10.2 #######
+26apr15
+   Added library for a subset of JSON
+      lib/json.l
+   Fix 'memq' instruction in 'emu'
+      src64/arch/emu.l
+   Support also input (parse) mode for 'ext:Base64'
+      src64/ext.l
+      src/ext.c
+      test/src/ext.l
+
+24apr15
+   Additional "user:passwd" argument to 'xmlrpc'
+      lib/xmlrpc.l
+
+####### 3.1.10.1 #######
+24apr15
+   Optional styles in <select> input elements
+      lib/xhtml.l
+      lib/form.l
+
+23apr15
+   Clear background in 'csDraw' and 'csDrawImage'
+      lib/canvas.js
+
+22apr15
+   Changed demo logo 7fach.gif -> 7fachLogo.png
+
+21apr15
+   Temporary fix for 3.1.1 and older
+      src64/arch/emu.l
+
+####### 3.1.9.17 #######
+17apr15
+   Slightly generalized 'mimetype' function
+      lib/http.l
+
+15apr15
+   Added "image/svg+xml" mime type
+      lib/http.l
+
+14apr15
+   Sanity checks in 'postForm'
+      lib/form.l
+
+13apr15
+   Keep 'Extern' symbol trees sorted by external symbol names, so that 'commit'
+   can write symbols sequentially. Instead of randomizing the keys, a "Lazy
+   Binary Tree" (abu) is used.
+      src64/glob.l
+      src64/main.l
+      src64/gc.l
+      src64/sym.l
+      src64/db.l
+
+####### 3.1.9.16 #######
+12apr15
+   Slightly simplified 'choDlg'
+      lib/form.l
+
+04apr15
+   Minor rearrangements
+      lib/canvas.l
+      lib/canvas.js
+
+03apr15
+   Bug in 'uninternEXY' for long names (found by Alexander Williams)
+      src64/sym.l
+      pilMCU/src/sym.l
+
+####### 3.1.9.15 #######
+03apr15
+   Replaced 'wchan' with 'time' (accumulated CPU time) in 'proc'
+      lib/debug.l
+      ersatz/lib.l
+
+02apr15
+   Minor bug in 'rand' argument handling: (rand (= 3 4)) was not treated as
+   (rand NIL) or (rand)
+      src64/big.l
+
+####### 3.1.9.14 #######
+01apr15
+   'gcc' -> 'gcc48' for FreeBSD
+      src/Makefile
+
+31mar15
+   Some changes in FAQ by Rick Hanson
+      doc/faq.html
+
+29mar15
+   Slightly optimized 'externX_E'
+      src64/sym.l
+
+27mar15
+   'depth' stores the total number of nodes in '@@'
+      lib/misc.l
+
+####### 3.1.9.13 #######
+23mar15
+   Generalized Makefile (with fix for pil32 on FreeBSD) by Rick Hanson and
+   Mihail Pechkin
+      src/Makefile
+
+####### 3.1.9.12 #######
+12mar15
+   Add filter to 'dumpDB'
+      lib/too.l
+   Bug in (read "_")
+      src64/io.l
+      pilMCU/src/io.l
+      src/io.c
+
+11mar15
+   Dump/load data and blobs with 'dumpDB' and 'loadDB'
+      lib/too.l
+
+####### 3.1.9.11 #######
+05mar15
+   Use window.location.replace() instead of window.location.reload()
+      lib/xhtml.l
+
+25feb15
+   Catch div/0 in 'rand'
+      src64/big.l
+      pilMCU/src/big.l
+      src/big.c
+      mini/src/math.c
+      ersatz/fun.src
+
+####### 3.1.9.10 #######
+21feb15
+   'rassoc' function
+      src64/subr.l
+      src64/glob.l
+      pilMCU/src/subr.l
+      pilMCU/src/glob.l
+      src/subr.c
+      src/tab.c
+      src/pico.h
+      mini/src/subr.c
+      mini/src/init.s
+      ersatz/fun.src
+      doc/ref.html
+      doc/refR.html
+      test/src/subr.l
+
+####### 3.1.9.9 #######
+16feb15
+   TinyMCE 'htmlText' more flexible tag handling
+   Added TinyMCE 'colorpicker'
+      lib/tinymce.l
+
+15feb15
+   Added sub-/superscript to 'psAlign'
+   Protect "*Size" and "*Font" globals in 'psAlign'
+      lib/ps.l
+
+13feb15
+   Additional 'flg' argument for 'ht:Pack' to handle percent in URLs
+      src64/ht.l
+      src/ht.c
+      lib/http.l
+      lib/form.l
+      test/src/ht.l
+
+####### 3.1.9.8 #######
+12feb15
+   Slightly extended able check for '+BubbleButton'
+      lib/form.l
+   TinyMCE switch on 'nowrap'
+      lib/tinymce.l
+
+11feb15
+    'able' check in '+Chg'
+      lib/form.l
+
+10feb15
+   '<rgb>' tag and '+RgbField'
+      lib/xhtml.l
+      lib/form.l
+
+####### 3.1.9.7 #######
+05feb15
+   No special target for "java/mkJar"
+      java/mkJar
+
+04feb15
+   TinyCME force_br_newlines works now
+   TinyCME min_height 12
+      lib/tinymce.l
+
+03feb15
+   Prune 'jre'
+      java/lib.l
+
+02feb15
+   Java Interoperability
+      java/lib.l
+      java/mkJar
+      java/Reflector.java
+      java/InOut.java
+      java/test.l
+
+####### 3.1.9.6 #######
+30jan15
+   'pipe' bidirectional, using socketpair()
+      src64/io.l
+      src64/arch/emu.l
+      src/io.c
+      src/net.c
+      src/pico.h
+
+####### 3.1.9.5 #######
+29jan15
+   Default SIGPIPE handling in 'pipe'
+      src64/io.l
+      src/io.c
+
+28jan15
+   Inhibit chart action upon field error
+      lib/form.l
+
+27jan15
+   'tr' unit test for 'pipe'
+      test/src/io.l
+
+26jan15
+   'push1q' function
+      src64/sym.l
+      src64/glob.l
+      pilMCU/src/sym.l
+      pilMCU/src/glob.l
+      src/sym.c
+      src/tab.c
+      src/pico.h
+      mini/src/sym.c
+      mini/src/init.s
+      ersatz/fun.src
+      doc/ref.html
+      test/src/sym.l
+
+####### 3.1.9.4 #######
+23jan15
+   'dbgc' at the end of 'admin' maintenance
+      lib/too.l
+
+21jan15
+   One more fix for "'+IdxFold' not subclass of '+Fold'"
+      lib/pilog.l
+
+####### 3.1.9.3 #######
+14jan15
+   '+IdxFold' not subclass of '+Fold'
+      lib/db.l
+
+####### 3.1.9.2 #######
+12jan15
+   'visibilitychange' event handling lib/form.js -> lib/xhtml.l, when (=0 Upd)
+      lib/form.js
+      lib/xhtml.l
+
+03jan15
+   Make 'lint' aware of destructuring 'let'
+      lib/lint.l
+
+02jan15
+   Use NIL instead of '@' for "don't care in destructuring 'let'
+      src64/flow.l
+      pilMCU/src/flow.l
+
+01jan15
+   Destructuring 'let' (64-bit)
+      src64/flow.l
+      pilMCU/src/flow.l
+
+####### 3.1.9.1 #######
+
+# vi:et:ts=3:sw=3

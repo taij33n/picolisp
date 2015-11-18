@@ -1,0 +1,37 @@
+#!bin/picolisp lib.l
+# 02sep15abu
+# Use: bin/replica <port|num> <keyFile> <journal> <dbFile> <blob/app/> [dbs1 ..]
+#    : bin/ssl <host> 443 '<port|name>/!replica' <keyFile> <journal> <blob/app/> 60
+
+(load "@lib/misc.l" "@lib/http.l")
+
+(allow "!replica")
+
+(argv *Arg1 *KeyFile *Journal *Pool *Blob . *Dbs)
+
+(unless (info *KeyFile)
+   (bye) )
+
+(setq
+   *Arg1 (format *Arg1)
+   *Port (or (format (sys "PORT")) *Arg1)
+   *SSLKey (in *KeyFile (line T)) )
+
+(de replica ()
+   (unless (lock)
+      (protect
+         (when (= (line T) *SSLKey)
+            (let? X (line T)
+               (if (format X)
+                  (when (out (tmp 'replica) (echo @))    # Journal
+                     (prin (peek))
+                     (flush)
+                     (journal (tmp 'replica)) )
+                  (let Blob (pack *Blob X)               # Blob
+                     (call 'mkdir "-p" (dirname Blob))
+                     (out Blob (echo)) ) ) ) ) ) ) )
+
+(pool *Pool (mapcar format *Dbs) *Journal)
+
+(retire *Arg1)
+(server *Port)

@@ -1,0 +1,183 @@
+16nov15abu
+(c) Software Lab. Alexander Burger
+
+
+         PicoLisp Installation
+         =====================
+
+There is no 'configure' procedure, but the PicoLisp file structure is simple
+enough to get along without it (we hope). It should compile and run on
+GNU/Linux, FreeBSD, Mac OS X (Darwin), Cygwin/Win32, and possibly other systems
+without problems.
+
+PicoLisp supports two installation strategies: Local and Global.
+
+The default (if you just download, unpack and compile the release) is a local
+installation. It will not interfere in any way with the world outside its
+directory. There is no need to touch any system locations, and you don't have to
+be root to install it. Many different versions - or local modifications - of
+PicoLisp can co-exist on a single machine.
+
+For a global installation, allowing system-wide access to the executable and
+library/documentation files, you can either install it from a ready-made
+distribution, or set some symbolic links to one of the local installation
+directories as described below.
+
+Note that you are still free to have local installations along with a global
+installation, and invoke them explicitly as desired.
+
+
+      Local Installation
+      ------------------
+
+1. Unpack the distribution
+
+      $ tar xfz picoLisp-XXX.tgz
+
+2. Change the directory
+
+      $ cd picoLisp-XXX
+
+3. Compile the PicoLisp interpreter
+
+      $ (cd src; make)
+
+   or - if you have an arm64, x86-64 or ppc64 system under Linux, or a x86-64
+   system under FreeBSD or SunOS - build the 64-bit version
+
+      $ (cd src64; make)
+
+   To use the 64-bit version also on systems which are not natively supported,
+   you can build the emulator
+
+      $ (cd src64; make emu)
+
+   Note that the emulator's execution speed is 10 to 20 times slower than the
+   native versions.
+
+   In all three cases (32-bits, 64-bits, or emulator), the executable
+   bin/picolisp will be created.
+
+
+   To build the 64-bit version the first time (bootstrapping), you have the
+   following three options:
+
+   - If a Java runtime system (version 1.6 or higher) is installed, it will
+     build right out of the box.
+
+   - Otherwise, download one of the pre-generated "*.s" file packages
+
+     - http://software-lab.de/arm64.linux.tgz
+     - http://software-lab.de/x86-64.linux.tgz
+     - http://software-lab.de/ppc64.linux.tgz
+     - http://software-lab.de/x86-64.freeBsd.tgz
+     - http://software-lab.de/x86-64.sunOs.tgz
+
+   - Else, build a 32-bit version first, and use the resulting bin/picolisp to
+     generate the "*.s" files:
+
+      $ (cd src; make)
+      $ (cd src64; make x86-64.linux)
+
+   After that, the 64-bit binary can be used to rebuild itself.
+
+
+   Note that on the BSD family of operating systems, 'gmake' must be used
+   instead of 'make'.
+
+
+      Global Installation
+      -------------------
+
+The recommended way for a global installation is to use a picolisp package from
+the OS distribution.
+
+If that is not available, you can (as root) create symbolic links from /usr/lib
+and /usr/bin to a local installation directory:
+
+   # ln -s /<installdir> /usr/lib/picolisp
+   # ln -s /usr/lib/picolisp/bin/picolisp /usr/bin
+   # ln -s /usr/lib/picolisp/bin/pil /usr/bin
+
+For additional access to the man pages and some examples:
+
+   # ln -s /<installdir>/man/man1/picolisp.1 /usr/share/man/man1
+   # ln -s /<installdir>/man/man1/pil.1 /usr/share/man/man1
+   # ln -s /<installdir> /usr/share/picolisp
+
+
+      Invocation
+      ----------
+
+In a global installation, the 'pil' command should be used. You can either start
+in plain or in debug mode. The difference is that for debug mode the command is
+followed by single plus ('+') sign. The '+' must be the very last argument on
+the command line.
+
+   $ pil       # Plain mode
+   :
+
+   $ pil +     # Debug mode
+   :
+
+In both cases, the colon ':' is PicoLisp's prompt. You may enter some Lisp
+expression,
+
+   : (+ 1 2 3)
+   -> 6
+
+To exit the interpreter, enter
+
+   : (bye)
+
+or just type Ctrl-D.
+
+
+For a local invocation, specify a path name, e.g.
+
+   $ ./pil     # Plain mode
+   :
+
+   $ ./pil +   # Debug mode
+   :
+
+or
+
+   $ /home/app/pil  # Invoking a local installation from some other directory
+
+Note that 'pil' can also serve as a template for your own stand-alone scripts.
+
+
+If you just want to test the ready-to-run Ersatz PicoLisp (it needs a Java
+runtime system), use
+
+   $ ersatz/pil +
+   :
+
+instead of './pil +'.
+
+
+      Documentation
+      -------------
+
+For further information, please look at "doc/index.html". There you find the
+PicoLisp Reference Manual ("doc/ref.html"), the PicoLisp tutorials
+("doc/tut.html", "doc/app.html", "doc/select.html" and "doc/native.html"), and
+the frequently asked questions ("doc/faq.html").
+
+For details about the 64-bit version, refer to "doc64/README", "doc64/asm" and
+"doc64/structures".
+
+As always, the most accurate and complete documentation is the source code ;-)
+Included in the distribution are many utilities and pet projects, including
+tests, demo databases and servers, games (chess, minesweeper), and more.
+
+Any feedback is welcome!
+Hope you enjoy :-)
+
+--------------------------------------------------------------------------------
+
+   Alexander Burger
+   Software Lab. / 7fach GmbH
+   Bahnhofstr. 24a, D-86462 Langweid
+   abu@software-lab.de, http://www.software-lab.de, +49 8230 5060

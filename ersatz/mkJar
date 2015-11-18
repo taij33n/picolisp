@@ -1,0 +1,97 @@
+#!./pil
+# 17jul12abu
+# (c) Software Lab. Alexander Burger
+
+(load "../src64/version.l")
+
+# Build Ersatz PicoLisp
+
+(de declLocal (Vars Typ Lst)
+   (when (filter '((S) (memq S Lst)) Vars)
+      (prinl "         " Typ " " (glue ", " @) ";") ) )
+
+(out "PicoLisp.java"
+   (in "sys.src"
+      (echo "<VERSION>")
+      (prin (glue "," *Version))
+      (echo "<SYM>")
+      (let Cnt (read)
+         (in "fun.src"
+            (skip "#")
+            (loop
+               (let Name (till " " T)
+                  (prinl
+                     "mkSymbol(new Number(\""
+                     (inc 'Cnt)
+                     "\"), \""
+                     Name
+                     "\", Pico);" ) )
+               (while (line))
+               (prin "      ")
+               (NIL (skip "#")) ) )
+         (prinl "MaxFun = " Cnt ";")
+         (prin "      ") )
+      (skip)
+      (echo "<FUN>")
+      (let Cnt (read)
+         (in "fun.src"
+            (skip "#")
+            (loop
+               (let (Name (till " " T)  Vars (read))
+                  (line)
+                  (prinl
+                     "case "
+                     (inc 'Cnt)
+                     ":  // "
+                     Name )
+                  (if (=T Vars)
+                     (while (line)
+                        (prinl "            " @) )
+                     (prinl "               " "return do" Cnt "(ex);")
+                     (while (line)) ) )
+               (prin "            ")
+               (NIL (skip "#")) ) ) )
+      (skip)
+      (echo "<DEF>")
+      (let Cnt (read)
+         (in "fun.src"
+            (skip "#")
+            (loop
+               (inc 'Cnt)
+               (let (Name (till " " T)  Vars (read))
+                  (line)
+                  (if (=T Vars)
+                     (while (line))
+                     (prinl
+                        "final static Any do"
+                        Cnt
+                        "(Any ex) { // "
+                        Name )
+                     (declLocal Vars "int" '(i j k))
+                     (declLocal Vars "char" '(c))
+                     (declLocal Vars "long" '(n))
+                     (declLocal Vars "Any" '(w x y z lst))
+                     (declLocal Vars "Symbol" '(s t))
+                     (declLocal Vars "Number" '(num))
+                     (declLocal Vars "String" '(str txt))
+                     (declLocal Vars "StringBuilder" '(sb))
+                     (declLocal Vars "Any[]" '(v))
+                     (declLocal Vars "Bind" '(bnd))
+                     (declLocal Vars "Object" '(o))
+                     (while (line)
+                        (prinl "      " @) )
+                     (prinl "      }")
+                     (prinl)
+                     (prin "      ") ) )
+               (NIL (skip "#")) ) ) )
+      (skip)
+      (echo) ) )
+
+(when (call "javac" "-O" "-g:none" "PicoLisp.java")
+   (let Lst (filter '((F) (tail '`(chop ".class") (chop F))) (dir))
+      (apply call Lst "jar" "cmf" "Manifest" "picolisp.jar")
+      (apply call Lst "rm") ) )
+
+(bye)
+
+# vi:et:ts=3:sw=3

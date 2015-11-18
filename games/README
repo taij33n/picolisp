@@ -1,0 +1,236 @@
+24apr12abu
+(c) Software Lab. Alexander Burger
+
+
+         PicoLisp Demo Games
+         ===================
+
+This directory contains a few simple games. They are neither especially
+interesting, nor powerful, but may be useful as programming examples.
+
+For a global PicoLisp installation (see the INSTALL file), either supply a full
+path to "/usr/share/picolisp/games/<file>.l" instead of just "games/<file>.l" in
+the commands below, or change the working directory to "/usr/share/picolisp/".
+
+
+'mine' is a simplified version of the minesweeper game. You can start it as:
+
+$ pil games/mine.l -main -go +
+
+It will display a 12-by-12 field with 24 (default) hidden mines. You can move
+around using the standard 'vi'-keys 'j' (down), 'k' (up), 'l' (right) and 'h'
+(left).
+
+Hit ENTER or SPACE to uncover a field, and ESC to terminate the game. In the
+latter case (of if a mine exploded), you'll get the PicoLisp prompt. Then you
+can continue the game with
+
+: (go)
+
+possibly after re-initializing it with
+
+: (main)
+
+or exit the PicoLisp interpreter with ENTER.
+
+
+
+'nim' and 'ttt' are only testbeds for the general 'game' alpha-beta search
+function (normally, these games are better implemented by directly exploring
+their underlying principles and strategies).
+
+Start 'nim' as
+
+$ pil games/nim.l +
+
+and then find the optimal move path for, let's say, three heaps of four matches
+each:
+
+: (nim 4 4 4)
+-> (-100 ((1 . 4) 1 . -4) ((2 . 4) 2 . -4) ((3 . 4) 3 . -4))
+
+This is a winning position (a minimal cost of -100), with three moves (in the
+CARs of the move list: Take 4 from heap 1, then 4 from heap 2, and finally 4
+from heap 3).
+
+
+
+To play Tic-Tac-Toe, enter
+
+$ pil games/ttt.l -main +
+
+A three-by-three board is displayed. Enter your moves with the 'go' function:
+
+: (go a 1)
+   +---+---+---+
+ 3 |   |   |   |
+   +---+---+---+
+ 2 |   |   |   |
+   +---+---+---+
+ 1 | T |   |   |
+   +---+---+---+
+     a   b   c
+
+Your positions are marked with 'T', the computer's with '0'.
+
+
+
+The 'chess' game is minimalistic (447 lines of code). Nevertheless, it plays
+some slow - though correct - chess. Start it as:
+
+$ pil games/chess.l -main +
+   +---+---+---+---+---+---+---+---+
+ 8 |<R>|<N>|<B>|<Q>|<K>|<B>|<N>|<R>|
+   +---+---+---+---+---+---+---+---+
+ 7 |<P>|<P>|<P>|<P>|<P>|<P>|<P>|<P>|
+   +---+---+---+---+---+---+---+---+
+ 6 |   | - |   | - |   | - |   | - |
+   +---+---+---+---+---+---+---+---+
+ 5 | - |   | - |   | - |   | - |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | - |   | - |   | - |   | - |
+   +---+---+---+---+---+---+---+---+
+ 3 | - |   | - |   | - |   | - |   |
+   +---+---+---+---+---+---+---+---+
+ 2 | P | P | P | P | P | P | P | P |
+   +---+---+---+---+---+---+---+---+
+ 1 | R | N | B | Q | K | B | N | R |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+The pieces are indicated by the letters 'K'ing, 'Q'ueen, 'R'ook, 'B'ishop,
+k'N'ight and 'P'awn, with black pieces in angular brackets.
+
+
+Alternatively, you can also run it through XBoard (in the X Window System):
+
+$ xboard -fcp games/xchess
+
+
+Without XBoard, you may enter your moves with the field names (in lower case)
+for the "from" and "to" positions:
+
+: (go e2 e4)
+
+Castling may be entered by just specifying the king's move:
+
+: (go e1 g1)
+
+To promote a pawn to some piece other than a queen, you can specify a class:
+
+: (go h7 h8 +Knight)
+
+To undo one or several moves, enter
+
+: (go -)
+
+and to redo them
+
+: (go +)
+
+To switch sides (and have the computer play against itself), call 'go' without
+arguments:
+
+: (go)
+
+The initial board position can be restored with
+
+: (main)
+
+The global variable '*Depth' holds the maximal depth of the alpha-beta tree
+search. It defaults to 5. You may change it to some smaller value for a faster
+response, or to a larger value for a deeper search:
+
+: (setq *Depth 7)
+
+The same effect can be achieved by passing the desired depth as the first
+argument to 'main':
+
+: (main 7)
+
+The second (optional) argument to 'main' is your color ('NIL' for white and 'T'
+for black).
+
+To setup some given board position, call 'main' with a list of triples, with
+each describing:
+
+   1. The field
+   2. The piece's classes
+   3. An optional flag to indicate that the piece did not move yet
+
+: (main 5 NIL
+   (quote
+      (a2 (+White +Pawn) T)
+      (b1 (+White +King))
+      (d4 (+Black +King)) ) )
+   +---+---+---+---+---+---+---+---+
+ 8 |   | - |   | - |   | - |   | - |
+   +---+---+---+---+---+---+---+---+
+ 7 | - |   | - |   | - |   | - |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | - |   | - |   | - |   | - |
+   +---+---+---+---+---+---+---+---+
+ 5 | - |   | - |   | - |   | - |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | - |   |<K>|   | - |   | - |
+   +---+---+---+---+---+---+---+---+
+ 3 | - |   | - |   | - |   | - |   |
+   +---+---+---+---+---+---+---+---+
+ 2 | P | - |   | - |   | - |   | - |
+   +---+---+---+---+---+---+---+---+
+ 1 | - | K | - |   | - |   | - |   |
+   +---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h
+
+At any time, you can print the current board position in the above format to a
+file with
+
+: (ppos "file")
+
+which later can be restored with
+
+: (load "file")
+
+
+
+There is also a plain 'sudoku' solver:
+
+$ pil games/sudoku.l +
+
+: (main
+   (quote
+      (5 3 0 0 7 0 0 0 0)
+      (6 0 0 1 9 5 0 0 0)
+      (0 9 8 0 0 0 0 6 0)
+      (8 0 0 0 6 0 0 0 3)
+      (4 0 0 8 0 3 0 0 1)
+      (7 0 0 0 2 0 0 0 6)
+      (0 6 0 0 0 0 2 8 0)
+      (0 0 0 4 1 9 0 0 5)
+      (0 0 0 0 8 0 0 7 9) ) )
+   +---+---+---+---+---+---+---+---+---+
+ 9 | 5   3     |     7     |           |
+   +   +   +   +   +   +   +   +   +   +
+ 8 | 6         | 1   9   5 |           |
+   +   +   +   +   +   +   +   +   +   +
+ 7 |     9   8 |           |     6     |
+   +---+---+---+---+---+---+---+---+---+
+ 6 | 8         |     6     |         3 |
+   +   +   +   +   +   +   +   +   +   +
+ 5 | 4         | 8       3 |         1 |
+   +   +   +   +   +   +   +   +   +   +
+ 4 | 7         |     2     |         6 |
+   +---+---+---+---+---+---+---+---+---+
+ 3 |     6     |           | 2   8     |
+   +   +   +   +   +   +   +   +   +   +
+ 2 |           | 4   1   9 |         5 |
+   +   +   +   +   +   +   +   +   +   +
+ 1 |           |     8     |     7   9 |
+   +---+---+---+---+---+---+---+---+---+
+     a   b   c   d   e   f   g   h   i
+
+Type
+
+: (go)
+
+to let it search for a solution.

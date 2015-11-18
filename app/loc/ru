@@ -1,0 +1,79 @@
+# 25apr08
+# Mansur Mamkin <mmamkin@mail.ru>
+
+"(@1 Positions)" "(@1 позиций)"
+
+"Address" "Адрес"
+
+"Can't print order" "Невозможно напечатать заказ"
+"Change" "Изменить"
+"City" "Город"
+"Contact" "Контакт"
+"Continued on page @1" "Продолжение на странице @1"
+"Country" "Страна"
+"Customer" "Покупатель"
+"Customer/Supplier" "Покупатель/Поставщик"
+"Customers/Suppliers" "Покупатели/Поставщики"
+
+"Data" "Данные"
+"Date" "Дата"
+"Dear Sir or Madam," "Уважаемый(ая)"
+"Description" "Описание"
+
+"EMail" "емейл"
+
+"Fax" "Факс"
+
+"Greeting" "Приветствие"
+
+"Home" "Домой"
+
+"Incomplete customer address" "Неполный адрес покупателя"
+"Install" "Установить"
+"Inventory" "Инвентаризация"
+"Item" "Товар"
+"Items" "Товары"
+
+"Memo" "Мемо"
+"Mobile" "Мобильный"
+
+"Name 2" "Имя 2"
+"No customer" "Нет покупателя"
+"No customer name" "Нет имени покупателя"
+"No customer number" "Нет номера покупателя"
+"No item description" "Нет описания товара"
+"No item number" "Нет номера товара"
+"No order date" "Нет даты заказа"
+"No order number" "Нет номера заказа"
+"No positions" "Нет позиций"
+"Number" "Номер"
+
+"Order" "Заказ"
+"Orders" "Заказы"
+
+"Page @1" "Страница @1"
+"PDF-Print" "Печать PDF"
+"Picture" "Картинка"
+"Position without item" "Позиция без товара"
+"Position without price" "Позиция без цены"
+"Position without quantity" "Позиция без количества"
+"Price" "Цена"
+
+"Quantity" "Количество"
+
+"Report" "Отчет"
+
+"Sales" "Продажи"
+"Salutation" "Приветствие"
+"Salutations" "Приветствия"
+"Sex" "Пол"
+"Street" "Улица"
+"Supplier" "Поставщик"
+"System" "Система"
+
+"Total" "Всего"
+
+"Uninstall" "Удалить"
+"Uninstall Picture?" "Удалить картинку?"
+
+"Zip" "Индекс"

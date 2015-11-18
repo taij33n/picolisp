@@ -1,0 +1,635 @@
+* XXmmm15 picoLisp-3.1.12
+   '+ObjVal' GUI prefix class
+   64-bit version for ARMv8 (arm64)
+   Simplified unit test setup
+   Switched ppc64 version to ppc64le
+   'prg' argument to 'cache' optional
+   '+Chg' prefix crashes without JS
+   Synchronize exernal changes in '+E/R'
+
+* 22jun15 picoLisp-3.1.11
+   SVG Printing in "lib/svg.l"
+   '=1' function
+   Bug in comparing external symbols (64-bit)
+   Accept \n, \r, \t and \ddd\ in strings
+   'till' instead of 'match' in "lib/http.l"
+   'prBase64' multiline Base64 printing
+   Input mode for 'ext:Base64'
+   JSON subset in "lib/json.l"
+
+* 18apr15 picoLisp-3.1.10
+   'commit' writes sequentially
+   Bug in 'zap' (64-bit)
+   Bug in (read "_")
+   'rassoc' function
+   Java Interoperability
+   'pipe' bidirectional
+   'push1q' function
+   Destructuring 'let' (64-bit)
+
+* 28dec14 picoLisp-3.1.9
+   'purge' backup function
+   'exec' flow function
+   Reversed 'bt' output
+   'ssl' peer certificate verification
+   'httpGate' and 'ssl' TLS-only
+   Bug in 'caaaar'
+
+* 30sep14 picoLisp-3.1.8
+   'stack' size unit MB -> kB
+   'has' debug function
+   Bug in bignum '*' (64-bit)
+   'stop' instruction (64-bit)
+   Added 'vim' plugin and syntax files
+   Handling 32-bit PIDs in 'tell'
+   Improved 'ctty' initialization
+   'httpGate' auto-start race condition
+
+* 30jun14 picoLisp-3.1.7
+   'pretty' print enhancements
+   Generalized 'style' propagation
+   Bug in "lib/plio.js"
+   Entity-Count in DB root objects
+   'console' JavaScript callback
+
+* 30mar14 picoLisp-3.1.6
+   'fully' map function
+   'ping' keepalive function
+   'less' function
+   'bt' backtrace printing (64-bit)
+   Bug in 'dbf' for '+Bag'
+   'call' exit status code in '@@'
+   Undo / Redo buttons
+   PostScript 'psAlign' function
+   Bug in PostScript 'rect'
+   'kids' function
+   'httpGate' names and auto-starts
+   Perfect Forward Secrecy
+   '*Cipher' global variable
+   Canvas mouse events
+   Canvas pre-rendering
+
+* 31dec13 picoLisp-3.1.5
+   Phone GUI support
+   'prune' LRU scheme
+   Bug in volatile properties
+   'cnt2' argument to 'gc' (64-bit)
+   Improved UB-Tree support
+
+* 30sep13 picoLisp-3.1.4
+   Bug in bignum 'rd' (64-bit)
+   'swap' function
+   Optimized 'sqrt'
+   Changed 'canvas' to '<canvas>'
+   Pass delay-argument to 'drawCanvas'
+   'grid' wrap flags
+   'ssl' timeout
+   'casq' flow function
+   Pilog Lisp call syntax with '^'
+   'read' preserves trailing white space
+
+* 29jun13 picoLisp-3.1.3
+   'snapshot' in "lib/too.l"
+   'info' optional 'flg' argument
+   '+Swap' relation prefix class
+   Allow unlimited number of coroutines
+   Default coroutine stack segment size 1 MB
+   JavaScript canvas library
+   '+OnClick' GUI prefix class
+   Flight Simulator in "misc/rcsim.l" (64-bit)
+   Removed z3d/rcsim flight simulator (32-bit)
+   Bug in 'conc' (64-bit)
+
+* 30mar13 picoLisp-3.1.2
+   'lisp' calls from 'native' in emulator
+   '<layout>' function
+   'fold' analog to 'lowc' / 'uppc'
+   'fold' second arg default zero
+   Removed 'dbg' startup script
+   Trim trailing spaces in "lib/form.js"
+   Bug in 'accept' on BSD
+   '+Hook2' index prefix class
+   Password hashing
+   'usec' optional 'flg' argument
+   JavaScript 'rd' in "lib/plio.js"
+   'bytes' function
+   Join multiple namespaces with 'symbols'
+
+* 30nov12 picoLisp-3.1.1
+   Emacs-style editing with 'em'
+   Line editor arrow-key support
+   Changed from CTags to ETags format
+   Backtrace with 'trail' and 'up' (64-bit)
+   Changed semantics of token 'read'
+   '-server' function
+   64-bit emulator
+   '*CPU' global variable (64-bit)
+   Bug in 'collect' for 'fold'ed keys
+   File descriptor leak in 'dir' (64-bit)
+   Namespace support also in Ersatz PicoLisp
+   JavaScript 'lisp' calls
+   '+DbHint' GUI prefix class
+   Stack alignments (64-bit)
+   Native 'struct' function (64-bit)
+   double/float in 'native' structures (64-bit)
+   Allow 'zap' protected symbols outside 'pico' namespace (64-bit)
+   Bug in 'who'
+
+* 10apr12 picoLisp-3.1.0
+   Generalized 'scl'
+   Pilog 'for/[2-4]' predicate
+   Bug in 'isLifeE_F' (64-bit)
+   Bug in 'firstByteA_B' (64-bit)
+   'httpGate' session bug
+   Simplified 'sigio'
+   Volatile 'NIL' property
+   Bug in 'fold' (64-bit)
+   Bug in 'db' for partial '+Aux' access
+   Bug in 'interface' (Ersatz)
+   'locale' optional arguments
+
+* 30dec11 picoLisp-3.0.9
+   Bash completion
+   Changed GUI '+Hint' system
+   Calculated message passing (64-bit)
+   Improved "tags" file handling
+   IPv6 support
+   '*Prompt' global variable
+   'local' symbols function
+   'open' optional 'flg' argument
+
+* 30sep11 picoLisp-3.0.8
+   'load' preserves current namespace
+   "src64/tags" for 'vi' source access
+   'import' symbols function
+   Namespace support with 'symbols' (64-bit)
+   Bug in '@' lambda bindings (32-bit)
+   GC bug in 64-bit bignums
+   Bug in 64-bit 'exec' error handling
+   Bug in 'rand' (64-bit)
+   EOF bug in pipes to stdin
+   'clause' function
+   'prop' and '::' cons default cell
+   "lib/test.l" position independent
+   'hash' function
+   Bug in 'dbFetchEX' for db extensions
+
+* 30jun11 picoLisp-3.0.7
+   Numbers and strings in 'native' structure arguments
+   Signal portability problems
+   'dbSync' on arbitrary objects
+   UB-Tree support in "lib/db.l"
+   Renamed "ersatz/picolisp" to "ersatz/pil"
+   Changed '@' to '!' for functions in URLs
+   64-bit version for PowerPC (ppc64)
+   Local 'pil' startup script
+   Bug in 'replace' (64-bit)
+   Moved temporary directories to ~/.pil/tmp/
+   Moved line editor history to ~/.pil/history
+
+* 29mar11 picoLisp-3.0.6
+   Bug in 'poll' (64-bit)
+   Bug in 'accept' (64-bit)
+   'err' function
+   Removed 'rpc' function
+   man pages for 'picolisp' and 'pil'
+   'version' also for 32-bit
+   Map/apply support for FEXPRs
+   Bug in vararg method calls (64-bit)
+   'fill' handles '^'
+   'le0' function
+   Interpreter not exited upon <enter>
+   '*Tsm' by default off, moved to "lib/tsm.l"
+   Command line '+' debug flag
+   'round' defaults to 3
+
+* 31dec10 picoLisp-3.0.5
+   'bin' function
+   'prior' function
+   'circ?' function
+   Ersatz PicoLisp (Java) version
+   Bug in (rd 'cnt)
+
+* 30sep10 picoLisp-3.0.4
+   'tell' accepts PID argument
+   Deprecated 'pid'
+   Extended protocol for 'sync'
+   MIT/X11 License
+   Drag & Drop file upload
+   Generic 'lisp' C-callbacks
+   'native' fixpoint handling
+   OpenGL (64-bit) in "lib/openGl.l"
+   Faster bignum division (64-bit)
+
+* 29jun10 picoLisp-3.0.3
+   'assert' function
+   'round' function
+   'co', 'yield' and 'stack' coroutine functions
+   'sigio' function
+   'sqrt' optionally rounds
+   'format' also accepts 'lst' argument
+   'adr' function
+   'dir' can also return '.'-files
+
+* 30mar10 picoLisp-3.0.2
+   Simple incrementing form of 'for'
+   Changed 'scl' to set '*Scl' globally
+   'acquire' and 'release' mutex functions
+   Changed 'state' syntax
+   'version' function (64-bit)
+   C 'lisp()' callback function (64-bit)
+   Bug in 'member' for circular lists (64-bit)
+   "lib/tags" for 'vi' source access
+   Bug in 'next' and 'arg' (64-bit)
+   Bug in comma read macro (64-bit)
+   Bug in binary read functions (64-bit)
+   'hax' function
+   Bug when deleting external symbols (64-bit)
+   Bug in external symbol names (64-bit)
+   Bug in '|' and 'x|' (32-bit)
+
+* 31dec09 picoLisp-3.0.1
+   '*Tsm' transient symbol markup
+   'range' function
+   'gcc' for 64-bit in "lib/native.l"
+   'flip' optional 'cnt' argument
+   Up to four letters in 'c[ad]*ar' and 'c[ad]*dr'
+   Fixed sporadic GUI errors
+   GUI 'onchange' handling
+
+* 07oct09 picoLisp-3.0
+   64-bit version for x86-64
+   Allowed '.' in symbol names
+   Changed GUI to Post/Redirect/Get pattern
+   Changed event handling to non-blocking I/O
+   Extension ".l" on localization country files
+   Deprecated 'begin' and 'nagle'
+
+* 30jun09 picoLisp-2.3.7
+   'dbg' startup script
+   Removed 'stk' function
+   Bug in GUI history "back" handling
+   Multi-line (block) comments
+   Improved external hash table
+   Transient characters no longer interned
+   'getd' loads shared library code
+
+* 31mar09 picoLisp-2.3.6
+   'lines' returns 'NIL' on failure
+   Only numeric argument to 'hear'
+   'sort' optional 'fun' argument
+   Bugs in 'evList()' and 'date'
+
+* 31dec08 picoLisp-2.3.5
+   Bug in 'pipe'
+   Bug in 'later'
+   Dialog and chart bugs in "lib/form.l"
+   HTTP protocol bug in "lib/http.l"
+   Bugs in 'inc' and 'bigCmp()'
+   'abort' function
+   'eval' and 'run' optional 'lst' argument
+
+* 30sep08 picoLisp-2.3.4
+   'once' function
+   'hex' and 'oct' negative arguments
+   Bug in 'pool'
+   'cmd' function
+   'script' function
+   Bug in 'idx'
+   Bug in 'lit'
+   'extract' function
+
+* 29jun08 picoLisp-2.3.3
+   Removed '*Rst' global variable
+   Catch error messages
+   Remote Pilog queries
+   DB extension with '*Ext' and 'ext'
+   Extended 'put'-syntax to zero keys
+   Wrong '@@' result in 'load'
+   Handling of "#" in 'str'
+
+* 29mar08 picoLisp-2.3.2
+   Ctrl-D termination
+   Improved termios restore
+   'file' function
+   ';' function
+   Changed (time T) semantics
+   Bugs in 'idx' and 'lup'
+   DB synchronous transaction log
+   Handling of 'bind' in 'debug'
+
+* 30dec07 picoLisp-2.3.1
+   'str' extended to parse tokens
+   '*Hup' global variable
+   Changed/extended 'all' semantics
+   Replaced 'die' with 'alarm'
+   Bug in 'glue'
+   Improved '@' handling
+   Bug in 'bye()'
+   'eol' end-of-line function
+   Escape delimiter characters in symbol names
+   'lint' also file contents
+   'noLint' function
+
+* 30sep07 picoLisp-2.3.0
+   Extended "lib/test.l" unit tests
+   'full' function
+   Bug in 'wipe'
+   Bug in 'digSub1()'
+   Changed internal symbol structure
+   'pid' selector for 'tell'
+   'vi' and 'ld' source code access
+   Restored 'in'/'out' negative channel offsets
+   Abandoned 'stdio' in I/O functions
+   Improved signal handling
+   'leaf' function
+   Restored 'gc' unit to "megabytes"
+   Changed 'heap' return values
+   Bug in 'tell'
+   'chess' XBoard interface
+   '*Sig1', '*Sig2' global variables
+   'ipid' and 'opid' functions
+   Bug in writing blobs
+   Timeout bug in 'httpGate'
+   '*Zap' global variable
+   '*OS' global variable
+
+* 30jun07 picoLisp-2.2.7
+   Extended "doc/ref.html"
+   'cons' multiple arguments
+   'yoke' function
+   'up' optional 'cnt' argument
+
+* 01apr07 picoLisp-2.2.6
+   'app' reference application
+   Bug in 'text'
+   Family IPC redesign
+   Gave up 'in'/'out' negative channel offsets
+   Changed 'keep>' and 'lose>' methods
+   Gave up '*Tsm' transient symbol markup
+   'sect' and 'diff' in C
+   'gc' unit changed to "million cells"
+
+* 31dec06 picoLisp-2.2.5
+   Persistent HTTP Connections
+   Extended 'tick' to count system time
+   Chunked HTTP transfers
+   Changed '*Key' to '*Run'
+   'fifo' function
+   'die' alarm function
+   'line' carriage return handling
+   Pre- and post-arguments to 'commit'
+   'text' function
+   'glue' in C
+   Ajax GUI in "lib/form.l", "lib/form.js"
+   'push1' function (deprecates '?push')
+   Bug in 'ht:Fmt'
+
+* 30sep06 picoLisp-2.2.4
+   Cygwin/Win32 port (Doug Snead)
+   Changed 'bind' argument
+   'fish' function
+   'rd' optional 'sym' argument
+   Bug in 'lock' (unlock all)
+   'free' function
+   Extended 'seq' to return first symbol
+   Simple 'udp' function
+   'usec' function
+   Bug in 'isLife()'
+   '*PPid' global variable
+   'nagle' network function
+   Extended 'get'-syntax to 'asoq'
+
+* 30jun06 picoLisp-2.2.3
+   "redefined" messages go to stderr
+   Bug in 'argv'
+   Deprecated "lib/tree.l"
+   Restored '*Solo' global variable
+   '(get lst 0)' returns 'NIL'
+   Bug in 'extern'
+   'nond' (negated 'cond') function
+   'ge0' function
+   Bug in 'lose>' and 'keep>' for '+Joint'
+   '*Rst' global variable
+   Bug in 'next'/'arg'
+   Changed 'env' and 'job'
+   Bug in B-Tree 'step'
+   Changed 'mark' return value
+   Changed 'close' return value
+
+* 29mar06 picoLisp-2.2.2
+   Mac OS X (Darwin) port (Rick Hanson)
+   'pwd' function
+   'if2' flow function
+   'rpc' function
+   'one' function
+   Changed 'space' return value
+   'up' symbol binding lookup function
+   Bug in 'eval' and 'run' environment offset
+   'onOff' function
+   'path' substitution function
+   '*Tsm' transient symbol markup
+   Underlining transient symbols
+
+* 30dec05 picoLisp-2.2.1
+   'eof' end-of-file function
+   Changed 'line' EOF return value
+   Deprecated 'whilst' and 'until=T'
+   'read' extended to parse tokens
+   'raw' console mode function
+   'later' multiprocessing function
+   Bug in nested 'fork' and 'pipe'
+   Extended 'gcc' arguments
+   Bug in 'boxWord2()'
+   'id' external symbol function
+   Extended 'dm' syntax for object argument
+   'size' changed to return bytes instead of blocks in DB
+   Executable renamed to "picolisp"
+   'lieu' predicate function
+   Bug in 'compare()'
+
+* 29sep05 picoLisp-2.2.0
+   FreeBSD port
+   B-Trees
+   Multi-file DB
+   Configurable DB block size
+   Generalized 'pipe' semantics
+   Changed 'rank' to sorted lists
+   Removed '*Solo' global variable
+   Relaxed 'wipe' "modified" error condition
+   DB-I/O changed to 'pread()' and 'pwrite()'
+   Extended 'get'-syntax to zero and negative keys
+   'by' attribute map function
+   Swing GUI in "java2/" and "lib/gui2.l"
+   'box?' predicate function
+   Bug in 'compare()'
+   'balance' C-utility
+
+* 30jun05 picoLisp-2.1.2
+   GC non-recursive
+   'lup' lookup in 'idx' trees
+   Applet colors
+   'try' to send messages
+   'x|' function
+   Tooltips in applets
+   Binding environment offset for 'eval' and 'run'
+   XHTML/CSS support in "lib/xhtml.l"
+   Separated "lib/html.l" from "lib/http.l"
+   Removed "lib/http.l" from "ext.l"
+   Bug in 'isa'
+   Bug in 'lose>' and 'keep>' for '+Bag'
+   Security hole in 'http'
+   Bug in 'rel>' for '+Hook'
+
+* 30mar05 picoLisp-2.1.1
+   'protect' function
+   DB journaling
+   'chess' demo
+   Predicates return their argument instead of 'T', if possible
+   Bug in 'fun?'
+   Improved 'lint' heuristics
+   I/O-Multiplexing also for plain stdin
+   'dir' in C
+   Self-adjusting applet size
+   Bug in 'pack()'
+
+* 30dec04 picoLisp-2.1.0
+   'pipe' function
+   Bugs in bignum arithmetic
+   'arg' optional 'cnt' argument
+   '+Aux' auxiliary index keys
+   '*Solo' global variable
+   'flg?' predicate function
+   'fin' access function
+   Bug in 'compare()'
+   'cd' returns old directory
+   'inc' and 'dec' numeric argument
+   Next 'opt' command line arg
+   'finally' exception cleanup
+   Implied 'upd' argument in transactions 'put!>', 'del!>' etc.
+   Bug in 'idx' for empty trees
+   'curry' function
+   Anonymous recursion with 'recur' and 'recurse'
+   Extended 'env' to return bindings
+   Second argument to 'fill'
+   Optional comment character argument for 'skip'
+   'flip' destructive list reversal
+
+* 01oct04 picoLisp-2.0.14
+   '<tree>' HTML function
+   Finite 'state' machine function
+   Extended 'for' functionality
+   'rcsim' toy RC flight simulator
+   Bug in 'sym', 'str' and '*/'
+   Extended 'dbck' return value
+
+* 03aug04 picoLisp-2.0.13
+   Changed rounding and argument policy of '*/'
+   Applet protocol revised
+   Extended 'head' and 'tail' to predicate functionality
+   Changed 'accu' default from 1 to 0
+   Dialog handling revised
+   Multiple JAR files per applet
+   Fixed "Last-Modified:" format in 'httpEcho'
+
+* 29may04 picoLisp-2.0.12
+   Fixed 'boss' mechanism
+   'del' delete-and-set function
+   '*Fork' global variable
+   Changed URL encoding of Lisp objects
+   Removed traffic throttle from 'httpGate'
+   Synchronized ".picoHistory" in "lib/led.l"
+   Fixed exception handling in debug breakpoint
+   Revised subclass handling in 'db' and 'collect'
+   Applet font/size parameters
+
+* 07apr04 picoLisp-2.0.11
+   Bug in 'append'
+   Modal dialogs revised
+   Bug in 'lose>' and 'keep>' for '+Bag'
+   'poll' (no block-on-read-) check function
+   Inline 'gcc' C-function compilation
+
+* 01feb04 picoLisp-2.0.10
+   'wr' raw byte output function
+   Improved modal dialogs
+   Comma ',' read-macro, replacing the '_' function
+   'let?' conditional flow/bind function
+   'accept' non-blocking, with timeout
+   Optional method-defining arguments to '+Form's
+   '+Bool' relation class
+   '+Ref2' backing index prefix class
+   'size' returns number of DB blocks for external symbols
+   '+ListTextField' split parameter
+
+* 06dec03 picoLisp-2.0.9
+   'Tele' java client
+   Closed leaking file descriptors in 'fork'
+   Changed applet protocol to individual server connections
+   Decoupled applet init from HTML page load
+
+* 14oct03 picoLisp-2.0.8b
+   Bug in 'put>', 'rel>', 'lose>' and 'keep>' for '+List'
+   Bug in 'lose>' and 'keep>' for '+Bag'
+
+* 01oct03 picoLisp-2.0.8
+   '+Hook' handling in '+Bag'
+   Unicode case conversions
+   '+Hook' changed to prefix class
+   Telephone number locales
+   CR-LF in HTTP headers
+   'date' and 'time' return UTC for 'T' argument
+   'clk>' (doubleclick) for '+DrawField'
+   Improved Hook support in Pilog
+   Optional 'NIL' argument to 'html' for "no Cache-Control"
+
+* 03aug03 picoLisp-2.0.7
+   Extended 'in' and 'out' for negative channel offset arguments
+   Changed internal database index tree function API
+   Changed 'info' to return 'T' for the directory size
+   Interrupt signal handling in 'ctty', 'psh' and "bin/psh"
+   Generic 'help>' method for '+Form' class in "lib/gui.l"
+   Fixed 'ht:Prin' bug (NULL-Bytes)
+   'argv' optional symbolic arguments
+   Changed 'idx' return value
+   Better tracing and profiling of C-functions
+
+* 08jun03 picoLisp-2.0.6
+   Allowed '#' in symbol names
+   Changed 'eps' in "lib/ps.l"
+   Interactive DB tools in "lib/sq.l"
+   'revise' line editor function
+   'circ' changed to individual arguments
+   Moved code-libraries to "lib/"
+   Moved *.jar-files to "java/"
+
+* 23apr03 picoLisp-2.0.5
+   'mail' changed to direct SMTP
+   'sys' environment access function
+   Plain HTML-GUI "lib/htm.l" (experimental)
+   Semantics of 'do NIL' changed from enless- to zero-loop
+
+* 03mar03 picoLisp-2.0.4
+   Changed and extended '+IndexChart'
+   '=0', 'lt0' and 'gt0' return numeric argument instead of 'T'
+   'cut' changed to be non-desctructive
+   'ssl' replication mechanism
+   'ctl' file control primitives
+   'ext?' and 'extern' check for physical existence of external symbol
+
+* 01feb03 picoLisp-2.0.3
+   Extension and redesign of the HTML API
+   'loop' function as a synonym for 'do NIL'
+
+* 17jan03 picoLisp-2.0.2
+   The example files for the tutorial were in the wrong directory
+   Bind '*Key' in debug breakpoint
+   Localization bug in "misc/tax.l"
+
+* 27dec02 picoLisp-2.0.1
+   Default locale 'NIL'
+   Pilog documentation
+   Example family database
+
+* 16dec02 picoLisp-2.0
+   Initial release

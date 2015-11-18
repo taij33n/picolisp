@@ -1,0 +1,2574 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>PicoLisp Tutorial</title>
+<link rel="stylesheet" href="doc.css" type="text/css">
+</head>
+<body>
+<a href="mailto:abu@software-lab.de">abu@software-lab.de</a>
+
+<h1>A PicoLisp Tutorial</h1>
+
+<p align=right>(c) Software Lab. Alexander Burger
+
+<h3>About this document</h3>
+
+<p>This document demonstrates some aspects of the PicoLisp system in detail and
+example. For a general description of the PicoLisp kernel please look at the <a
+href="ref.html">PicoLisp Reference</a>.
+
+<p>This is <i>not</i> a Lisp tutorial, as it assumes some basic knowledge of
+programming, Lisp, and even PicoLisp. Please read these sections before coming
+back here: <a href="ref.html#intro">Introduction</a> and <a
+href="ref.html#vm">The PicoLisp Machine</a>. This tutorial concentrates on the
+specificities of PicoLisp, and its differences with other Lisp dialects.
+
+<h3>Now let's start</h3>
+
+<p>If not stated otherwise, all examples assume that PicoLisp was started from a
+global installation (see <a href="ref.html#inst">Installation</a>) from the
+shell prompt as
+
+<pre><code>
+$ pil +
+:
+</code></pre>
+
+<p>It loads the PicoLisp base system and the debugging environment, and waits
+for you to enter input lines at the interpreter prompt (<code>:</code>). You can
+terminate the interpreter and return to the shell at any time, by either hitting
+the <code>Ctrl-D</code> key, or by executing the function <code><a
+href="refB.html#bye">(bye)</a></code>.
+
+<p>Please note that special handling is done during character input. This one
+is incompatible with <code>rlwrap</code> for example but is more powerful.
+<p><ul>
+<li><code>vi</code>-like command-line editing (typos fixes and history with ESC,
+<code>h</code>, <code>j</code>, <code>k</code> and <code>l</code> but not
+arrows),</li>
+<li>auto-formating (underlined) of double-quoted strings (don't try and struggle
+to make <code>&quot;</code> appear).</li>
+</ul>
+
+<p>If you prefer to use Emacs, please use the picolisp-mode bundled in the "el/"
+directory (that is "@lib/el" for a local installation, or some system dependent
+directory for a global installation).
+
+<p>If you feel that you absolutely have to use an IDE, <code>rlwrap</code> or
+another input front-end, please create an empty "~/.pil/editor" file. This
+effectively disables the command line editor. Note that in this case, however,
+you will not have the TAB symbol completion feature available during command
+line editing.
+
+<h3>Table of content</h3>
+
+<p>If you are new to PicoLisp, you might want to read the following sections in
+the given order, as some of them assume knowledge about previous ones. Otherwise
+just jump anywhere you are interested in.
+
+<p><ul>
+<li><a href="#ledit">Command Line Editing</a>
+   <ul>
+   <li><a href="#vi-style">'vi'-style</a>
+   <li><a href="#em-style">'emacs'-style</a>
+   </ul>
+<li><a href="#brw">Browsing</a>
+<li><a href="#fun">Defining Functions</a>
+<li><a href="#dbg">Debugging</a>
+<li><a href="#funio">Functional I/O</a>
+<li><a href="#script">Scripting</a>
+<li><a href="#oop">Objects and Classes</a>
+<li><a href="#ext">Persistence (External Symbols)</a>
+<li><a href="#db">Database Programming</a>
+<li><a href="#gui">User Interface (GUI) Programming</a>
+<li><a href="#pilog">Pilog -- PicoLisp Prolog</a>
+<li><a href="#sql">Poor Man's SQL</a>
+<li><a href="#ref">References</a>
+</ul>
+
+
+<p><hr>
+<h2><a name="ledit">Command Line Editing</a></h2>
+
+<p>PicoLisp permanently reads input from the current input channel (i.e. the
+console in interactive mode), evaluates it, and prints the result to the current
+output channel. This is called a "read-eval-print-loop" (REPL).
+
+<h3><a name="vi-style">'vi'-style</a></h3>
+
+<p>This is the default line editor, as it needs less system resources and works
+also on dumb terminals. It is similar to - though simpler than - the 'vi' edit
+modes of the 'korn' and 'bash' shells. For an analog 'emacs' style editor,
+please see <a href="#em-style">below</a>.
+
+<p>It is very helpful - though not absolutely necessary - when you know how to
+use the <code>vi</code> text editor.
+
+<p>To alleviate the task of manual line input, a command line editor is provided
+which is similar to (though much simpler than) the <code>readline</code> feature
+of the <code>bash</code> shell. Only a subset of the <code>vi</code> mode is
+supported, which is restricted to single-key commands (the "real"
+<code>vi</code> supports multi-key commands and the modification of most
+commands with count prefixes). It is loaded at startup in debug mode, you find
+its source in "lib/led.l".
+
+<p>You can enter lines in the normal way, correcting mistypes with the BACKSPACE
+key, and terminating them with the ENTER key. This is the <i>Insert Mode</i>.
+
+<p>If you hit ESC, you get into <i>Command Mode</i>. Now you can navigate
+horizontally in the current input line, or vertically in the history of
+previously entered lines, with key commands borrowed from the <code>vi</code>
+editor (only <code>h</code>, <code>j</code>, <code>k</code> and <code>l</code>
+and not arrows). Note, however, that there is always only a single line visible.
+
+<p>Let's say you did some calculation
+
+<pre><code>
+: (* (+ 2 3) (- 7 2))
+-> 25
+:
+</code></pre>
+
+<p>If you want to repeat a modified version of this command, using
+<code>8</code> instead of <code>7</code>, you don't have to re-type the
+whole command, but type
+
+<p><ul>
+<li>ESC to get into <i>Command Mode</i>
+<li><code>k</code> to get one line "up"
+<li><code>f</code> and <code>7</code> to "find" the character <code>7</code>
+<li><code>r</code> and <code>8</code> to "replace" with <code>8</code>
+</ul>
+
+<p>Then you hit ENTER to execute the modified line. Instead of jumping to the
+<code>7</code> with the "find" command, you may also type <code>l</code> (move
+"right") repeatedly till you reach the correct position.
+
+<p>The key commands in the <i>Command Mode</i> are listed below. Some commands
+change the mode back to <i>Insert Mode</i> as indicated in parentheses. Deleting
+or changing a "word" take either the current atom (number or symbol), or a whole
+expression when the cursor is at a left parenthesis.
+
+<p><ul>
+<li><code>k</code> - Go up one line
+<li><code>j</code> - Go down one line
+<li><code>l</code> - Go right one character
+<li><code>h</code> - Go left one character
+<li><code>w</code> - Go right one word
+<li><code>b</code> - Go back (left) one word
+<li><code>0</code> - Go to the beginning of the line
+<li><code>$</code> - Go to the end of the line
+<li><code>i</code> - Enter <i>Insert Mode</i> at the cursor position
+<li><code>a</code> - Append (<i>Insert Mode</i>) after the cursor position
+<li><code>A</code> - Append (<i>Insert Mode</i>) at the end of the line
+<li><code>I</code> - Insert (<i>Insert Mode</i>) at the beginning of the line
+<li><code>x</code> - Delete the character at the cursor position
+<li><code>X</code> - Delete the character left of the cursor position
+<li><code>r</code> - Replace the character at the cursor position with the next key
+<li><code>s</code> - Substitute the character at the cursor position (<i>Insert Mode</i>)
+<li><code>S</code> - Substitute the whole line (<i>Insert Mode</i>)
+<li><code>d</code> - Delete the word at the cursor position (<i>Insert Mode</i>)
+<li><code>D</code> - Delete the rest of the line
+<li><code>c</code> - Change the word at the cursor position (<i>Insert Mode</i>)
+<li><code>C</code> - Change the rest of the line (<i>Insert Mode</i>)
+<li><code>f</code> - Find next key in the rest of the current line
+<li><code>p</code> - Paste data deleted with <code>x</code>, <code>X</code>, <code>d</code> or <code>D</code> after the cursor position
+<li><code>P</code> - Paste data deleted with <code>x</code>, <code>X</code>, <code>d</code> or <code>D</code> before the cursor position
+<li><code>/</code> - Accept an input pattern and search the history for it
+<li><code>n</code> - Search for next occurrence of pattern (as entered with <code>/</code>)
+<li><code>N</code> - Search for previous occurrence of pattern
+<li><code>%</code> - Go to matching parenthesis
+<li><code>~</code> - Convert character to opposite (lower or upper) case and move right
+<li><code>u</code> - Undo the last change (one level only)
+<li><code>U</code> - Undo all changes of the current line
+<li><code>g</code> - Display current contents of cut buffer (not in <code>vi</code>)
+</ul>
+
+<p>Notes:
+<ul>
+
+<li>The <code>d</code> command corresponds to the <code>dw</code> command of the
+<code>vi</code> editor, and <code>c</code> corresponds to <code>cw</code>.
+
+<li>Search patterns may contain "<code>@</code>" characters as wildcards.
+
+<li>Lines shorter than 3 characters, lines beginning with a space character, or
+duplicate lines are not entered into the history.
+
+<li>The history is stored in the file ".pil/history" in the user's home
+directory. The length of the history is limited to 1000 lines.
+
+</ul>
+
+<p>The following two key-combinations work both in Insert and Command Mode:
+
+<p><ul>
+
+<li><code>Ctrl-D</code> will immediately terminate the current process.
+
+<li><code>Ctrl-X</code> discards all input, abandons further processing, and
+returns to the interpreter's top level (equivalent to invoking <code><a
+href="refQ.html#quit">quit</a></code>). This is also useful when the program
+stopped at a breakpoint (see single-stepping <a href="#dbg">Debugging</a>), or
+after program execution was interrupted with <code>Ctrl-C</code>.
+
+</ul>
+
+<p>Besides these two keys, in <i>Insert Mode</i> only the following keys have a
+special meaning:
+
+<p><ul>
+
+<li>BACKSPACE (<code>Ctrl-H</code>) and DEL erase the character to the left
+
+<li><code>Ctrl-V</code> inserts the next key literally
+
+<li><code>Ctrl-E</code> lets you <code><a href="refE.html#edit">edit</a></code>
+the history
+
+<li>TAB performs symbol and/or path completion: When a symbol (or path) name is
+entered partially and TAB is pressed subsequently, all internal symbols (and/or
+path names in the file system) matching the partial input are shown in sequence.
+
+<li>ESC terminates <i>Input Mode</i> and enters <i>Command Mode</i>
+
+</ul>
+
+<h3><a name="em-style">'emacs'-style</a></h3>
+
+<p>You can switch the command line editor to an 'emacs' style, if you call the
+function <code>(em)</code> (i.e. without arguments). A single call is enough.
+Alternatively, you could invoke PicoLisp at least once with the <code>-em</code>
+command line option
+
+<pre><code>
+$ pil -em +
+:
+</code></pre>
+
+<p>The style will be remembered in a file "~/.pil/editor", and used in all
+subsequent PicoLisp sessions.
+
+<p>To switch back to 'vi' style, call <code>(vi)</code>, use the
+<code>-vi</code> command line option, or simply remove "~/.pil/editor".
+
+
+<h3>Conclusion</h3>
+
+<p>Please take some time to experiment and to get used to command line editing.
+It will make life much easier in the future :-)
+
+
+<p><hr>
+<h2><a name="brw">Browsing</a></h2>
+
+<p>PicoLisp provides some functionality for inspecting pieces of data and code
+within the running system.
+
+<h3>Basic tools</h3>
+
+The really basic tools are of course available and their name alone is enough
+to know:
+<code><a href="refP.html#print">print</a></code>,
+<code><a href="refS.html#size">size</a></code>
+...
+
+<p>But you will appreciate some more powerful tools like:
+<p><ul><li><code><a href="refM.html#match">match</a></code>, a predicate which
+    compares S-expressions with bindable wildcards when matching,</li>
+</ul>
+
+<h3>Inspect a symbol with <i>show</i></h3>
+
+<p>The most commonly used tool is probably the <code><a
+href="refS.html#show">show</a></code> function. It takes a symbolic argument,
+and shows the symbol's name (if any), followed by its value, and then the
+contents of the property list on the following lines (assignment of such things
+to a symbol can be done with <code><a href="refS.html#set">set</a></code>,
+<code><a href="refS.html#setq">setq</a></code>, and <code><a
+href="refP.html#put">put</a></code>).
+
+<pre><code>
+: (setq A '(This is the value))  # Set the value of 'A'
+-> (This is the value)
+: (put 'A 'key1 'val1)           # Store property 'key1'
+-> val1
+: (put 'A 'key2 'val2)           # and 'key2'
+-> val2
+: (show 'A)                      # Now 'show' the symbol 'A'
+A (This is the value)
+   key2 val2
+   key1 val1
+-> A
+</code></pre>
+
+<p><code>show</code> accepts an arbitrary number of arguments which are
+processed according to the rules of <code><a
+href="refG.html#get">get</a></code>, resulting in a symbol which is showed then.
+
+<pre><code>
+: (put 'B 'a 'A)        # Put 'A' under the 'a'-property of 'B'
+-> A
+: (setq Lst '(A B C))   # Create a list with 'B' as second argument
+-> (A B C)
+: (show Lst 2 'a)       # Show the property 'a of the 2nd element of 'Lst'
+A (This is the value)   # (which is 'A' again)
+   key2 val2
+   key1 val1
+-> A
+</code></pre>
+
+<h3>Inspect and edit with <i>edit</i></h3>
+
+<p>Similar to <code>show</code> is <code><a
+href="refE.html#edit">edit</a></code>. It takes an arbitrary number of symbolic
+arguments, writes them to a temporary file in a format similar to
+<code>show</code>, and starts the <code>vim</code> editor with that file.
+
+<pre><code>
+: (edit 'A 'B)
+</code></pre>
+
+<p>The <code>vim</code> window will look like
+
+<pre><code>
+A (This is the value)
+key1 val1
+key2 val2
+
+(=======)
+
+B NIL
+a A  # (This is the value)
+
+(=======)
+</code></pre>
+
+<p>Now you can modify values or properties. You should not touch the
+parenthesized asterisks, as they serve as delimiters. If you position the cursor
+on the first character of a symbol name and type '<code>K</code>' ("Keyword
+lookup"), the editor will be restarted with that symbol added to the editor
+window. '<code>Q</code>' (for "Quit") will bring you back to the previous view.
+
+<p><code>edit</code> is also very useful to browse in a database. You can follow
+the links between objects with '<code>K</code>', and even - e.g. for low-level
+repairs - modify the data (but only if you are really sure about what you are
+doing, and don't forget to <code><a href="refC.html#commit">commit</a></code>
+when you are done).
+
+<h3>Built-in pretty print with <i>pp</i></h3>
+
+<p>The <i>pretty-print</i> function <code><a href="refP.html#pp">pp</a></code>
+takes a symbol that has a function defined (or two symbols that specify message
+and class for a method definition), and displays that definition in a formatted
+and indented way.
+
+<pre><code>
+: (pp 'pretty)
+(de pretty (X N)
+   (setq N (abs (space (or N 0))))
+   (while (and (pair X) (== 'quote (car X)))
+      (prin "'")
+      (pop 'X) )
+   (cond
+      ...
+      (T (prtty0 X N)) ) )
+-> pretty
+</code></pre>
+
+<p>The style is the same as we use in source files:
+
+<ul>
+
+<li>The indentation level is three spaces
+
+<li>If a list is too long (to be precise: if its <code><a
+href="refS.html#size">size</a></code> is greater than 12), pretty-print the CAR
+on the current line, and each element of the CDR recursively on its own line.
+
+<li>A closing parenthesis a preceded by a space if the corresponding open
+parenthesis is not on the same line
+
+</ul>
+
+<h3>Inspect elements one by one with <i>more</i></h3>
+
+<p><code><a href="refM.html#more">more</a></code> is a simple tool that displays
+the elements of a list one by one. It stops after each element and waits for
+input. If you just hit ENTER, <code>more</code> continues with the next element,
+otherwise (usually I type a dot (<code>.</code>) followed by ENTER) it
+terminates.
+
+<pre><code>
+: (more (1 2 3 4 5 6))
+1                          # Hit ENTER
+2.                         # Hit '.' and ENTER
+-> T                       # stopped
+</code></pre>
+
+<p>Optionally <code>more</code> takes a function as a second argument and
+applies that function to each element (instead of the default <code><a
+href="refP.html#print">print</a></code>). Here, often <code>show</code> or
+<code>pp</code> (see below) is used.
+
+<pre><code>
+: (more '(A B))            # Step through 'A' and 'B'
+A
+B
+-> NIL
+: (more '(A B) show)       # Step through 'A' and 'B' with 'show'
+A (This is the value)      # showing 'A'
+   key2 val2
+   key1 val1
+                           # Hit ENTER
+B NIL                      # showing 'B'
+   a A
+-> NIL
+</code></pre>
+
+<h3>Search through available symbols with <i>what</i></h3>
+
+<p>The <code><a href="refW.html#what">what</a></code> function returns a list of
+all internal symbols in the system which match a given pattern (with
+'<code>@</code>' wildcard characters).
+
+<pre><code>
+: (what "prin@")
+-> (prin print prinl print> printsp println)
+</code></pre>
+
+<h3>Search through values or properties of symbols with <i>who</i></h3>
+
+<p>The function <code><a href="refW.html#who">who</a></code> returns <i>"who
+contains that"</i>, i.e. a list of symbols that contain a given argument
+somewhere in their value or property list.
+
+<pre><code>
+: (who 'print)
+-> (query pretty pp msg more "edit" view show (print> . +Date) rules select
+(print> . +relation))</code></pre>
+
+<p>A dotted pair indicates either a method definition or a property entry. So
+<code>(print> . +relation)</code> denotes the <code>print&gt;</code> method of
+the <code><a href="refR.html#+relation">+relation</a></code> class.
+
+<p><code>who</code> can be conveniently combined with <code>more</code> and
+<code>pp</code>:
+
+<pre><code>
+: (more (who 'print) pp)
+(de query ("Q" "Dbg")  # Pretty-print these functions one by one
+   (use "R"
+      (loop
+         (NIL (prove "Q" "Dbg"))
+         (T (=T (setq "R" @)) T)
+         (for X "R"
+            (space)
+            (print (car X))
+            (print '=)
+            (print (cdr X))
+            (flush) )
+         (T (line)) ) ) )
+
+(de pretty (X N)
+   ...
+</code></pre>
+
+<p>The argument to <code>who</code> may also be a pattern list (see <code><a
+href="refM.html#match">match</a></code>):
+
+<pre><code>
+: (who '(print @ (val @)))
+-> (show)
+
+: (more (who '(% @ 7)) pp)
+(de day (Dat Lst)
+   (when Dat
+      (get
+         (or Lst *DayFmt)
+         (inc (% (inc Dat) 7)) ) ) )
+
+(de _week (Dat)
+   (/ (- Dat (% (inc Dat) 7)) 7) )
+</code></pre>
+
+<h3>Find what classes can accept a given message with <i>can</i></h3>
+
+<p>The function <code><a href="refC.html#can">can</a></code> returns a list
+which indicates which classes <i>can</i> accept a given message. Again, this
+list is suitable for iteration with <code>pp</code>:
+
+<pre><code>
+: (can 'del>)                                   # Which classes accept 'del>' ?
+-> ((del> . +List) (del> . +Entity) (del> . +relation))
+
+: (more (can 'del>) pp)                         # Inspect the methods with 'pp'
+(dm (del> . +List) (Obj Old Val)
+   (and ((&lt;> Old Val) (delete Val Old)) )
+
+(dm (del> . +Entity) (Var Val)
+   (when
+      (and
+         Val
+         (has> (meta This Var) Val (get This Var)) )
+      (let Old (get This Var)
+         (rel>
+            (meta This Var)
+            This
+            Old
+            (put This Var (del> (meta This Var) This Old @)) )
+         (when (asoq Var (meta This 'Aux))
+            (relAux This Var Old (cdr @)) )
+         (upd> This Var Old) ) ) )
+
+(dm (del> . +relation) (Obj Old Val)
+   (and ((&lt;> Old Val) Val) )
+</code></pre>
+
+<h3>Inspect dependencies with <i>dep</i></h3>
+
+<p><code><a href="refD.html#dep">dep</a></code> shows the dependencies in a
+class hierarchy. That is, for a given class it displays the tree of its
+(super)class(es) above it, and the tree of its subclasses below it.
+
+<p>To view the complete hierarchy of input fields, we start with the root class
+<code><a href="refR.html#+relation">+relation</a></code>:
+
+<pre><code>
+: (dep '+relation)
++relation
+   +Bag
+   +Any
+   +Blob
+   +Link
+      +Joint
+   +Bool
+   +Symbol
+      +String
+   +Number
+      +Time
+      +Date
+-> +relation
+</code></pre>
+
+<p>If we are interested in <code>+Link</code>:
+
+<pre><code>
+: (dep '+Link)
+   +relation
++Link
+   +Joint
+-> +Link
+</code></pre>
+
+<p>This says that <code>+Link</code> is a subclass of <code><a
+href="refR.html#+relation">+relation</a></code>, and has a single subclass
+(<code>+Joint</code>).
+
+
+<p><hr>
+<h2><a name="fun">Defining Functions</a></h2>
+
+<p>Most of the time during programming is spent defining functions (or methods).
+In the following we will concentrate on functions, but most will be true for
+methods as well except for using <code><a href="refD.html#dm">dm</a></code>
+instead of <code><a href="refD.html#de">de</a></code>.
+
+<h3>Functions with no argument</h3>
+
+<p>The notorious "Hello world" function must be defined:
+
+<pre><code>
+: (de hello ()
+   (prinl "Hello world") )
+-> hello
+</code></pre>
+
+<p>The <code>()</code> in the first line indicates a function without arguments.
+The body of the function is in the second line, consisting of a single
+statement. The last line is the return value of <code>de</code>, which here is
+the defined symbol. From now on we will omit the return values of examples when
+they are unimportant.
+
+<p>Now you can call this function this way:
+
+<pre><code>
+: (hello)
+Hello world
+</code></pre>
+
+<h3>Functions with one argument</h3>
+
+<p>A function with an argument might be defined this way:
+
+<pre><code>
+: (de hello (X)
+   (prinl "Hello " X) )
+# hello redefined
+-> hello
+</code></pre>
+
+<p>PicoLisp informs you that you have just redefined the function. This might be
+a useful warning in case you forgot that a bound symbol with that name already
+existed.
+
+<pre><code>
+: (hello "world")
+Hello world
+</code></pre>
+
+<pre><code>
+: (hello "Alex")
+Hello Alex
+</code></pre>
+
+<h3>Preventing arguments evaluation and variable number of arguments</h3>
+
+<p>Normally, PicoLisp evaluates the arguments before it passes them to a
+function:
+
+<pre><code>
+: (hello (+ 1 2 3))
+Hello 6
+</code></pre>
+
+<pre><code>
+: (setq A 1  B 2)       # Set 'A' to 1 and 'B' to 2
+-> 2
+: (de foo (X Y)         # 'foo' returns the list of its arguments
+   (list X Y) )
+-> foo
+: (foo A B)             # Now call 'foo' with 'A' and 'B'
+-> (1 2)                # -> We get a list of 1 and 2, the values of 'A' and 'B'
+</code></pre>
+
+<p>In some cases you don't want that. For some functions (<code><a
+href="refS.html#setq">setq</a></code> for example) it is better if the function
+gets all arguments unevaluated, and can decide for itself what to do with them.
+
+<p>For such cases you do not define the function with a <i>list</i> of
+parameters, but give it a <i>single atomic</i> parameter instead. PicoLisp will
+then bind all (unevaluated) arguments as a list to that parameter.
+
+<pre><code>
+: (de foo X
+   (list (car X) (cadr X)) )        # 'foo' lists the first two arguments
+
+: (foo A B)                         # Now call it again
+-> (A B)                            # -> We don't get '(1 2)', but '(A B)'
+
+: (de foo X
+   (list (car X) (eval (cadr X))) ) # Now evaluate only the second argument
+
+: (foo A B)
+-> (A 2)                            # -> We get '(A 2)'
+</code></pre>
+
+<h3>Mixing evaluated arguments and variable number of unevaluated arguments</h3>
+
+<p>As a logical consequence, you can combine these principles. To define a
+function with 2 evaluated and an arbitrary number of unevaluated arguments:
+
+<pre><code>
+: (de foo (X Y . Z)     # Evaluate only the first two args
+   (list X Y Z) )
+
+: (foo A B C D E)
+-> (1 2 (C D E))        # -> Get the value of 'A' and 'B' and the remaining list
+</code></pre>
+
+<h3>Variable number of evaluated arguments</h3>
+
+<p>More common, in fact, is the case where you want to pass an arbitrary number
+of <i>evaluated</i> arguments to a function. For that, PicoLisp recognizes the
+symbol <code>@</code> as a single atomic parameter and remembers all evaluated
+arguments in an internal frame. This frame can then be accessed sequentially
+with the <code><a href="refA.html#args">args</a></code>, <code><a
+href="refN.html#next">next</a></code>, <code><a
+href="refA.html#arg">arg</a></code> and <code><a
+href="refR.html#rest">rest</a></code> functions.
+
+<pre><code>
+: (de foo @
+   (list (next) (next)) )     # Get the first two arguments
+
+: (foo A B)
+-> (1 2)
+</code></pre>
+
+<p>Again, this can be combined:
+
+<pre><code>
+: (de foo (X Y . @)
+   (list X Y (next) (next)) ) # 'X' and 'Y' are fixed arguments
+
+: (foo A B (+ 3 4) (* 3 4))
+-> (1 2 7 12)                 # All arguments are evaluated
+</code></pre>
+
+<p>These examples are not very useful, because the advantage of a variable
+number of arguments is not used. A function that prints all its evaluated
+numeric arguments, each on a line followed by its squared value:
+
+<pre><code>
+: (de foo @
+   (while (args)                            # Check if there are some args left
+      (println (next) (* (arg) (arg))) ) )  # Call the last arg (next) returned
+
+: (foo (+ 2 3) (- 7 1) 1234 (* 9 9))
+5 25
+6 36
+1234 1522756
+81 6561
+-> 6561
+</code></pre>
+
+<p>This next example shows the behaviour of <code>args</code> and
+<code>rest</code>:
+
+<pre><code>
+: (de foo @
+   (while (args)
+      (next)
+      (println (arg) (args) (rest)) ) )
+: (foo 1 2 3)
+1 T (2 3)
+2 T (3)
+3 NIL NIL
+</code></pre>
+
+<p>Finally, it is possible to pass all these evaluated arguments to another
+function, using <code><a href="refP.html#pass">pass</a></code>:
+
+<pre><code>
+: (de foo @
+   (pass println 9 8 7)       # First print all arguments preceded by 9, 8, 7
+   (pass + 9 8 7) )           # Then add all these values
+
+: (foo (+ 2 3) (- 7 1) 1234 (* 9 9))
+9 8 7 5 6 1234 81             # Printing ...
+-> 1350                       # Return the result
+</code></pre>
+
+<h3>Anonymous functions without the <i>lambda</i> keyword</h3>
+
+There's no distinction between code and data in PicoLisp,
+<code><a href="refQ.html#quote">quote</a></code> will do what you want (see
+also <a href="faq.html#lambda">this FAQ entry</a>).
+
+<pre><code>
+: ((quote (X) (* X X)) 9)
+-> 81
+</code></pre>
+
+<pre><code>
+: (setq f '((X) (* X X)))  # This is equivalent to (de f (X) (* X X))
+-> ((X) (* X X))
+: f
+-> ((X) (* X X))
+: (f 3)
+-> 9
+</code></pre>
+
+
+<p><hr>
+<h2><a name="dbg">Debugging</a></h2>
+
+<p>There are two major ways to debug functions (and methods) at runtime:
+<i>Tracing</i> and <i>single-stepping</i>.
+
+<p>In this section we will use the REPL to explore the debugging facilities, but
+in the <a href="#script">Scripting</a> section, you will learn how to launch
+PicoLisp scripts with some selected functions debugged:
+
+<pre><code>
+$ pil app/file1.l -"trace 'foo" -main -"debug 'bar" app/file2.l +
+</code></pre>
+
+<h3>Tracing</h3>
+
+<p><i>Tracing</i> means letting functions of interest print their name and arguments
+when they are entered, and their name again and the return value when they are
+exited.
+
+<p>For demonstration, let's define the unavoidable factorial function (or just
+<code><a href="refL.html#load">load</a></code> the file "<code><a
+href="fun.l">@doc/fun.l</a></code>"):
+
+<pre><code>
+(de fact (N)
+   (if (=0 N)
+      1
+      (* N (fact (dec N))) ) )
+</code></pre>
+
+<p>With <code><a href="refT.html#trace">trace</a></code> we can put it in trace
+mode:
+
+<pre><code>
+: (trace 'fact)
+-> fact
+</code></pre>
+
+<p>Calling <code>fact</code> now will display its execution trace.
+
+<pre><code>
+: (fact 3)
+ fact : 3
+  fact : 2
+   fact : 1
+    fact : 0
+    fact = 1
+   fact = 1
+  fact = 2
+ fact = 6
+-> 6
+</code></pre>
+
+<p>As can be seen here, each level of function call will indent by an additional
+space. Upon function entry, the name is separated from the arguments with a
+colon (<code>:</code>), and upon function exit with an equals sign
+(<code>=</code>) from the return value.
+
+<p><code>trace</code> works by modifying the function body, so generally it
+works only for functions defined as lists (lambda expressions, see <a
+href="ref.html#ev">Evaluation</a>). Tracing a C-function is possible, however,
+when it is a function that evaluates all its arguments.
+
+<p>So let's trace the functions <code><a href="ref_.html#=0">=0</a></code> and
+<code><a href="ref_.html#*">*</a></code>:
+
+<pre><code>
+: (trace '=0)
+-> =0
+: (trace '*)
+-> *
+</code></pre>
+
+<p>If we call <code>fact</code> again, we see the additional output:
+
+<pre><code>
+: (fact 3)
+ fact : 3
+  =0 : 3
+  =0 = NIL
+  fact : 2
+   =0 : 2
+   =0 = NIL
+   fact : 1
+    =0 : 1
+    =0 = NIL
+    fact : 0
+     =0 : 0
+     =0 = 0
+    fact = 1
+    * : 1 1
+    * = 1
+   fact = 1
+   * : 2 1
+   * = 2
+  fact = 2
+  * : 3 2
+  * = 6
+ fact = 6
+-> 6
+</code></pre>
+
+<p>To reset a function to its untraced state, call <code><a
+href="refU.html#untrace">untrace</a></code>:
+
+<pre><code>
+: (untrace 'fact)
+-> fact
+: (untrace '=0)
+-> =0
+: (untrace '*)
+-> *
+</code></pre>
+
+<p>or simply use <code><a href="refM.html#mapc">mapc</a></code>:
+
+<pre><code>
+: (mapc untrace '(fact =0 *))
+-> *
+</code></pre>
+
+<h3>Single-stepping</h3>
+
+<p><i>Single-stepping</i> means to execute a function step by step, giving the
+programmer an opportunity to look more closely at what is happening. The
+function <code><a href="refD.html#debug">debug</a></code> inserts a breakpoint
+into each top-level expression of a function. When the function is called, it
+stops at each breakpoint, displays the expression it is about to execute next
+(this expression is also stored into the global variable <code><a
+href="ref_.html#^">^</a></code>) and enters a read-eval-loop. The programmer can
+then
+
+<ul>
+
+<li>inspect the current environment by typing variable names or calling
+functions
+
+<li>execute <code>(<a href="refD.html#d">d</a>)</code> to recursively debug the
+next expression (looping through subexpressions of this expression)
+
+<li>execute <code>(<a href="refE.html#e">e</a>)</code> to evaluate the next
+expression, to see what will happen without actually advancing on
+
+<li>type ENTER (that is, enter an empty line) to leave the read-eval loop and
+continue with the next expression
+
+</ul>
+
+<p>Thus, in the simplest case, single-stepping consists of just hitting ENTER
+repeatedly to step through the function.
+
+<p>To try it out, let's look at the <code><a
+href="refS.html#stamp">stamp</a></code> system function. You may need to have a
+look at
+
+<ul>
+<li><code><a href="ref_.html#=T">=T</a></code> (T test),</li>
+
+<li><code><a href="refD.html#date">date</a></code> and <code><a
+href="refT.html#time">time</a></code> (grab system date and time)
+
+<li><code><a href="refD.html#default">default</a></code> (conditional
+assignments)
+
+<li><code><a href="refP.html#pack">pack</a></code> (kind of concatenation), and
+
+<li><code><a href="refD.html#dat$">dat$</a></code> and <code><a
+href="refT.html#tim$">tim$</a></code> (date and time formats)</li>
+
+</ul>
+
+to understand this definition.
+
+<pre><code>
+: (pp 'stamp)
+(de stamp (Dat Tim)
+   (and (=T Dat) (setq Dat (date T)))
+   (default Dat (date) Tim (time T))
+   (pack (dat$ Dat "-") " " (tim$ Tim T)) )
+-> stamp
+</code></pre>
+
+<pre><code>
+: (debug 'stamp)                       # Debug it
+-> T
+: (stamp)                              # Call it again
+(and (=T Dat) (setq Dat (date T)))     # stopped at first expression
+!                                      # ENTER
+(default Dat (date) Tim (time T))      # second expression
+!                                      # ENTER
+(pack (dat$ Dat "-") " " (tim$ ...     # third expression
+! Tim                                  # inspect 'Tim' variable
+-> 41908
+! (time Tim)                           # convert it
+-> (11 38 28)
+!                                      # ENTER
+-> "2004-10-29 11:38:28"               # done, as there are only 3 expressions
+</code></pre>
+
+<p>Now we execute it again, but this time we want to look at what's happening
+inside the second expression.
+
+<pre><code>
+: (stamp)                              # Call it again
+(and (=T Dat) (setq Dat (date T)))
+!                                      # ENTER
+(default Dat (date) Tim (time T))
+!                                      # ENTER
+(pack (dat$ Dat "-") " " (tim$ ...     # here we want to look closer
+! (d)                                  # debug this expression
+-> T
+!                                      # ENTER
+(dat$ Dat "-")                         # stopped at first subexpression
+! (e)                                  # evaluate it
+-> "2004-10-29"
+!                                      # ENTER
+(tim$ Tim T)                           # stopped at second subexpression
+! (e)                                  # evaluate it
+-> "11:40:44"
+!                                      # ENTER
+-> "2004-10-29 11:40:44"               # done
+</code></pre>
+
+<p>The breakpoints still remain in the function body. We can see them when we
+pretty-print it:
+
+<pre><code>
+: (pp 'stamp)
+(de stamp (Dat Tim)
+   (! and (=T Dat) (setq Dat (date T)))
+   (! default Dat (date) Tim (time T))
+   (! pack
+      (! dat$ Dat "-")
+      " "
+      (! tim$ Tim T) ) )
+-> stamp
+</code></pre>
+
+<p>To reset the function to its normal state, call <code><a
+href="refU.html#unbug">unbug</a></code>:
+
+<pre><code>
+: (unbug 'stamp)
+</code></pre>
+
+<p>Often, you will not want to single-step a whole function. Just use
+<code>edit</code> (see above) to insert a single breakpoint (the exclamation
+mark followed by a space) as CAR of an expression, and run your program.
+Execution will then stop there as described above; you can inspect the
+environment and continue execution with ENTER when you are done.
+
+
+<p><hr>
+<h2><a name="funio">Functional I/O</a></h2>
+
+<p>Input and output in PicoLisp is functional, in the sense that there are not
+variables assigned to file descriptors, which need then to be passed to I/O
+functions for reading, writing and closing. Instead, these functions operate on
+implicit input and output channels, which are created and maintained as dynamic
+environments.
+
+<p>Standard input and standard output are the default channels. Try reading a
+single expression:
+
+<pre><code>
+: (read)
+(a b c)        # Console input
+-> (a b c)
+</code></pre>
+
+<p>To read from a file, we redirect the input with <code><a
+href="refI.html#in">in</a></code>. Note that comments and whitespace are
+automatically skipped by <code>read</code>:
+
+<pre><code>
+: (in "@doc/fun.l" (read))
+-> (de fact (N) (if (=0 N) 1 (* N (fact (dec N)))))
+</code></pre>
+
+<p>The <code><a href="refS.html#skip">skip</a></code> function can also be used
+directly. To get the first non-white character in the file with <code><a
+href="refC.html#char">char</a></code>:
+
+<pre><code>
+: (in "@doc/fun.l" (skip "#") (char))
+-> "("
+</code></pre>
+
+<p><code><a href="refF.html#from">from</a></code> searches through the input
+stream for given patterns. Typically, this is not done with Lisp source files
+(there are better ways), but for a simple example let's extract all items
+immediately following <code>fact</code> in the file,
+
+<pre><code>
+: (in "@doc/fun.l" (while (from "fact ") (println (read))))
+(N)
+(dec N)
+</code></pre>
+
+<p>or the word following "(de " with <code><a
+href="refT.html#till">till</a></code>:
+
+<pre><code>
+: (in "@doc/fun.l" (from "(de ") (till " " T)))
+-> "fact"
+</code></pre>
+
+
+<p>With <code><a href="refL.html#line">line</a></code>, a line of characters is
+read, either into a single <a href="ref.html#transient-io">transient</a> symbol
+(the type used by PicoLisp for strings),
+
+<pre><code>
+: (in "@doc/tut.html" (line T))
+-> "&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://..."
+</code></pre>
+
+<p>or into a list of symbols (characters):
+
+<pre><code>
+: (in "@doc/tut.html" (line))
+-> ("&lt;" "!" "D" "O" "C" "T" "Y" "P" "E" " " "H" "T" "M" "L" ...
+</code></pre>
+
+<p><code>line</code> is typically used to read tabular data from a file.
+Additional arguments can split the line into fixed-width fields, as described in
+the <code><a href="refL.html#line">reference manual</a></code>. If, however, the
+data are of variable width, delimited by some special character, the <code><a
+href="refS.html#split">split</a></code> function can be used to extract the
+fields. A typical way to import the contents of such a file is:
+
+<pre><code>
+(load "@lib/import.l")
+
+(in '("bin/utf2" "importFile.txt")              # Pipe: Convert to UTF-8
+   (until (eof)                                 # Process whole file
+      (let L (split (line) "^I")                # TAB-delimited data
+         ... use 'getStr', 'getNum' etc ...     # process them
+</code></pre>
+
+<p>Some more examples with <code><a href="refE.html#echo">echo</a></code>:
+
+<pre><code>
+(in "a"                                         # Copy the first 40 Bytes
+   (out "b"                                     # from file "a" to file "b"
+      (echo 40) ) )
+
+(in "@doc/tut.html"                             # Show the HTTP-header
+   (line)
+   (echo "&lt;body>") )
+
+(out "file.mac"                                 # Convert to Macintosh
+   (in "file.txt"                               # from Unix or DOS format:
+      (while (char)
+         (prin
+            (case @
+               ("^M" NIL)                       # ignore CR
+               ("^J" "^M")                      # convert CR to LF
+               (T @) ) ) ) ) )                  # otherwise no change
+
+(out "c"                                        # Merge the contents of "a"
+   (in "b"                                      # and "b" into "c"
+      (in "a"
+         (while (read)                          # Read an item from "a",
+            (println @ (in -1 (read))) ) ) ) )  # print it with an item from "b"
+</code></pre>
+
+
+<p><hr>
+<h2><a name="script">Scripting</a></h2>
+
+<p>There are two possibilities to get the PicoLisp interpreter into doing useful
+work: via command line arguments, or as a stand-alone script.
+
+<h3>Command line arguments for the PicoLisp interpreter</h3>
+
+<p>The command line can specify either files for execution, or arbitrary Lisp
+expressions for direct evaluation (see <a href="ref.html#invoc">Invocation</a>):
+if an argument starts with a hyphen, it is evaluated, otherwise it is <code><a
+href="refL.html#load">load</a></code>ed as a file. A typical invocation might
+look like:
+
+<pre><code>
+$ pil app/file1.l -main app/file2.l +
+</code></pre>
+
+<p>It loads the debugging environment, an application source file, calls the
+main function, and then loads another application source. In a typical
+development and debugging session, this line is often modified using the shell's
+history mechanisms, e.g. by inserting debugging statements:
+
+<pre><code>
+$ pil app/file1.l -"trace 'foo" -main -"debug 'bar" app/file2.l +
+</code></pre>
+
+<p>Another convenience during debugging and testing is to put things into the
+command line (shell history) which would otherwise have to be done each time in
+the application's user interface:
+
+<pre><code>
+$ pil app/file1.l -main app/file2.l -go -'login "name" "password"' +
+</code></pre>
+
+<p>The final production release of an application usually includes a shell
+script, which initializes the environment, does some bookkeeping and cleanup,
+and calls the application with a proper command line. It is no problem if the
+command line is long and complicated.
+
+<p>For small utility programs, however, this is overkill. Enter full PicoLisp
+scripts.
+
+<h3>PicoLisp scripts</h3>
+
+It is better to write
+a single executable file using the mechanisms of "interpreter files". If the
+first two characters in an executable file are "<code>#!</code>", the operating
+system kernel will pass this file to an interpreter program whose pathname is
+given in the first line (optionally followed by a single argument). This is fast
+and efficient, because the overhead of a subshell is avoided.
+
+<p>Let's assume you installed PicoLisp in the directory "/home/foo/picolisp/",
+and put links to the executable and the installation directory as:
+
+<pre><code>
+$ ln -s /home/foo/picolisp /usr/lib/picolisp
+$ ln -s /usr/lib/picolisp/bin/picolisp /usr/bin/picolisp
+</code></pre>
+
+Then a simple hello-world script might look like:
+
+<pre><code>
+#!/usr/bin/picolisp /usr/lib/picolisp/lib.l
+(prinl "Hello world!")
+(bye)
+</code></pre>
+
+<p>If you write this into a text file, and use <code>chmod</code> to set it to
+"executable", it can be executed like any other command. Note that (because
+<code>#</code> is the comment character in PicoLisp) the first line will not be
+interpreted, and you can still use that file as a normal command line argument
+to PicoLisp (useful during debugging).
+
+<h3>Grab command line arguments from PicoLisp scripts</h3>
+
+<p>The fact that a hyphen causes evaluation of command line arguments can be
+used to simulate something like command line options. The following script
+defines two functions <code>a</code> and <code>f</code>, and then calls
+<code>(<a href="refL.html#load">load</a> T)</code> to process the rest of the
+command line (which otherwise would be ignored because of the <code>(<a
+href="refB.html#bye">bye</a>)</code> statement):
+
+<pre><code>
+#!/usr/bin/picolisp /usr/lib/picolisp/lib.l
+
+(de a ()
+   (println '-a '-> (opt)) )
+
+(de f ()
+   (println '-f '-> (opt)) )
+
+(load T)
+(bye)
+</code></pre>
+
+(<code><a href="refO.html#opt">opt</a></code> retrieves the next command line
+option)
+
+<p>Calling this script (let's say we named it "testOpts") gives:
+
+<pre><code>
+$ ./testOpts -f abc
+-f -> "abc"
+$ ./testOpts -a xxx  -f yyy
+-a -> "xxx"
+-f -> "yyy"
+</code></pre>
+
+<p>We have to be aware of the fact, however, that the aggregation of arguments
+like
+
+<pre><code>
+$ ./testOpts -axxx  -fyyy
+</code></pre>
+
+<p>or
+
+<pre><code>
+$ ./testOpts -af yyy
+</code></pre>
+
+<p>cannot be achieved with this simple and general mechanism of command line
+processing.
+
+<h3>Run scripts from arbitrary places on the host file system</h3>
+
+<p>Utilities are typically used outside the context of the PicoLisp environment.
+All examples above assumed that the current working directory is the PicoLisp
+installation directory, which is usually all right for applications developed in
+that environment. Command line file arguments like "app/file1.l" will be
+properly found.
+
+<p>To allow utilities to run in arbitrary places on the host file system, the
+concept of <i>home directory substitution</i> was introduced. The interpreter
+remembers internally at start-up the pathname of its first argument (usually
+"lib.l"), and substitutes any leading "<code>@</code>" character in subsequent
+file names with that pathname. Thus, to run the above example in some other
+place, simply write:
+
+<pre><code>
+$ /home/foo/picolisp/pil @app/file1.l -main @app/file2.l +
+</code></pre>
+
+<p>that is, supply a full path name to the initial command (here 'p'), or put it
+into your <code>PATH</code> variable, and prefix each file which has to be
+loaded from the PicoLisp home directory with a <code>@</code> character.
+"Normal" files (not prefixed by <code>@</code>) will be opened or created
+relative to the current working directory as usual.
+
+<p>Stand-alone scripts will often want to load additional modules from the
+PicoLisp environment, beyond the "lib.l" we provided in the first line of the
+hello-world script. Typically, at least a call to
+
+<pre><code>
+(load "@lib/misc.l")
+</code></pre>
+
+<p>(note the home directory substitution) will be included near the beginning of
+the script.
+
+<p>As a more complete example, here is a script which extracts the date, name
+and size of the latest official PicoLisp release version from the download web
+site, and prints it to standard output:
+
+<pre><code>
+#!/usr/bin/picolisp /usr/lib/picolisp/lib.l
+
+(load "@lib/misc.l" "@lib/http.l")
+
+(use (@Date @Name @Size)
+   (when
+      (match
+         '(@Date ~(chop " - &lt;a href=\"") @Name "\"" "&gt;"
+             @Name ~(chop "&lt;/a&gt; (") @Size )
+         (client "software-lab.de" 80 "down.html"
+            (from "Release Archive")
+            (from "&lt;li&gt;")
+            (till ",") ) )
+      (prinl @Name)
+      (prinl @Date " -- " @Size) ) )
+
+(bye)
+</code></pre>
+
+<h3>Editing scripts</h3>
+
+<p>We recommend that you have a terminal window open, and try the examples by
+yourself. You may either type them in, directly to the PicoLisp interpreter, or
+edit a separate source file (e.g. <code>"@doc/fun.l"</code>) in a second
+terminal window and load it into PicoLisp with
+
+<pre><code>
+: (load "@doc/fun.l")
+</code></pre>
+
+<p>each time you have modified and saved it.
+
+<h3>Editing scripts with vi</h3>
+
+<p>Once a function is loaded from a source file, you can call 'vim' directly on
+that function with
+
+<pre><code>
+: (vi 'fact)
+</code></pre>
+
+<p>The function 'vi' opens the appropriate source file, and jumps to the right
+line where 'fact' is defined. When you modify it, you can simply call 'ld' to
+(re)load that source file
+
+<pre><code>
+: (ld)
+</code></pre>
+
+<p><hr>
+<h2><a name="oop">Objects and Classes</a></h2>
+
+<p>The PicoLisp object model is very simple, yet flexible and powerful. Objects
+as well as classes are both implemented as symbols. In fact, there is no formal
+difference between objects and classes; classes are more a conceptual design
+consideration in the head of the programmer than a physical reality.
+
+<p>Having said this, we declare that normally:
+
+<ol>
+<li>A Class
+   <ul>
+   <li>Has a name (interned symbol)
+   <li>Has method definitions and superclass(es) in the value
+   <li>May have class variables (attributes) in the property list
+   </ul>
+<li>An Object
+   <ul>
+   <li>Has no name (anonymous symbol) or is an external symbol
+   <li>Has class(es) (and optionally method definitions) in the value
+   <li>Has instance variables (attributes) in the property list
+   </ul>
+</ol>
+
+<p>So the main difference between classes and objects is that the former ones
+usually are internal symbols. By convention, their names start with a
+'<code>+</code>'. Sometimes it makes sense, however, to create named objects (as
+global singletons, for example), or even anonymous classes.
+
+<p>Both classes and objects have a list in their value, consisting of method
+definitions (often empty for objects) and (super)class(es). And both classes and
+objects have local data in their property lists (often empty for classes). This
+implies, that any given object (as an instance of a class) may have private
+(object-local) methods defined.
+
+<p>It is rather difficult to contrive a simple OOP example. We constructed a
+hierarchy of geometric shapes, with a base class <code>+Shape</code> and two
+subclasses <code>+Rectangle</code> and <code>+Circle</code>.
+
+<p>The source code is included as "<code><a
+href="shape.l">@doc/shape.l</a></code>" in the PicoLisp distribution, so you
+don't have to type it in. Just <code><a href="refL.html#load">load</a></code>
+the file, or start it from the shell as:
+
+<pre><code>
+$ pil @doc/shape.l +
+</code></pre>
+
+<p>Let's look at it piece by piece. Here's the base class:
+
+<pre><code>
+(class +Shape)
+# x y
+
+(dm T (X Y)
+   (=: x X)
+   (=: y Y) )
+
+(dm move> (DX DY)
+   (inc (:: x) DX)
+   (inc (:: y) DY) )
+</code></pre>
+
+<p>The first line '<code>(class +Shape)</code>' defines the symbol
+<code>+Shape</code> as a class without superclasses. The following method
+definitions will go to that class.
+
+<p>The comment '<code># x y</code>' in the second line is just a convention, to
+indicate what instance variables (properties) that class uses. As PicoLisp is a
+dynamic language, a class can be extended at runtime with any number of
+properties, and there is nothing like a fixed object size or structure. This
+comment is a hint of what the programmer thinks to be essential and typical for
+that class. In the case of <code>+Shape</code>, <code>x</code> and
+<code>y</code> are the coordinates of the shape's origin.
+
+<p>Then we have two method definitions, using the keyword <code><a
+href="refD.html#dm">dm</a></code> for "define method". The first method is
+special, in that its name is <code>T</code>. Each time a new object is created,
+and a method with that name is found in its class hierarchy, that method will be
+executed. Though this looks like a "constructor" in other programming languages,
+it should probably better be called "initializer". The <code>T</code> method of
+<code>+Shape</code> takes two arguments <code>X</code> and <code>Y</code>, and
+stores them in the object's property list.
+
+<p>The second method <code>move&gt;</code> changes the object's origin by adding
+the offset values <code>DX</code> and <code>DY</code> to the object's origin.
+
+<p>Now to the first derived class:
+
+<pre><code>
+(class +Rectangle +Shape)
+# dx dy
+
+(dm T (X Y DX DY)
+   (super X Y)
+   (=: dx DX)
+   (=: dy DY) )
+
+(dm area> ()
+   (* (: dx) (: dy)) )
+
+(dm perimeter> ()
+   (* 2 (+ (: dx) (: dy))) )
+
+(dm draw> ()
+   (drawRect (: x) (: y) (: dx) (: dy)) )
+</code></pre>
+
+<p><code>+Rectangle</code> is defined as a subclass of <code>+Shape</code>.
+The comment '<code># dx dy</code>' indicates that <code>+Rectangle</code> has a
+width and a height in addition to the origin coordinates inherited from
+<code>+Shape</code>.
+
+<p>The <code>T</code> method passes the origin coordinates <code>X</code> and
+<code>Y</code> to the <code>T</code> method of the superclass
+(<code>+Shape</code>), then stores the width and height parameters into
+<code>dx</code> and <code>dy</code>.
+
+<p>Next we define the methods <code>area&gt;</code> and
+<code>perimeter&gt;</code> which do some obvious calculations, and a method
+<code>draw&gt;</code> which is supposed to draw the shape on the screen by
+calling some hypothetical function <code>drawRect</code>.
+
+<p>Finally, we define a <code>+Circle</code> class in an analog way, postulating
+the hypothetical function <code>drawCircle</code>:
+
+<pre><code>
+(class +Circle +Shape)
+# r
+
+(dm T (X Y R)
+   (super X Y)
+   (=: r R) )
+
+(dm area> ()
+   (*/ (: r) (: r) 31415927 10000000) )
+
+(dm perimeter> ()
+   (*/ 2 (: r) 31415927 10000000) )
+
+(dm draw> ()
+   (drawCircle (: x) (: y) (: r)) )
+</code></pre>
+
+<p>Now we can experiment with geometrical shapes. We create a rectangle at point
+(0,0) with a width of 30 and a height of 20, and keep it in the variable
+<code>R</code>:
+
+<pre><code>
+: (setq R (new '(+Rectangle) 0 0 30 20))  # New rectangle
+-> $134432824                             # returned anonymous symbol
+: (show R)
+$134432824 (+Rectangle)                   # Show the rectangle
+   dy 20
+   dx 30
+   y 0
+   x 0
+</code></pre>
+
+<p>We see that the symbol <code>$134432824</code> has a list of classes
+'<code>(+Rectangle)</code>' in its value, and the coordinates, width and height
+in its property list.
+
+<p>Sending messages to that object
+
+<pre><code>
+: (area> R)                               # Calculate area
+-> 600
+: (perimeter> R)                          # and perimeter
+-> 100
+</code></pre>
+
+<p>will return the values for area and perimeter, respectively.
+
+<p>Then we move the object's origin:
+
+<pre><code>
+: (move> R 10 5)                          # Move 10 right and 5 down
+-> 5
+: (show R)
+$134432824 (+Rectangle)
+   y 5                                    # Origin changed (0,0) -> (10,5)
+   x 10
+   dy 20
+   dx 30
+</code></pre>
+
+<p>Though a method <code>move&gt;</code> wasn't defined for the
+<code>+Rectangle</code> class, it is inherited from the <code>+Shape</code>
+superclass.
+
+<p>Similarly, we create and use a circle object:
+
+<pre><code>
+: (setq C (new '(+Circle) 10 10 30))      # New circle
+-> $134432607                             # returned anonymous symbol
+: (show C)
+$134432607 (+Circle)                      # Show the circle
+   r 30
+   y 10
+   x 10
+-> $134432607
+: (area> C)                               # Calculate area
+-> 2827
+: (perimeter> C)                          # and perimeter
+-> 188
+: (move> C 10 5)                          # Move 10 right and 5 down
+-> 15
+: (show C)
+$134432607 (+Circle)                      # Origin changed (10,10) -> (20,15)
+   y 15
+   x 20
+   r 30
+</code></pre>
+
+<p>It is also easy to send messages to objects in a list:
+
+<pre><code>
+: (mapcar 'area> (list R C))              # Get list of areas
+-> (600 2827)
+: (mapc
+   '((Shape) (move> Shape 10 10))         # Move all 10 right and down
+   (list R C) )
+-> 25
+: (show R)
+$134431493 (+Rectangle)
+   y 15
+   x 20
+   dy 20
+   dx 30
+-> $134431493
+: (show C)
+$134431523 (+Circle)
+   y 25
+   x 30
+   r 30
+</code></pre>
+
+<p>Assume that we want to extend our shape system. From time to time, we need
+shapes that behave exactly like the ones above, but are tied to a fixed
+position. That is, they do not change their position even if they receive a
+<code>move&gt;</code> message.
+
+<p>One solution would be to modify the <code>move&gt;</code> method in the
+<code>+Shape</code> class to a no-operation. But this would require to duplicate
+the whole shape hierarchy (e.g. by defining <code>+FixedShape</code>,
+<code>+FixedRectangle</code> and <code>+FixedCircle</code> classes).
+
+<p>The PicoLisp Way is the use of <u>Prefix Classes</u> through multiple
+inheritance. It uses the fact that searching for method definitions is a
+depth-first, left-to-right search of the class tree. We define a prefix class:
+
+<pre><code>
+: (class +Fixed)
+
+(dm move> (DX DY))  # A do-nothing method
+</code></pre>
+
+<p>We can now create a fixed rectangle, and try to move it:
+
+<pre><code>
+: (setq R (new '(+Fixed +Rectangle) 0 0 30 20))    # '+Fixed' prefix class
+-> $134432881
+: (move> R 10 5)                                   # Send 'move>' message
+-> NIL
+: (show R)
+$134432881 (+Fixed +Rectangle)
+   dy 20
+   dx 30
+   y 0                                             # Did not move!
+   x 0
+</code></pre>
+
+<p>We see, prefix classes can surgically change the inheritance tree for
+selected objects or classes.
+
+<p>Alternatively, if fixed rectangles are needed often, it might make sense to
+define a new class <code>+FixRect</code>:
+
+<pre><code>
+: (class +FixRect +Fixed +Rectangle)
+-> +FixRect
+</code></pre>
+
+<p>and then use it directly:
+
+<pre><code>
+: (setq R (new '(+FixRect) 0 0 30 20))
+-> $13455710
+</code></pre>
+
+
+<p><hr>
+<h2><a name="ext">Persistence (External Symbols)</a></h2>
+
+<p>PicoLisp has persistent objects built-in as a first class data type. With
+"first class" we mean not just the ability of being passed around, or returned
+from functions (that's a matter of course), but that they are a primary data
+type with their own interpreter tag bits. They are, in fact, a special type of
+symbolic atoms (called "<a href="ref.html#external">External Symbols</a>"), that
+happen to be read from pool file(s) when accessed, and written back
+automatically when modified.
+
+<p>In all other aspects they are normal symbols. They have a value, a property
+list and a name.
+
+<p>The name cannot be directly controlled by the programmer, as it is assigned
+when the symbol is created. It is an encoded index of the symbol's location in
+its database file. In its visual representation (output by the <code><a
+href="refP.html#print">print</a></code> functions and input by the <code><a
+href="refR.html#read">read</a></code> functions) it is surrounded by braces.
+
+<p>To make use of external symbols, you need to open a database first:
+
+<pre><code>
+: (pool "test.db")
+</code></pre>
+
+<p>If a file with that name did not exist, it got created now. Also created at
+the same moment was <code>{1}</code>, the very first symbol in the file. This
+symbol is of great importance, and is handled especially by PicoLisp. Therefore
+a global constant <code><a href="refD.html#*DB">*DB</a></code> exists, which
+points to that symbol <code>{1}</code>, which should be used exclusively to
+access the symbol <code>{1}</code>, and which should never be modified by the
+programmer.
+
+<pre><code>
+: *DB                   # The value of '*DB'
+-> {1}                  # is '{1}'
+: (show *DB)
+{1} NIL                 # Value of '{1}' is NIL, property list empty
+</code></pre>
+
+<p>Now let's put something into the value and property list of <code>{1}</code>.
+
+<pre><code>
+: (set *DB "Hello world")  # Set value of '{1}' to a transient symbol (string)
+-> "Hello world"
+: (put *DB 'a 1)           # Property 'a' to 1
+-> 1
+: (put *DB 'b 2)           # Property 'b' to 2
+-> 2
+: (show *DB)               # Now show the symbol '{1}'
+{1} "Hello world"
+   b 2
+   a 1
+</code></pre>
+
+<p>Note that instead of '<code>(set *DB "Hello world")</code>', we might
+also have written '<code>(setq {1} "Hello world")</code>', and instead of
+'<code>(put *DB 'a 1)</code>' we might have written '<code>(put '{1} 'a
+1)</code>'. This would have the same effect, but as a rule external symbols
+should never be be accessed literally in application programs, because the
+garbage collector might not be able to free these symbols and all symbols
+connected to them (and that might well be the whole database). It is all right,
+however, to access external symbols literally during interactive debugging.
+
+<p>Now we can create our first own external symbol. This can be done with
+<code><a href="refN.html#new">new</a></code> when a <code>T</code> argument is
+supplied:
+
+<pre><code>
+: (new T)
+-> {2}               # Got a new symbol
+</code></pre>
+
+<p>We store it in the database root <code>{1}</code>:
+
+<pre><code>
+: (put *DB 'newSym '{2})   # Literal '{2}' (ok during debugging)
+-> {2}
+: (show *DB)
+{1} "Hello world"
+   newSym {2}              # '{2}' is now stored in '{1}'
+   b 2
+   a 1
+</code></pre>
+
+<p>Put some property value into '{2}'
+
+<pre><code>
+: (put *DB 'newSym 'x 777) # Put 777 as 'x'-property of '{2}'
+-> 777
+: (show *DB 'newSym)       # Show '{2}' (indirectly)
+{2} NIL
+   x 777
+-> {2}
+: (show '{2})              # Show '{2}' (directly)
+{2} NIL
+   x 777
+</code></pre>
+
+<p>All modifications to - and creations of - external symbols done so far are
+not written to the database yet. We could call <code><a
+href="refR.html#rollback">rollback</a></code> (or simply exit PicoLisp) to undo
+all the changes. But as we want to keep them:
+
+<pre><code>
+: (commit)           # Commit all changes
+-> T
+: (bye)              # Exit picolisp
+$                    # back to the shell
+</code></pre>
+
+<p>So, the next time when ..
+
+<pre><code>
+$ pil +                 # .. we start PicoLisp
+: (pool "test.db")      # and open the database file,
+-> T
+: (show *DB)            # our two symbols are there again
+{1} "Hello world"
+   newSym {2}
+   b 2
+   a 1
+-> {1}
+: (show *DB 'newSym)
+{2} NIL
+   x 777
+-> {2}
+</code></pre>
+
+
+<p><hr>
+<h2><a name="db">Database Programming</a></h2>
+
+<p>To a database, there is more than just persistence. PicoLisp includes an
+entity/relation class framework (see also <a href="ref.html#dbase">Database</a>)
+which allows a close mapping of the application data structure to the database.
+
+<p>We provided a simple yet complete database and GUI demo application in
+<code><a href="family.tgz">@doc/family.tgz</a></code> and <code><a
+href="family64.tgz">@doc/family64.tgz</a></code>. Please unpack the first one if
+you use a 32-bit system, and the second one on a 64-bit system. Both contain the
+sources in <code><a href="family.l">@doc/family.l</a></code>, and an initial
+database in the "family/" subdirectory.
+
+<p>To use it, please unpack it first in your current working directory, then
+start it up in the following way:
+
+<pre><code>
+$ pil family.l -main +
+:
+</code></pre>
+
+<p>This loads the source file, initializes the database by calling the
+<code>main</code> function, and prompts for user input.
+
+<p>The data model is small and simple. We define a class <code>+Person</code>
+and two subclasses <code>+Man</code> and <code>+Woman</code>.
+
+<pre><code>
+(class +Person +Entity)
+</code></pre>
+
+<p><code>+Person</code> is a subclass of the <code><a
+href="refE.html#+Entity">+Entity</a></code> system class. Usually all objects in
+a database are of a direct or indirect subclass of <code><a
+href="refE.html#+Entity">+Entity</a></code>. We can then define the relations to
+other data with the <code><a href="refR.html#rel">rel</a></code> function.
+
+<pre><code>
+(rel nm (+Need +Sn +Idx +String))      # Name
+</code></pre>
+
+<p>This defines the name property (<code>nm</code>) of a person. The first
+argument to <code>rel</code> is always a list of relation classes (subclasses of
+<code><a href="refR.html#+relation">+relation</a></code>), optionally followed
+by further arguments, causing relation daemon objects be created and stored in
+the class definition. These daemon objects control the entity's behavior later
+at runtime.
+
+<p>Relation daemons are a kind of <i>metadata</i>, controlling the interactions
+between entities, and maintaining database integrity. Like other classes,
+relation classes can be extended and refined, and in combination with proper
+prefix classes a fine-grained description of the application's structure can be
+produced.
+
+<p>Besides primitive relation classes, like <code>+Number</code>,
+<code>+String</code> or <code>+Date</code>, there are
+
+<ul>
+
+<li>relations between entities, like <code>+Link</code> (unidirectional link),
+<code>+Joint</code> (bidirectional link) or <code>+Hook</code> (object-local
+index trees)
+
+<li>relations that bundle other relations into a single unit (<code>+Bag</code>)
+
+<li>a <code>+List</code> prefix class
+
+<li>a <code>+Blob</code> class for "binary large objects"
+
+<li>prefix classes that maintain index trees, like <code>+Key</code> (unique
+index), <code>+Ref</code> (non-unique index) or <code>+Idx</code> (full text
+index)
+
+<li>prefix classes which in turn modify index class behavior, like
+<code>+Sn</code> (modified soundex algorithm [<a href="#knuth73">knuth73</a>]
+for tolerant searches)
+
+<li>a <code>+Need</code> prefix class, for existence checks
+
+<li>a <code>+Dep</code> prefix class controlling dependencies between other
+relations
+
+</ul>
+
+<p>In the case of the person's name (<code>nm</code>) above, the relation object
+is of type <code>(+Need +Sn +Idx +String)</code>. Thus, the name of each person
+in this demo database is a mandatory attribute (<code>+Need</code>), searchable
+with the soundex algorithm (<code>+Sn</code>) and a full index
+(<code>+Idx</code>) of type <code>+String</code>.
+
+<pre><code>
+(rel pa (+Joint) kids (+Man))          # Father
+(rel ma (+Joint) kids (+Woman))        # Mother
+(rel mate (+Joint) mate (+Person))     # Partner
+</code></pre>
+
+<p>The attributes for <i>father</i> (<code>pa</code>), <i>Mother</i>
+(<code>ma</code>) and <i>partner</i> (<code>mate</code>) are all defined as
+<code>+Joint</code>s. A <code>+Joint</code> is probably the most powerful
+relation mechanism in PicoLisp; it establishes a bidirectional link between two
+objects.
+
+<p>The above declarations say that the <i>father</i> (<code>pa</code>) attribute
+points to an object of type <code>+Man</code>, and is joined with that object's
+<code>kids</code> attribute (which is a list of joints back to all his
+children).
+
+<p>The consistency of <code>+Joint</code>s is maintained automatically by the
+relation daemons. These become active whenever a value is stored to a person's
+<code>pa</code>, <code>ma</code>, <code>mate</code> or <code>kids</code>
+property.
+
+<p>For example, interesting things happen when a person's <code>mate</code> is
+changed to a new value. Then the <code>mate</code> property of the old mate's
+object is cleared (she has no mate after that). Now when the person pointed to
+by the new value already has a mate, then that mate's <code>mate</code> property
+gets cleared, and the happy new two mates now get their joints both set
+correctly.
+
+<p>The programmer doesn't have to care about all that. He just declares these
+relations as <code>+Joint</code>s.
+
+<p>The last four attributes of person objects are just static data:
+
+<pre><code>
+(rel job (+Ref +String))               # Occupation
+(rel dat (+Ref +Date))                 # Date of birth
+(rel fin (+Ref +Date))                 # Date of death
+(rel txt (+String))                    # Info
+</code></pre>
+
+<p>They are all searchable via a non-unique index (<code>+Ref</code>). Date
+values in PicoLisp are just numbers, representing the day number (starting first
+of March of the year zero).
+
+<p>A method <code>url&gt;</code> is defined:
+
+<pre><code>
+(dm url> ()
+   (list "!person" '*ID This) )
+</code></pre>
+
+<p>It is needed later in the GUI, to cause a click on a link to switch to that
+object.
+
+<p>The classes <code>+Man</code> and <code>+Woman</code> are subclasses of
+<code>+Person</code>:
+
+<pre><code>
+(class +Man +Person)
+(rel kids (+List +Joint) pa (+Person)) # Children
+
+(class +Woman +Person)
+(rel kids (+List +Joint) ma (+Person)) # Children
+</code></pre>
+
+<p>They inherit everything from <code>+Person</code>, except for the
+<code>kids</code> attribute. This attribute joins with the <code>pa</code> or
+<code>ma</code> attribute of the child, depending on the parent's gender.
+
+<p>That's the whole data model for our demo database application.
+
+<p>It is followed by a call to <code><a href="refD.html#dbs">dbs</a></code>
+("database sizes"). This call is optional. If it is not present, the whole
+database will reside in a single file, with a block size of 256 bytes. If it is
+given, it should specify a list of items, each having a number in its CAR, and a
+list in its CDR. The CARs taken together will be passed later to <a
+href="refP.html#pool">pool</a>, causing an individual database file with that
+size to be created. The CDRs tell what entity classes (if an item is a symbol)
+or index trees (if an item is a list with a class in its CAR and a list of
+relations in its CDR) should be placed into that file.
+
+
+<p>A handful of access functions is provided, that know about database
+relationships and thus allows higher-level access modes to the external symbols
+in a database.
+
+<p>For one thing, the B-Trees created and maintained by the index daemons can be
+used directly. Though this is rarely done in a typical application, they form
+the base mechanisms of other access modes and should be understood first.
+
+<p>The function <code><a href="refT.html#tree">tree</a></code> returns the tree
+structure for a given relation. To iterate over the whole tree, the functions
+<code><a href="refI.html#iter">iter</a></code> and <code><a
+href="refS.html#scan">scan</a></code> can be used:
+
+<pre><code>
+(iter (tree 'dat '+Person) '((P) (println (datStr (get P 'dat)) (get P 'nm))))
+"1770-08-03" "Friedrich Wilhelm III"
+"1776-03-10" "Luise Augusta of Mecklenburg-Strelitz"
+"1797-03-22" "Wilhelm I"
+...
+</code></pre>
+
+<p>They take a function as the first argument. It will be applied to all objects
+found in the tree (to show only a part of the tree, an optional begin- and
+end-value can be supplied), producing a simple kind of report.
+
+<p>More useful is <code><a href="refC.html#collect">collect</a></code>; it
+returns a list of all objects that fall into a range of index values:
+
+<pre><code>
+: (collect 'dat '+Person (date 1982 1 1) (date 1988 12 31))
+-> ({2-M} {2-L} {2-E})
+</code></pre>
+
+<p>This returns all persons born between 1982 and 1988. Let's look at them with
+<code><a href="refS.html#show">show</a></code>:
+
+<pre><code>
+: (more (collect 'dat '+Person (date 1982 1 1) (date 1988 12 31)) show)
+{2-M} (+Man)
+   nm "William"
+   dat 724023
+   ma {2-K}
+   pa {2-J}
+   job "Heir to the throne"
+
+{2-L} (+Man)
+   nm "Henry"
+   dat 724840
+   ma {2-K}
+   pa {2-J}
+   job "Prince"
+
+{2-E} (+Woman)
+   nm "Beatrice"
+   dat 726263
+   ma {2-D}
+   job "Princess"
+   pa {2-B}
+</code></pre>
+
+<p>If you are only interested in a certain attribute, e.g. the name, you can
+return it directly:
+
+<pre><code>
+: (collect 'dat '+Person (date 1982 1 1) (date 1988 12 31) 'nm)
+-> ("William" "Henry" "Beatrice")
+</code></pre>
+
+<p>To find a single object in the database, the function <code><a
+href="refD.html#db">db</a></code> is used:
+
+<pre><code>
+: (db 'nm '+Person "Edward")
+-> {2-;}
+</code></pre>
+
+<p>If the key is not unique, additional arguments may be supplied:
+
+<pre><code>
+: (db 'nm '+Person "Edward"  'job "Prince"  'dat (date 1964 3 10))
+-> {2-;}
+</code></pre>
+
+<p>The programmer must know which combination of keys will suffice to specify
+the object uniquely. The tree search is performed using the first value
+("Edward"), while all other attributes are used for filtering. Later, in
+the <a href="#pilog">Pilog</a> section, we will show how more general (and
+possibly more efficient) searches can be performed.
+
+
+<p><hr>
+<h2><a name="gui">User Interface (GUI) Programming</a></h2>
+
+<p>The only types of GUI supported by the PicoLisp application server framework
+is either dynamically generated (but static by nature) HTML, or an interactive
+XHTML/CSS framework with the optional use of JavaScript.
+
+<p>Before we explain the GUI of our demo database application, we present a
+minimal example for a plain HTML-GUI in <code><a
+href="hello.l">@doc/hello.l</a></code>. Start the application server as:
+
+<pre><code>
+$ pil @lib/http.l  --server 8080 @doc/hello.l  -wait
+</code></pre>
+
+<p>Now point your browser to the address '<code><a
+href="http://localhost:8080">http://localhost:8080</a></code>'. You should see a
+very simple HTML page. You can come back here with the browser's BACK button.
+
+<p>You can call the page repeatedly, or concurrently with many clients if you
+like. To terminate the server, you have to send it a TERM signal (e.g.
+'<code>killall pil</code>'), or type the <code>Ctrl-C</code> key in the console
+window.
+
+<p>In our demo database application, a single function <code>person</code> is
+responsible for the whole GUI. Again, please look at <code><a
+href="family.l">@doc/family.l</a></code>.
+
+<p>To start the database <i>and</i> the application server, call:
+
+<pre><code>
+$ pil family.l -main -go +
+</code></pre>
+
+<p>As before, the database is opened with <code>main</code>. The function
+<code>go</code> is also defined in <code>@doc/family.l</code>:
+
+<pre><code>
+(de go ()
+   (server 8080 "!person") )
+</code></pre>
+
+<p>It starts the HTTP server listening on TCP port 8080 (we did a similar thing
+in our minimal GUI example above directly on the command line). Each connect to
+that port will cause the function <code>person</code> to be invoked.
+
+<p>Again, point your browser to the address '<code><a
+href="http://localhost:8080" target="GUI">http://localhost:8080</a></code>'.
+
+<p>You should see a new browser window with an input form created by the
+function <code>person</code>. We provided an initial database in "family/[1-4]".
+You can navigate through it by clicking on the pencil icons besides the input
+fields.
+
+<p>The chart with the children data can be scrolled using the down
+(<code>v</code>) and up (<code>^</code>) buttons.
+
+<p>A click on the button "Select" below opens a search dialog. You can scroll
+through the chart as before. Again, a click on a pencil will jump to that
+person. You can abort the dialog with a click on the "Cancel"-button.
+
+<p>The search fields in the upper part of the dialog allow a conjunctive search.
+If you enter "Edward" in the "Name" field and click "Search", you'll see all
+persons having the string "Edward" in their name. If you also enter "Duke" in
+the "Occupation" field, the result list will reduce to only two entries.
+
+<p>To create a new person, press the "New Man" or "New Woman" button. A new
+empty form will be displayed. Please type a name into the first field, and
+perhaps also an occupation and birth date. Any change of contents should be
+followed by a press on the "Done" button, though any other button (also Scroll
+or Select-buttons) will also do.
+
+<p>To assign a <i>father</i> attribute, you can either type a name directly into
+the field (if that person already exists in the database and you know the exact
+spelling), or use the "Set"-button (<code>-&gt;</code>) to the left of that
+field to open the search dialog. If you type in the name directly, your input
+must exactly match upper and lower case.
+
+<p>Alternatively, you may create a new person and assign a child in the
+"Children" chart.
+
+<p>On the console where you started PicoLisp, there should a prompt have
+appeared just when the browser connected. You can debug the application
+interactively while it is running. For example, the global variable
+<code>*Top</code> always contains the top level GUI object:
+
+<pre><code>
+: (show *Top)
+</code></pre>
+
+<p>To take a look at the first field on the form:
+
+<pre><code>
+: (show *Top 'gui 1)
+</code></pre>
+
+<p>A production application would be started in a slightly different way:
+
+<pre><code>
+$ pil family.l -main -go -wait
+</code></pre>
+
+<p>In that case, no debug prompt will appear. In both cases, however, two
+<code>pil</code> processes will be running now. One is the initial server
+process which will continue to run until it is killed. The other is a child
+process holding the state of the GUI in the browser. It will terminate some time
+after the browser is closed, or when <code>(<a
+href="refB.html#bye">bye</a>)</code> or a <code>Ctrl-D</code> is entered at the
+PicoLisp prompt.
+
+<p>Now back to the explanation of the GUI function <code>person</code>:
+
+<pre><code>
+(de person ()
+   (app)
+   (action
+      (html 0 (get (default *ID (val *DB)) 'nm) "@lib.css" NIL
+         (form NIL
+            (&lt;h2&gt; (&lt;id&gt; (: nm)))
+</code></pre>
+
+<p>For an in-depth explanation of that startup code, please refer to the guide
+to <a href="app.html">PicoLisp Application Development</a>.
+
+<p>All components like fields and buttons are controlled by <code>form</code>.
+The function <code>gui</code> creates a single GUI component and takes the type
+(a list of classes) and a variable number of arguments depending on the needs of
+these classes.
+
+<pre><code>
+   (gui '(+E/R +TextField) '(nm : home obj) 40 "Name")
+</code></pre>
+
+<p>This creates a <code>+TextField</code> with the label "Name" and a length of
+40 characters. The <code>+E/R</code> (: Entity/Relation) prefix class connects
+that field to a database object, the <code>nm</code> attribute of a person in
+this case, so that the person's name is displayed in that text field, and any
+changes entered into that field are propagated to the database automatically.
+
+<pre><code>
+   (gui '(+ClassField) '(: home obj) '(("Male" +Man) ("Female" +Woman)))
+</code></pre>
+
+<p>A <code>+ClassField</code> displays and changes the class of an object, in
+this case the person's sex from <code>+Man</code> to <code>+Woman</code> and
+vice versa.
+
+<p>As you see, there is no place where explicit accesses to the database have to
+be programmed, no <code>select</code> or <code>update</code>. This is all
+encapsulated in the GUI components, mainly in the <code>+E/R</code> prefix
+class. The above function <code>person</code> is fully functional as we present
+it and allows creation, modification and deletion of person objects in the
+database.
+
+<p>The two buttons on the bottom right generate simple reports:
+
+<p>The first one shows all contemporaries of the person that is currently
+displayed, i.e. all persons who did not die before, or were not born after that
+person. This is a typical PicoLisp report, in that in addition to the report's
+HTML page, a temporary file may be generated, suitable for download (and import
+into a spread sheet), and from which a PDF can be produced for print-out.
+
+<p>In PicoLisp, there is not a real difference between a plain HTML-GUI and a
+report. Again, the function <code>html</code> is used to generate the page.
+
+<p>The second report is much simpler. It produces a recursive structure of the
+family.
+
+<p>In both reports, links to the person objects are created which allow easy
+navigation through the database.
+
+
+<p><hr>
+<h2><a name="pilog">Pilog -- PicoLisp Prolog</a></h2>
+
+<p>This sections explains some cases of using Pilog in typical application
+programming, in combination with persistent objects and databases. Please refer
+to the <a href="ref.html#pilog">Pilog</a> section of the PicoLisp Reference for
+the basic usage of Pilog.
+
+<p>Again, we use our demo application <code><a
+href="family.l">@doc/family.l</a></code> that was introduced in the <a
+href="#db">Database Programming</a> section.
+
+<p>Normally, Pilog is used either interactively to query the database during
+debugging, or in applications to generate export data and reports. In the
+following examples we use the interactive query front-end functions <code><a
+href="ref_.html#?">?</a></code> and <code><a
+href="refS.html#select">select</a></code>. An application will use <code><a
+href="refG.html#goal">goal</a></code> and <code><a
+href="refP.html#prove">prove</a></code> directly, or use convenience functions
+like <code><a href="refP.html#pilog">pilog</a></code> or <code><a
+href="refS.html#solve">solve</a></code>.
+
+<p>All Pilog access to external symbols is done via the two predicates <code><a
+href="refD.html#db/3">db/3</a></code> and <code><a
+href="refS.html#select/3">select/3</a></code>.
+
+<ul>
+
+<li><code><a href="refD.html#db/3">db/3</a></code> corresponds to the Lisp-level
+functions <code><a href="refD.html#db">db</a></code> and <code><a
+href="refC.html#collect">collect</a></code>, as it derives its data from a
+single relation. It can be used for simple database queries.
+
+<li><code><a href="refS.html#select/3">select/3</a></code> provides for
+self-optimizing parallel access to an arbitrary number of relations. There is
+also a Lisp front-end function <code><a
+href="refS.html#select">select</a></code>, for convenient calls to the Pilog
+<code>select</code> predicate.
+
+</ul>
+
+<p>A predicate <code><a href="refS.html#show/1">show/1</a></code> is pre-defined
+for debugging purposes (a simple glue to the Lisp-level function
+<code>show</code>, see <a href="#brw">Browsing</a>). Searching with <code><a
+href="refD.html#db/3">db/3</a></code> for all persons having the string "Edward"
+in their name:
+
+<pre><code>
+: (? (db nm +Person "Edward" @P) (show @P))
+{2-;} (+Man)
+   nm "Edward"
+   ma {2-:}
+   pa {2-A}
+   dat 717346
+   job "Prince"
+ @P={2-;}
+{2-1B} (+Man)
+   nm "Albert Edward"
+   kids ({2-1C} {2-1D} {2-1E} {2-1F} {2-1G} {2-1H} {2-1I} {2-g} {2-a})
+   job "Prince"
+   mate {2-f}
+   fin 680370
+   dat 664554
+ @P={2-1B}
+...               # more results
+</code></pre>
+
+<p>To search for all persons with "Edward" in their name who are married to
+somebody with occupation "Queen":
+
+<pre><code>
+: (? (db nm +Person "Edward" @P) (val "Queen" @P mate job) (show @P))
+{2-1B} (+Man)
+   mate {2-f}
+   nm "Albert Edward"
+   kids ({2-1C} {2-1D} {2-1E} {2-1F} {2-1G} {2-1H} {2-1I} {2-g} {2-a})
+   job "Prince"
+   fin 680370
+   dat 664554
+ @P={2-1B}
+-> NIL            # only one result
+</code></pre>
+
+<p>If you are interested in the names of "Albert Edward"'s children:
+
+<pre><code>
+: (? (db nm +Person "Albert Edward" @P) (lst @K @P kids) (val @Kid @K nm))
+ @P={2-1B} @K={2-1C} @Kid="Beatrice Mary Victoria"
+ @P={2-1B} @K={2-1D} @Kid="Leopold George Duncan"
+ @P={2-1B} @K={2-1E} @Kid="Arthur William Patrick"
+ @P={2-1B} @K={2-1F} @Kid="Louise Caroline Alberta"
+ @P={2-1B} @K={2-1G} @Kid="Helena Augusta Victoria"
+ @P={2-1B} @K={2-1H} @Kid="Alfred Ernest Albert"
+ @P={2-1B} @K={2-1I} @Kid="Alice Maud Mary"
+ @P={2-1B} @K={2-g} @Kid="Victoria Adelaide Mary"
+ @P={2-1B} @K={2-a} @Kid="Edward VII"
+-> NIL
+</code></pre>
+
+<p><code><a href="refD.html#db/3">db/3</a></code> can do a direct index access
+only for a single attribute (<code>nm</code> of <code>+Person</code> above). To
+search for several criteria at the same time, <code><a
+href="refS.html#select/3">select/3</a></code> has to be used:
+
+<pre><code>
+: (?
+   (select (@P)
+      ((nm +Person "Edward") (nm +Person "Augusta" pa))  # Generator clauses
+      (tolr "Edward" @P nm)                              # Filter clauses
+      (tolr "Augusta" @P kids nm) )
+   (show @P) )
+{2-1B} (+Man)
+   kids ({2-1C} {2-1D} {2-1E} {2-1F} {2-1G} {2-1H} {2-1I} {2-g} {2-a})
+   mate {2-f}
+   nm "Albert Edward"
+   job "Prince"
+   fin 680370
+   dat 664554
+ @P={2-1B}
+-> NIL
+</code></pre>
+
+<p><code><a href="refS.html#select/3">select/3</a></code> takes a list of
+generator clauses which are used to retrieve objects from the database, and a
+number of normal Pilog filter clauses. In the example above the generators are
+
+<ul>
+
+<li><code>(nm +Person "Edward")</code> to generate persons with "Edward" in
+their names, and
+
+<li><code>(nm +Person "Augusta" pa)</code> to find persons with "Augusta"
+in their names and generate persons using the <code>pa</code> ("father")
+attribute.
+
+</ul>
+
+<p>All persons generated are possible candidates for our selection. The
+<code>nm</code> index tree of <code>+Person</code> is traversed twice in
+parallel, optimizing the search in such a way that successful hits get higher
+priority in the search, depending on the filter clauses. The process will stop
+as soon as any one of the generators is exhausted. Note that this is different
+from the standard Prolog search algorithm.
+
+<p>The filter clauses in this example both use the pre-defined predicate
+<code><a href="refT.html#tolr/3">tolr/3</a></code> for <i>tolerant</i> string
+matches (according either to the soundex algorithm (see the section <a
+href="#db">Database Programming</a>) or to substring matches), and filter
+objects that
+
+<ul>
+
+<li>match "Edward" in their name: <code>(tolr "Edward" @P nm)</code>, and
+
+<li>match "Augusta" in one of their kids' names: <code>(tolr "Augusta" @P
+kids nm)</code>
+
+</ul>
+
+<p>A more typical and extensive example for the usage of <code>select</code> can
+be found in the <code>qPerson</code> function in <code><a
+href="family.l">@doc/family.l</a></code>. It is used in the search dialog of the
+demo application, and searches for a person with the name, the parents' and
+partner's names, the occupation and a time range for the birth date. The
+relevant index trees in the database are searched (actually only those trees
+where the user entered a search key in the corresponding dialog field), and a
+logical AND of the search attributes is applied to the result.
+
+<p>For example, press the "Select" button, enter "Elizabeth" into the "Mother"
+search field and "Phil" in the "Partner" search field, meaning to look for all
+persons whose mother's name is like "Elizabeth" and whose partner's name is like
+"Phil". As a result, two persons ("Elizabeth II" and "Anne") will show up.
+
+<p>In principle, <code><a href="refD.html#db/3">db/3</a></code> can be seen as a
+special case of <code><a href="refS.html#select/3">select/3</a></code>. The
+following two queries are equivalent:
+
+<pre><code>
+: (? (db nm +Person "Edward" @P))
+ @P={2-;}
+ @P={2-1B}
+ @P={2-R}
+ @P={2-1K}
+ @P={2-a}
+ @P={2-T}
+-> NIL
+: (? (select (@P) ((nm +Person "Edward"))))
+ @P={2-;}
+ @P={2-1B}
+ @P={2-R}
+ @P={2-1K}
+ @P={2-a}
+ @P={2-T}
+-> NIL
+</code></pre>
+
+
+<p><hr>
+<h2><a name="sql">Poor Man's SQL</a></h2>
+
+<h3>select</h3>
+
+<p>For convenience, a <code><a href="refS.html#select">select</a></code> Lisp
+glue function is provided as a front-end to the <code>select</code> predicate.
+Note that this function does not evaluate its arguments (it is intended for
+interactive use), and that it supports only a subset of the predicate's
+functionality. The syntax resembles SELECT in the SQL language, for example:
+
+<pre><code>
+# SELECT * FROM Person
+: (select +Person)  # Step through the whole database
+{2-o} (+Man)
+   nm "Adalbert Ferdinand Berengar Viktor of Prussia"
+   dat 688253
+   ma {2-j}
+   pa {2-h}
+   fin 711698
+
+{2-1B} (+Man)
+   nm "Albert Edward"
+   dat 664554
+   job "Prince"
+   mate {2-f}
+   kids ({2-1C} {2-1D} {2-1E} {2-1F} {2-1G} {2-1H} {2-1I} {2-g} {2-a})
+   fin 680370
+...
+</code></pre>
+
+<pre><code>
+# SELECT * FROM Person WHERE nm LIKE "%Edward%"
+: (select +Person nm "Edward")  # Show all Edwards
+{2-;} (+Man)
+   nm "Edward"
+   dat 717346
+   job "Prince"
+   ma {2-:}
+   pa {2-A}
+
+{2-1B} (+Man)
+   nm "Albert Edward"
+   dat 664554
+   job "Prince"
+   kids ({2-1C} {2-1D} {2-1E} {2-1F} {2-1G} {2-1H} {2-1I} {2-g} {2-a})
+   mate {2-f}
+   fin 680370
+...
+</code></pre>
+
+<pre><code>
+# SELECT nm, dat FROM Person WHERE nm LIKE "%Edward%"
+: (select nm dat +Person nm "Edward")
+"Edward" "1964-03-10" {2-;}
+"Albert Edward" "1819-08-26" {2-1B}
+"George Edward" NIL {2-R}
+"Edward Augustus Hanover" NIL {2-1K}
+...
+</code></pre>
+
+<pre><code>
+# SELECT dat, fin, p1.nm, p2.nm
+#    FROM Person p1, Person p2
+#    WHERE p1.nm LIKE "%Edward%"
+#    AND p1.job LIKE "King%"
+#    AND p1.mate = p2.mate  -- Actually, in a SQL model we'd need
+#                           -- another table here for the join
+: (select dat fin nm (mate nm) +Person nm "Edward" job "King")
+"1894-06-23" "1972-05-28" "Edward VIII" "Wallace Simpson" {2-T}
+"1841-11-09" NIL "Edward VII" "Alexandra of Denmark" {2-a}
+-> NIL
+</code></pre>
+
+
+<h3>update</h3>
+
+<p>In addition (just to stay with the SQL terminology ;-), there is also an
+<code><a href="refU.html#update">update</a></code> function. It is a front-end
+to the <code><a href="refE.html#entityMesssages">set!></a></code> and <code><a
+href="refE.html#entityMesssages">put!></a></code> transaction methods, and
+should be used when single objects in the database have to be modified by hand.
+
+<p>In principle, it would also be possible to use the <code><a
+href="refE.html#edit">edit</a></code> function to modify a database object. This
+is not recommended, however, because <code>edit</code> does not know about
+relations to other objects (like Links, Joints and index trees) and may easily
+cause database corruption.
+
+<p>In the most general case, the value of a property in a database object is
+changed with the <code>put!></code> method. Let's look at "Edward" from the
+previous examples:
+
+<pre><code>
+: (show '{2-;})
+{2R} (+Man)
+   job "Prince"
+   nm "Edward"
+   dat 717346
+   ma {2-:}
+   pa {20A}
+-> {2-;}
+</code></pre>
+
+<p>We might change the name to "Johnny" with <code>put!></code>:
+
+<pre><code>
+: (put!> '{2-;} 'nm "Johnny")
+-> "Johnny"
+</code></pre>
+
+<p>However, an easier and less error-prone prone way - especially when more than
+one property has to be changed - is using <code><a
+href="refU.html#update">update</a></code>. It presents the value (the list of
+classes) and then each property on its own line, allowing the user to change it
+with the <a href="#ledit">command line editor</a>.
+
+<p>Just hitting ENTER will leave that property unchanged. To modify it, you'll
+typically hit ESC to get into command mode, and move the cursor to the point of
+change.
+
+<p>For properties with nested list structures (<code>+List +Bag</code>),
+<code>update</code> will recurse into the data structure.
+
+<pre><code>
+: (update '{2-;})
+{2-;} (+Man)      # ENTER
+nm "Johnny"       # Modified the name to "Johnny"
+ma {2-:}          # ENTER
+pa {2-A}          # ENTER
+dat 1960-03-10    # Modified the year from "1964" to "1960"
+job "Prince"      # ENTER
+-> {2-;}
+</code></pre>
+
+<p>All changes are committed immediately, observing the rules of database
+synchronization so that any another user looking at the same object will have
+his GUI updated correctly.
+
+<p>To abort <code>update</code>, hit <code>Ctrl-X</code>.
+
+<p>If only a single property has to be changed, <code>update</code> can be
+called directly for that property:
+
+<pre><code>
+: (update '{2-;} 'nm)
+{2-;} nm "Edward"
+...
+</code></pre>
+
+
+<p><hr>
+<h2><a name="ref">References</a></h2>
+
+<p><a name="knuth73">[knuth73]</a> Donald E. Knuth: ``The Art of Computer
+Programming'', Vol.3, Addison-Wesley, 1973, p. 392
+
+</body>
+</html>
