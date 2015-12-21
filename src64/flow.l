@@ -1,4 +1,4 @@
-# 11nov15abu
+# 17nov15abu
 # (c) Software Lab. Alexander Burger
 
 (code 'redefMsgEC)
@@ -1310,7 +1310,7 @@
 10       do
             ld X (X CDR)  # Locate method in extra classes
             atom X  # Any?
-         while z  # No: Return 'gt'
+            jnz retGt  # No: Return 'gt'
             ld E (X)  # Superclass
             ld Z X  # 'cls'
             call methodEY_FCYZ  # Found?

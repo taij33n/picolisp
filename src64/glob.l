@@ -1,4 +1,4 @@
-# 03oct15abu
+# 24nov15abu
 # (c) Software Lab. Alexander Burger
 
 (data 'Data)
@@ -587,8 +587,6 @@
    word (short `(cadr *Version))
    word .+8
    word (short `(caddr *Version))
-   word .+8
-   word (short `(cadddr *Version))
    word Nil
 
 : ExtCnt       word  1           # External symbol count

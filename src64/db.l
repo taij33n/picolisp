@@ -1,4 +1,4 @@
-# 30oct15abu
+# 17nov15abu
 # (c) Software Lab. Alexander Burger
 
 # 6 bytes in little endian format
@@ -55,10 +55,10 @@
    ld B (Buf)
    shl A 6  # 'dbFile' index
    cmp A (DBs)  # Local file?
-   jge retLt  # No
+   jge retEq  # No: 'z'
    add A (DbFiles)  # Get DB file
    ld (DbFile) A  # Set current
-   ret  # 'ge'
+   ret  # 'nz'
 
 # Build external symbol name
 (code 'extNmCE_X 0)
@@ -598,7 +598,7 @@
    if eq  # Yes
       ld A (BlkLink)  # Next block?
       null A
-      jz ret  # No: Return 0
+      jz ret  # No: Return 'z'
       push C
       push E
       call rdBlockIndexAZ_Z  # Read block
@@ -606,7 +606,7 @@
       pop C
    end
    ld B (Z)  # Next byte
-   add Z 1  # (gt)
+   add Z 1  # 'nz'
    ret
 
 (code 'putBlockBZ 0)
@@ -874,7 +874,7 @@
                         cmp A (hex "FFFF")  # End marker?
                      while ne  # No
                         call dbfBuf_AF  # Read file number from 'Buf' to 'DbFile'
-                        jlt jnlErrX  # No local file
+                        jz jnlErrX  # No local file
                         cc fread(Buf BLK 1 (DbLog))  # Read object ID
                         cmp A 1  # OK?
                         jne jnlErrX  # No
@@ -895,7 +895,7 @@
                      break T
                   end
                   call dbfBuf_AF  # Read file number from 'Buf' into 'DbFile'
-                  jlt 40  # No local file
+                  jz 40  # No local file
                   cc fread(Buf BLK 1 (DbLog))  # Read object ID
                   cmp A 1  # OK?
                   jne 40  # No
@@ -994,7 +994,7 @@
          cmp A 1  # OK?
          jne jnlErrX  # No
          call dbfBuf_AF  # Read file number from 'Buf' to 'DbFile'
-         jlt dbfErrX  # No local file
+         jz dbfErrX  # No local file
          cmp C BLKSIZE  # Whole block?
          ldz C (A III)  # Yes: Take file's block size
          cc fread(Buf BLK 1 E)  # Read object ID

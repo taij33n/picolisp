@@ -1,4 +1,4 @@
-# 16nov15abu
+# 17nov15abu
 # (c) Software Lab. Alexander Burger
 
 # *Globals
@@ -37,13 +37,6 @@
 (redef label (Lbl Flg)
    (and Flg (not *FPic) (push '*Globals Lbl))
    (label Lbl Flg) )
-
-(de nearLabel (Lbl)
-   (or
-      (= `(char ".") (char Lbl))
-      (and
-         (cdr (split (chop Lbl) "_"))
-         (format (last @)) ) ) )
 
 # Debug output
 (de comment (Sym . @)
@@ -962,9 +955,9 @@
 
 (asm nul (Src S)
    (comment 'nul Src)
-   (if (== 'B (setq Src (src Src S NIL NIL "b")))
-      (prinst "ands" 'wzr "w0" "#0xFF")
-      (prinst "cmp" Src 0) ) )
+   (when (== 'B (setq Src (src Src S NIL NIL "b")))
+      (prinst "ubfm" (setq Src "x11") "x0" 0 7) )
+   (prinst "cmp" Src 0) )
 
 (asm nul/jz (Src S Adr A)  # optimize
    (comment 'nul Src "--" "jz" Adr)
@@ -1752,7 +1745,12 @@
          (cond
             ((memq (caadr Lst) '(jz jnz))
                (and
-                  (nearLabel (get Lst 2 2))
+                  (or
+                     (= `(char ".") (char (get Lst 2 2)))
+                     (and
+                        (cdr (split (chop (get Lst 2 2)) "_"))
+                        (format (last @)) ) )
+
                   (optimBranch Lst) ) )
             ((and (memq (caadr Lst) '(ldz ldnz)) (not (needCC (cddr Lst))))
                (let? L (cadr Lst)
@@ -1763,6 +1761,7 @@
             ((memq (caadr Lst) '(jz jnz))
                (and
                   (not (needCC (cons (cons 'jmp (cdadr Lst)) (cddr Lst))))
+                  (nor (pre? "ret" (get Lst 2 2)) (pre? "Ret" (get Lst 2 2)))
                   (optimBranch Lst) ) )
             ((and (memq (caadr Lst) '(ldz ldnz)) (not (needCC (cddr Lst))))
                (let? L (cadr Lst)

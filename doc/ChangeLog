@@ -1,4 +1,17 @@
+####### 15.11.0 #######
+24nov15
+   Version Numbering: Switch to YY.MM[.nn] style
+      {src64,pilos/src}/version.l
+      {src64,pilos/src}/glob.l
+      src/main.c
+      ersatz/fun.src
+      doc/refV.html
+
 ####### 3.1.11.14 #######
+20nov15
+   Changed "bin/replica" to non-forking server
+      bin/replica
+
 16nov15
    Fine-tuned and optimized 64-bit version for ARMv8 (arm64)
       README
