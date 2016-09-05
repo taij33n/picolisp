@@ -1,4 +1,4 @@
-# 27feb16abu
+# 25jul16abu
 # (c) Software Lab. Alexander Burger
 
 (de admin "Prg"
@@ -224,7 +224,7 @@
    (for X (getl *DB)
       (and (pair X) (set (car X) 0)) )
    (commit)
-   (for (F . @) *Dbs
+   (for (F . @) (or *Dbs (2))
       (for (This (seq F) This (seq This))
          (and
             (isa '+Entity This)

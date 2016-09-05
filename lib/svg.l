@@ -1,4 +1,4 @@
-# 16mar16abu
+# 27jul16abu
 # (c) Software Lab. Alexander Burger
 
 # *Unit *DX *DY *Pos *Page *StrokeWidth
@@ -78,6 +78,11 @@
       "\" height=\"" (or SY SX "100%") "\"" )
    (and *Style (htStyle @))
    (prinl "/>") )
+
+(de xlink (Url . Prg)
+   (prinl "<a xlink:href=\"" Url "\">")
+   (run Prg 1)
+   (prinl "</a>") )
 
 # Text
 (de <faces> (Lst)
@@ -196,12 +201,16 @@
    (let (PosX 0  Max *FontSize)
       (mapc
          '((N Exe)
-            (window PosX *Pos N Max
-               (if (atom Exe)
-                  (ps NIL (eval Exe 2))
-                  (eval Exe 2 '(*Pos *DX *DY)) )
-               (inc 'PosX N)
-               (setq Max (max *Pos Max)) ) )
+            (when
+               (or
+                  (nT (car (pair Exe)))
+                  (setq Exe (run (cdr Exe) 2)) )
+               (window PosX *Pos N Max
+                  (if (atom Exe)
+                     (ps NIL (eval Exe 2))
+                     (eval Exe 2 '(*Pos *DX *DY)) )
+                  (inc 'PosX N)
+                  (setq Max (max *Pos Max)) ) ) )
          Lst
          Prg )
       (inc '*Pos Max) ) )

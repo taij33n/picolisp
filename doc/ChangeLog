@@ -1,3 +1,128 @@
+05sep16
+   Minor ref fix
+      doc/refF.html
+   'T' argument to '<layout>' for percentages
+      lib/xhtml.l
+
+04sep16
+   Mistype in '=0' ref
+      doc/ref_.html
+   Global '<layout>' state
+      lib/xhtml.l
+
+03sep16
+   Changed '<button>' syntax and style
+      lib/xhtml.l
+      lib.css
+      lib/phone.css
+   Handle '#{ .. }#' comments
+      bin/pilIndent
+
+02sep16
+   Minor generalization in "portable"
+      doc/faq.html
+
+29aug16
+   Greek localiztion (Anas Drak)
+      loc/gr
+      loc/GR.l
+      app/loc/gr
+      app/main.l
+
+26aug16
+   Bug in 'prin' of anonymous symbols
+      src/io.c
+   Minor cosmetics
+      lib/db.l
+
+18aug16
+   'flush' in 'repl'
+      lib/form.l
+
+16aug16
+   Include "@lib/boss.l" only as comment
+      app/main.l
+
+03aug16
+   Call native symlink() in 'blob+' if 64-bit
+      lib/db.l
+
+01aug16
+   Minor ref addition to 'detach'
+      doc/refD.html
+
+31jul16
+   Precise Auto-symbol check
+      {src64,pilos/src}/apply.l
+   Byte manipulating instructions in 'emu'
+      src64/arch/emu.l
+
+29jul16
+   Reload names config upon SIGHUP
+      src/httpGate.c
+      doc/httpGate.html
+
+28jul16
+   Make 'ubZval' non-destructive
+      lib/db.l
+   Note about 'adr' and garbage collection (DKordic)
+      doc/refA.html
+
+27jul16
+   Suppress columns in 'table' with (T . prg)
+      lib/svg.l
+      lib/ps.l
+   Align in 'heapAlloc' only for 'emu'
+      src64/main.l
+   Force data alignment in 'emu'
+      src64/arch/emu.l
+
+25jul16
+   Allow NIL elements in 'ubZval'
+      lib/db.l
+   Handle empty '*Dbs' in 'fixECnt'
+      lib/too.l
+
+23jul16
+   '<button>' function
+      lib/xhtml.l
+      lib/phone.css
+
+22jul16
+   Bug in arm64 'mul' instruction
+      src64/arch/arm64.l
+
+19jul16
+   Accept standard input in sslFile()
+      src/ssl.c
+
+17jul16
+   Set 'quit' reason to whole 'Prg' in 'assert' (DKordic)
+      lib.l
+      ersatz/lib.l
+      pilos/init/lib.l
+
+16jul16
+   Bug in 'text' (64-bit)
+      {src64,pilos/src}/sym.l
+      test/src/sym.l
+
+15jul16
+   Removed "/installpath/bin/" from man page
+      man/man1/picolisp.1
+
+12jul16
+   Add SVG links
+      lib/svg.l
+
+08jul16
+   Define "^D" and "^X" as 'fkey'
+      lib/led.l
+
+03jul16
+   'pool' ref example extension
+      doc/refP.html
+
 ####### 16.6 #######
 28jun16
    Keep in sync with PilBox

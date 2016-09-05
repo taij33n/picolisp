@@ -1,4 +1,4 @@
-# 26mar16abu
+# 26aug16abu
 # (c) Software Lab. Alexander Burger
 
 # *Dbs *Jnl *Blob upd
@@ -824,14 +824,15 @@
    (extra Var Lst) )
 
 (de ubZval (Lst X)
-   (let (Res 0  P 1)
-      (while (find n0 Lst)
-         (map
-            '((L)
-               (and (bit? 1 (car L)) (setq Res (| Res P)))
-               (setq P (>> -1 P))
-               (set L (>> 1 (car L))) )
-            Lst ) )
+   (let (Res 0  P 1  Q 1)
+      (while (find '((N) (>= N Q)) Lst)
+         (for N Lst
+            (and
+               N
+               (bit? Q N)
+               (setq Res (| Res P)) )
+            (setq P (>> -1 P)) )
+         (setq Q (>> -1 Q)) )
       (cons Res X) ) )
 
 (dm has> (Val X)
@@ -840,7 +841,7 @@
          (extra Val X)
          (extra
             (let (N (inc (length (: aux)))  M 1  V 0)
-               (until (=0 Val)
+               (while (gt0 Val)
                   (and (bit? 1 Val) (inc 'V M))
                   (setq M (>> -1 M)  Val (>> N Val)) )
                V )
@@ -1015,8 +1016,8 @@
 
 (de inc! (Obj Var Val)
    (when (num? (get Obj Var))
-      (dbSync)
-      (prog1
+      (prog2
+         (dbSync)
          (inc (prop Obj Var) (or Val 1))
          (commit 'upd) ) ) )
 
@@ -1028,9 +1029,13 @@
 (de blob+ (Obj Var)
    (when *Jnl
       (chdir *Blob
-         (call "ln" "-sf"
-            (pack (glue "/" (chop Obj)) "." Var)
-            (pack "=" (name Obj) "." Var) ) ) ) )
+         `(if (== 64 64)
+            '(native "@" "symlink" 'I
+               (pack (glue "/" (chop Obj)) "." Var)
+               (pack "=" (name Obj) "." Var) )
+            '(call "ln" "-sf"
+               (pack (glue "/" (chop Obj)) "." Var)
+               (pack "=" (name Obj) "." Var) ) ) ) ) )
 
 (de incECnt (Obj)
    (for Cls (type Obj)

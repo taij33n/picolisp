@@ -1,4 +1,4 @@
-# 22may16abu
+# 17jul16abu
 # (c) Software Lab. Alexander Burger
 
 (setq
@@ -486,10 +486,10 @@
 ### Assertions ###
 (de assert Prg
    (when *Dbg
-      (cons
-         (list 'unless
-            (if (cdr Prg) (cons 'and Prg) (car Prg))
-            (list 'quit "'assert' failed" (lit (car Prg))) ) ) ) )
+      (let A (if (cdr Prg) (cons 'and Prg) (car Prg))
+         (cons
+            (list 'unless A
+               (list 'quit "'assert' failed" (lit A)) ) ) ) ) )
 
 ############ lib/misc.l ############
 

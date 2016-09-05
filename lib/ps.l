@@ -1,4 +1,4 @@
-# 15feb15abu
+# 27jul16abu
 # (c) Software Lab. Alexander Burger
 
 # "*Glyph" "*PgX" "*PgY"
@@ -292,10 +292,14 @@
    (let ("PosX" 0  "Max" "*Size")
       (mapc
          '(("N" "X")
-            (window "PosX" "*Pos" "N" "Max"
-               (if (atom "X") (ps (eval "X")) (eval "X"))
-               (inc '"PosX" "N")
-               (setq "Max" (max "*Pos" "Max")) ) )
+            (when
+               (or
+                  (nT (car (pair "X")))
+                  (setq "X" (run (cdr "X"))) )
+               (window "PosX" "*Pos" "N" "Max"
+                  (if (atom "X") (ps (eval "X")) (eval "X"))
+                  (inc '"PosX" "N")
+                  (setq "Max" (max "*Pos" "Max")) ) ) )
          "Lst"
          "Prg" )
       (inc '"*Pos" "Max") ) )

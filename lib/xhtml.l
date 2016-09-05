@@ -1,4 +1,4 @@
-# 13jan16abu
+# 05sep16abu
 # (c) Software Lab. Alexander Burger
 
 # *JS "*JS" *Style *Menu *Tab *ID
@@ -355,37 +355,45 @@
       (run "Prg") ) )
 
 # Layout
+(zero "LayX" "LayY")
+
 (de <layout> "Lst"
-   (let ("X" 0  "Y" 0)
-      (recur ("Lst" "Y")
-         (for "L" "Lst"
-            (let
-               ("Args" (mapcar eval (cddar "L"))
-                  "DX" (eval (caar "L"))
-                  "DY" (eval (cadar "L"))
-                  "Cls" (unless (sub? ":" (car "Args")) (pop '"Args"))
-                  "Style"
-                  (cons 'style
-                     (glue "; "
-                        (cons
-                           "position:absolute"
-                           (pack "top:" (abs "Y") (if (ge0 "Y") "px" "%"))
-                           (pack "left:" (abs "X") (if (ge0 "X") "px" "%"))
-                           (cond
-                              ((=0 "DX") "min-width:100%")
-                              ("DX"
-                                 (pack "width:" (abs @) (if (ge0 "DX") "px" "%")) ) )
-                           (cond
-                              ((=0 "DY") "min-height:100%")
-                              ("DY"
-                                 (pack "height:" (abs @ ) (if (ge0 "DY")"px" "%")) ) )
-                           "Args" ) ) ) )
-               (prog1
-                  (if "Cls" (list "Cls" "Style") "Style")  # -> '@'
-                  (eval (cadr "L")) )
-               (let "X" (+ "X" "DX")
-                  (recurse (cddr "L") "Y") )
-               (inc '"Y" "DY") ) ) ) ) )
+   (let P (and (=T (car "Lst")) (pop '"Lst"))
+      (recur ("Lst" "LayX")
+         (use "LayY"
+            (for "L" "Lst"
+               (let
+                  ("Args" (mapcar eval (cddar "L"))
+                     "DX" (eval (caar "L"))
+                     "DY" (eval (cadar "L"))
+                     "Cls" (unless (sub? ":" (car "Args")) (pop '"Args"))
+                     "Style"
+                     (cons 'style
+                        (glue "; "
+                           (cons
+                              "position:absolute"
+                              (pack "top:" "LayY" (if P "%" "px"))
+                              (pack "left:" "LayX" (if P "%" "px"))
+                              (cond
+                                 ((=0 "DX") "min-width:100%")
+                                 ("DX" (pack "width:" "DX" (if P "%" "px"))) )
+                              (cond
+                                 ((=0 "DY") "min-height:100%")
+                                 ("DY" (pack "height:" "DY" (if P "%" "px"))) )
+                              "Args" ) ) ) )
+                  (prog1
+                     (if "Cls" (list "Cls" "Style") "Style")  # -> '@'
+                     (eval (cadr "L")) )
+                  (recurse (cddr "L") (+ "LayX" "DX"))
+                  (inc '"LayY" "DY") ) ) ) ) ) )
+
+(de <button> (Url Str)
+   (<div> "button"
+      (prin "<a href=\"" (sesId Url) "\"")
+      (and *Style (htStyle @))
+      (prin ">")
+      (<span> "button2" Str)
+      (prin "</a>") ) )
 
 # Menus
 (de urlMT (Url Menu Tab Id Str)

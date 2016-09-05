@@ -1,4 +1,4 @@
-# 16sep15abu
+# 16jul16abu
 # (c) Software Lab. Alexander Burger
 
 ### name ###
@@ -130,6 +130,8 @@
 (test "aXYZz" (text "a@3z" 1 2 '(X Y Z)))
 (test "a@bc.de" (text "a@@bc.@1" "de"))
 (test "10.11.12" (text "@A.@B.@C" 1 2 3 4 5 6 7 8 9 10 11 12))
+(test "1 2 3 4 5 6 7 8 9 10 11 12"
+   (text "@1 @2 @3 @4 @5 @6 @7 @8 @9 @A @B @C" 1 2 3 4 5 6 7 8 9 10 11 12) )
 
 
 ### pre? ###

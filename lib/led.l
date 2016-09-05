@@ -1,4 +1,4 @@
-# 19apr16abu
+# 08jul16abu
 # (c) Software Lab. Alexander Burger
 
 # Line editor
@@ -383,10 +383,7 @@
       (chgLine "L" (inc (length "L")))
       (on "Insert")
       (until (member (setq "C" (let *Dbg "*Dbg" (key))) '("^J" "^M"))
-         (case "C"
-            (NIL (bye))
-            ("^D" (prinl) (bye))
-            ("^X" (prin (cdr *Tsm)) (prinl) (quit)) )
+         (or "C" (bye))
          ((if "Insert" insMode cmdMode) "C") )
       (eMove) ) )
 
@@ -410,6 +407,8 @@
             (cons (cons Key Prg) (delete @ "FKey")) )
          (T (cons (cons Key Prg) "FKey")) ) ) )
 
+(fkey "^D" (prinl) (bye))
+(fkey "^X" (prin (cdr *Tsm)) (prinl) (quit))
 (when (sys "TERM")
    (fkey "^[[A" (uMove) (xMove))
    (fkey "^[[B" (dMove) (xMove))

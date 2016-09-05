@@ -1,4 +1,4 @@
-# 27jun16abu
+# 18aug16abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -344,6 +344,7 @@
             (out (pack "+" (tmp "repl"))
                (err NIL
                   (prinl ": " Str)
+                  (flush)
                   (catch '(NIL)
                      (in "/dev/null"
                         (setq @ "Result"  "Result" (eval (any Str))) )

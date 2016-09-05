@@ -1,4 +1,4 @@
-# 27may16abu
+# 16jul16abu
 # (c) Software Lab. Alexander Burger
 
 ### Compare long names ###
@@ -1483,7 +1483,7 @@
          jeq 10  # Yes
          sub B (char "0")  # >= "1"?
          if gt  # Yes
-            cmp B 8  # > 8?
+            cmp B 9  # > 9?
             if gt
                sub B 7  # Adjust for letter
             end

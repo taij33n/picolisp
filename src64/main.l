@@ -1,4 +1,4 @@
-# 19jun16abu
+# 27jul16abu
 # (c) Software Lab. Alexander Burger
 
 (code 'Code)
@@ -222,8 +222,10 @@
    ld A 0  # NULL pointer
    ld E (+ HEAP I II)  # Heap size + link + space
    call allocAE_A
-   add A 15  # Align to cell boundary
-   off B 15
+   ? (= *Architecture "emu")
+      add A 15  # Align to cell boundary
+      off B 15
+   =
    ld E A  # Heap pointer
    ld (A HEAP) (Heaps)  # Set heap link
    ld (Heaps) A

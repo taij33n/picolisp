@@ -1,4 +1,4 @@
-/* 08dec13abu
+/* 03sep16abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -16,10 +16,6 @@ body {
 
 caption {
    margin: 0;
-}
-
-#expires {
-   font-size: smaller;
 }
 
 /* Form header */
