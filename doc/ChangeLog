@@ -1,6 +1,6 @@
 09sep16
-   Propagate *Unit to all coordinates
-      lib/svg.l
+   Add '+Swap' link
+      doc/refR.html
 
 06sep16
    Small optimizations (Mike Pechkin)

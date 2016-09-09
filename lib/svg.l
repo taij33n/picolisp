@@ -1,4 +1,4 @@
-# 09sep16abu
+# 27jul16abu
 # (c) Software Lab. Alexander Burger
 
 # *Unit *DX *DY *Pos *Page *StrokeWidth
@@ -31,49 +31,39 @@
 # Graphics
 (de rect (X Y DX DY Fill Stroke)
    (prin
-      "<rect x=\"" X *Unit
-      "\" y=\"" Y *Unit
-      "\" width=\"" DX *Unit
-      "\" height=\"" DY *Unit
+      "<rect x=\"" X
+      "\" y=\"" Y
+      "\" width=\"" DX
+      "\" height=\"" DY
       "\" fill=\"" (or Fill "none")
       "\" stroke=\"" (or Stroke (if Fill "none" "black"))
-      "\" stroke-width=\"" *StrokeWidth *Unit "\"" )
+      "\" stroke-width=\"" *StrokeWidth "\"" )
    (and *Style (htStyle @))
    (prinl "/>") )
 
 (de circle (X Y R Fill Stroke)
    (prin
-      "<circle cx=\"" X *Unit
-      "\" cy=\"" Y *Unit
-      "\" r=\"" R *Unit
+      "<circle cx=\"" X
+      "\" cy=\"" Y
+      "\" r=\"" R
       "\" fill=\"" (or Fill "none")
       "\" stroke=\"" (or Stroke (if Fill "none" "black"))
-      "\" stroke-width=\"" *StrokeWidth *Unit "\"" )
+      "\" stroke-width=\"" *StrokeWidth "\"" )
    (and *Style (htStyle @))
    (prinl "/>") )
 
 (de polyline (Stroke . @)
-   (prin
-      "<polyline fill=\"none\" stroke=\""
-      Stroke
-      "\" stroke-width=\""
-      *StrokeWidth *Unit
-      "\" points=\""
-      (next) *Unit )
+   (prin "<polyline fill=\"none\" stroke=\"" Stroke "\" stroke-width=\"" *StrokeWidth "\" points=\"" (next))
    (while (args)
-      (prin " " (next) *Unit) )
+      (prin " " (next)) )
    (prin "\"")
    (and *Style (htStyle @))
    (prinl "/>") )
 
 (de polygon (Fill . @)
-   (prin
-      "<polygon fill=\""
-      Fill
-      "\" points=\""
-      (next) *Unit )
+   (prin "<polygon fill=\"" Fill "\" points=\"" (next))
    (while (args)
-      (prin " " (next) *Unit) )
+      (prin " " (next)) )
    (prin "\"")
    (and *Style (htStyle @))
    (prinl "/>") )
@@ -82,10 +72,10 @@
    (prinl "<image xlink:href=\"data:" Typ ";base64,")
    (in Img (prBase64 18))
    (prin
-      "\" x=\"" X *Unit
-      "\" y=\"" Y *Unit
-      "\" width=\"" (if SX (pack @ *Unit) "100%")
-      "\" height=\"" (if (or SY SX) (pack @ *Unit) "100%") "\"" )
+      "\" x=\"" X
+      "\" y=\"" Y
+      "\" width=\"" (or SX "100%")
+      "\" height=\"" (or SY SX "100%") "\"" )
    (and *Style (htStyle @))
    (prinl "/>") )
 
@@ -107,8 +97,8 @@
    (prinl "</style>") )
 
 (de <text> (X Y . Prg)
-   (prin "<text x=\"" X *Unit "\" y=\"" Y *Unit
-      "\" font-size=\"" *FontSize *Unit
+   (prin "<text x=\"" X "\" y=\"" Y
+      "\" font-size=\"" *FontSize
       "\" font-family=\"" *FontFamily
       "\" font-style=\"" *FontStyle
       "\" font-weight=\"" *FontWeight "\"" )
@@ -174,10 +164,10 @@
          (next)
          (off A) )
       (prin
-         "<text x=\"" (case A (NIL 0) (0 (/ *DX 2)) (T *DX)) *Unit
-            "\" y=\"" (inc '*Pos *FontSize) *Unit
+         "<text x=\"" (case A (NIL 0) (0 (/ *DX 2)) (T *DX))
+            "\" y=\"" (inc '*Pos *FontSize)
             "\" text-anchor=\"" (case A (NIL "start") (0 "middle") (T "end"))
-            "\" font-size=\"" *FontSize *Unit
+            "\" font-size=\"" *FontSize
             "\" font-family=\"" *FontFamily
             "\" font-style=\"" *FontStyle
             "\" font-weight=\"" *FontWeight "\"" ) )
