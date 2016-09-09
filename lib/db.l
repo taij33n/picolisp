@@ -1,4 +1,4 @@
-# 26aug16abu
+# 06sep16abu
 # (c) Software Lab. Alexander Burger
 
 # *Dbs *Jnl *Blob upd
@@ -195,8 +195,8 @@
    (super Var) )
 
 (dm mis> (Val Obj)
-   (or
-      (ifn (lst? Val) "Not a Bag")
+   (ifn (lst? Val)
+      "Not a Bag"
       (pick
          '((This V)
             (mis> This V Obj
@@ -868,8 +868,8 @@
 (class +List)
 
 (dm mis> (Val Obj)
-   (or
-      (ifn (lst? Val) "Not a List")
+   (ifn (lst? Val)
+      "Not a List"
       (pick '((V) (extra V Obj)) Val) ) )
 
 (dm ele> (Val)

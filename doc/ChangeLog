@@ -1,4 +1,18 @@
+09sep16
+   Propagate *Unit to all coordinates
+      lib/svg.l
+
+06sep16
+   Small optimizations (Mike Pechkin)
+      lib/db.l
+      mini/lib/db.l
+      pilos/init/lib/db.l
+   'repl' optional size parameters
+      lib/form.l
+
 05sep16
+   Viewport relative font size
+      lib/phone.css
    Minor ref fix
       doc/refF.html
    'T' argument to '<layout>' for percentages

@@ -1,4 +1,4 @@
-/* 03sep16abu
+/* 05sep16abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -11,7 +11,7 @@
 .rel100 {width: 100%}
 
 body {
-   font-size: larger;
+   font-size: 3.0vw;
 }
 
 caption {

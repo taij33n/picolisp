@@ -1,4 +1,4 @@
-# 18aug16abu
+# 06sep16abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -334,11 +334,12 @@
    (onOff "rowF") )
 
 # REPL form
-(de repl (Attr)
+(de repl (Attr DX DY)
+   (default DX 80  DY 25)
    (form Attr
-      (gui 'view '(+FileField) '(tmp "repl") 80 25)
+      (gui 'view '(+FileField) '(tmp "repl") DX DY)
       (--)
-      (gui 'line '(+Focus +TextField) 64 ":")
+      (gui 'line '(+Focus +TextField) (*/ DX 3 4) ":")
       (gui '(+JS +Button) "eval"
          '(let Str (val> (: home line))
             (out (pack "+" (tmp "repl"))
