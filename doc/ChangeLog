@@ -1,3 +1,7 @@
+10sep16
+   Add 'viewBox' to '<svg>'
+      lib/svg.l
+
 09sep16
    Add '+Swap' link
       doc/refR.html

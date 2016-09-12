@@ -1,4 +1,4 @@
-# 27jul16abu
+# 10sep16abu
 # (c) Software Lab. Alexander Burger
 
 # *Unit *DX *DY *Pos *Page *StrokeWidth
@@ -20,7 +20,7 @@
       "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink"
       "\" width=\"" *DX *Unit
       "\" height=\"" *DY *Unit
-      "\"" )
+      "\" viewBox=\"0 0 " *DX " " *DY "\"" )
    (dfltCss "svg")
    (prinl ">")
    (let *Pos 0
