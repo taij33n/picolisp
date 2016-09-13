@@ -1,4 +1,4 @@
-# 16mar16abu
+# 13sep16abu
 # (c) Software Lab. Alexander Burger
 
 (data 'Data)
@@ -179,7 +179,7 @@
    initSym Adr       "*Adr"      Nil
    initSym Fork      "*Fork"     Nil
    initSym Bye       "*Bye"      Nil
-   initSym Dbg       "*Dbg"      Nil  # Last un-'zap'pable symbol
+   initSym Dbg       "*Dbg"      Nil
 
    # System functions
    initFun NIL       "raw"       doRaw
