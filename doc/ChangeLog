@@ -1,3 +1,7 @@
+24sep16
+   Minor typo
+      doc/native.html
+
 13sep16
    Remove 'zap' protection in pil64
       {src64,pilos/src}/sym.l
