@@ -1,3 +1,15 @@
+03oct16
+   Minor tuning
+      app/item.l
+
+01oct16
+   Cleared-up description of 'sort'
+      doc/refS.html
+
+30sep16
+   Emacs lisp patches by Vasilij Schneidermann
+      lib/el/picolisp.el
+
 24sep16
    Minor typo
       doc/native.html
