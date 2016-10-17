@@ -1,4 +1,4 @@
-# 06sep16abu
+# 17oct16abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -2230,6 +2230,46 @@
             (not (val> This))
             (<> "-" S)
             ,"Data not found" ) ) ) )
+
+
+(class +Obj2 +Obj)
+# objVar2
+
+(dm T @
+   (=: objVar2 (next))
+   (pass super) )
+
+(dm hint> (Str)
+   (let L
+      (make
+         (for S (dbHint Str (: objVar2) (last (: objTyp)))
+            (for Obj (collect (: objVar2) (last (: objTyp)) S)
+               (link (pack (get Obj (: objVar)) " — " S)) )
+            (T (nth (made) 36)) ) )
+      (if (db (: objVar) (last (: objTyp)) (format Str))
+         (cons (pack Str " — " (get @ (: objVar2))) L)         # Dash
+         L ) ) )
+
+(dm str> ()
+   (let? S (extra)
+      (let (L (split (chop S) " ")  N (format (car L)))
+         (format
+            (nond
+               (N                                              # Text
+                  (get
+                     (db (: objVar2) (last (: objTyp)) S)
+                     (: objVar) ) )
+               ((cdr L) N)                                     # Nr
+               ((= '("—") (cadr L))                            # Nr Text
+                  (get
+                     (db (: objVar2) (last (: objTyp)) S)
+                     (: objVar) ) )
+               ((<>                                            # Nr — Text
+                     (glue " " (cddr L))
+                     (get
+                        (db (: objVar) (last (: objTyp)) N)
+                        (: objVar2) ) )
+                  N ) ) ) ) ) )
 
 
 (class +ObjVal +obj)
