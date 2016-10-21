@@ -1,4 +1,68 @@
+20oct16
+   'insert', 'remove' and 'place' in Asm/C
+      {src64,pilos/src}/subr.l
+      {src64,pilos/src}/glob.l
+      src/pico.h
+      src/subr.c
+      src/tab.c
+      lib.l
+      test/lib.l
+      test/src/subr.l
+
+17oct16
+   Check for '+relation' in 'dbfCheck'
+      lib/too.l
+   '+Obj2' GUI prefix class
+      lib/form.l
+
+11oct16
+   Several doc fixes by Rick Hanson
+      doc/ref.html
+
+06oct16
+   Note in 'lup' reference about empty tree
+      doc/refL.html
+
+03oct16
+   Minor tuning
+      app/item.l
+
+01oct16
+   Cleared-up description of 'sort'
+      doc/refS.html
+
+30sep16
+   Emacs lisp patches by Vasilij Schneidermann
+      lib/el/picolisp.el
+
+24sep16
+   Minor typo
+      doc/native.html
+
+13sep16
+   Remove 'zap' protection in pil64
+      {src64,pilos/src}/sym.l
+      {src64,pilos/src}/glob.l
+
+10sep16
+   Add 'viewBox' to '<svg>'
+      lib/svg.l
+
+09sep16
+   Add '+Swap' link
+      doc/refR.html
+
+06sep16
+   Small optimizations (Mike Pechkin)
+      lib/db.l
+      mini/lib/db.l
+      pilos/init/lib/db.l
+   'repl' optional size parameters
+      lib/form.l
+
 05sep16
+   Viewport relative font size
+      lib/phone.css
    Minor ref fix
       doc/refF.html
    'T' argument to '<layout>' for percentages

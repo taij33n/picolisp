@@ -1,4 +1,4 @@
-# 24may15abu
+# 20oct16abu
 # (c) Software Lab. Alexander Burger
 
 ### c[ad]*r ###
@@ -145,6 +145,24 @@
 (test '(A b b A) (replace '(a b b a) 'a 'A))
 (test '(a B B a) (replace '(a b b a) 'b 'B))
 (test '(B A A B) (replace '(a b b a) 'a 'B 'b 'A))
+
+
+### insert ###
+(test '(a b 777 c d e) (insert 3 '(a b c d e) 777))
+(test (777 a b c d e) (insert 1 '(a b c d e) 777))
+(test '(a b c d e 777) (insert 9 '(a b c d e) 777))
+
+
+### remove ###
+(test '(a b d e) (remove 3 '(a b c d e)))
+(test '(b c d e) (remove 1 '(a b c d e)))
+(test '(a b c d e) (remove 9 '(a b c d e)))
+
+
+### place ###
+(test '(a b 777 d e) (place 3 '(a b c d e) 777))
+(test (777 b c d e) (place 1 '(a b c d e) 777))
+(test '(a b c d e 777) (place 9 '(a b c d e) 777))
 
 
 ### strip ###

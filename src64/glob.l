@@ -1,4 +1,4 @@
-# 16mar16abu
+# 20oct16abu
 # (c) Software Lab. Alexander Burger
 
 (data 'Data)
@@ -179,7 +179,7 @@
    initSym Adr       "*Adr"      Nil
    initSym Fork      "*Fork"     Nil
    initSym Bye       "*Bye"      Nil
-   initSym Dbg       "*Dbg"      Nil  # Last un-'zap'pable symbol
+   initSym Dbg       "*Dbg"      Nil
 
    # System functions
    initFun NIL       "raw"       doRaw
@@ -424,6 +424,9 @@
    initFun NIL       "delete"    doDelete
    initFun NIL       "delq"      doDelq
    initFun NIL       "replace"   doReplace
+   initFun NIL       "insert"    doInsert
+   initFun NIL       "remove"    doRemove
+   initFun NIL       "place"     doPlace
    initFun NIL       "strip"     doStrip
    initFun NIL       "split"     doSplit
    initFun NIL       "reverse"   doReverse

@@ -1,4 +1,4 @@
-/* 16mar16abu
+/* 20oct16abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -170,6 +170,7 @@ static symInit Symbols[] = {
    {doInc, "inc"},
    {doIndex, "index"},
    {doInfo, "info"},
+   {doInsert, "insert"},
    {doIntern, "intern"},
    {doIpid, "ipid"},
    {doIsa, "isa"},
@@ -256,6 +257,7 @@ static symInit Symbols[] = {
    {doPeek, "peek"},
    {doPick, "pick"},
    {doPipe, "pipe"},
+   {doPlace, "place"},
    {doPoll, "poll"},
    {doPool, "pool"},
    {doPop, "pop"},
@@ -290,6 +292,7 @@ static symInit Symbols[] = {
    {doRaw, "raw"},
    {doRd, "rd"},
    {doRead, "read"},
+   {doRemove, "remove"},
    {doRem, "%"},
    {doReplace, "replace"},
    {doRest, "rest"},

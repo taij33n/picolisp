@@ -1,4 +1,4 @@
-# 29may16abu
+# 20oct16abu
 # (c) Software Lab. Alexander Burger
 
 # (car 'var) -> any
@@ -1587,6 +1587,175 @@
       pop Z
       pop Y
    end
+   pop X
+   ret
+
+# (insert 'cnt 'lst 'any) -> lst
+(code 'doInsert 2)
+   push X
+   push Y
+   push Z
+   ld X E
+   ld Y (E CDR)  # Y on args
+   call evCntXY_FE  # Eval 'cnt'
+   ld Z E  # in Z
+   ld Y (Y CDR)  # Second arg
+   ld E (Y)
+   eval  # Eval 'lst'
+   link
+   push E  # <L I/II> 'lst'
+   link
+   ld Y (Y CDR)  # Point to third arg
+   atom E  # Second arg atomic?
+   jnz 10  # Yes
+   dec Z  # Count <= 1?
+   if sz  # Yes
+10    ld E (Y)  # Eval 'any'
+      eval
+      call consE_X  # Cons 'any'
+      ld (X) E
+      ld (X CDR) (L I)  # with arg
+      ld E X  # Return it
+   else
+      call consE_X  # Cons first cell
+      ld (X) (E)
+      ld (X CDR) Nil
+      tuck X  # <L I> Result
+      link
+      do
+         ld E (E CDR)  # More elements?
+         atom E
+      while z  # Yes
+         dec Z  # Count?
+      while nz  # Yes
+         call cons_A  # Copy next cell
+         ld (A) (E)
+         ld (A CDR) Nil
+         ld (X CDR) A  # Append to result
+         ld X (X CDR)
+      loop
+      ld Z E  # Rest in Z
+      ld E (Y)  # Eval 'any'
+      eval
+      call consE_A  # Last cell
+      ld (A) E  # Cons 'any'
+      ld (A CDR) Z  # with rest
+      ld (X CDR) A  # Append to result
+      ld E (L I)  # Get result
+   end
+   drop
+   pop Z
+   pop Y
+   pop X
+   ret
+
+# (remove 'cnt 'lst) -> lst
+(code 'doRemove 2)
+   push X
+   push Y
+   ld X E
+   ld Y (E CDR)  # Y on args
+   call evCntXY_FE  # Eval 'cnt'
+   xchg Y E  # in Y
+   ld E ((E CDR))  # Second arg
+   eval  # Eval 'lst'
+   atom E  # Atomic?
+   if z  # No
+      dec Y  # Count <= 0?
+      if ns  # No
+         if z  # Count = 1
+            ld E (E CDR)  # Return CDR
+         else
+            link
+            push E  # <L II> 'lst'
+            link
+            call consE_X  # Cons first cell
+            ld (X) (E)
+            ld (X CDR) Nil
+            tuck X  # <L I> Result
+            link
+            do
+               ld E (E CDR)  # More elements?
+               atom E
+            while z  # Yes
+               dec Y  # Count?
+            while nz  # Yes
+               call cons_A  # Copy next cell
+               ld (A) (E)
+               ld (A CDR) Nil
+               ld (X CDR) A  # Append to result
+               ld X (X CDR)
+            loop
+            ld (X CDR) (E CDR)  # Append rest
+            ld E (L I)  # Get result
+            drop
+         end
+      end
+   end
+   pop Y
+   pop X
+   ret
+
+# (place 'cnt 'lst 'any) -> lst
+(code 'doPlace 2)
+   push X
+   push Y
+   push Z
+   ld X E
+   ld Y (E CDR)  # Y on args
+   call evCntXY_FE  # Eval 'cnt'
+   ld Z E  # in Z
+   ld Y (Y CDR)  # Second arg
+   ld E (Y)
+   eval  # Eval 'lst'
+   ld Y (Y CDR)  # Point to third arg
+   atom E  # Atomic?
+   if nz  # Yes
+      ld E (Y)  # Return 'any'
+      eval
+   else
+      link
+      push E  # <L I/II> 'lst'
+      link
+      dec Z  # Count <= 1?
+      if sz  # Yes
+         ld E (Y)  # Eval 'any'
+         eval
+         call consE_X  # Cons 'any'
+         ld (X) E
+         ld (X CDR) ((L I) CDR)  # with CDR
+         ld E X  # Return it
+      else
+         call consE_X  # Cons first cell
+         ld (X) (E)
+         ld (X CDR) Nil
+         tuck X  # <L I> Result
+         link
+         do
+            ld E (E CDR)  # More elements?
+            atom E
+         while z  # Yes
+            dec Z  # Count?
+         while nz  # Yes
+            call cons_A  # Copy next cell
+            ld (A) (E)
+            ld (A CDR) Nil
+            ld (X CDR) A  # Append to result
+            ld X (X CDR)
+         loop
+         ld Z E  # Rest in Z
+         ld E (Y)  # Eval 'any'
+         eval
+         call consE_A  # Last cell
+         ld (A) E  # Cons 'any'
+         ld (A CDR) (Z CDR)  # with rest
+         ld (X CDR) A  # Append to result
+         ld E (L I)  # Get result
+      end
+      drop
+   end
+   pop Z
+   pop Y
    pop X
    ret
 

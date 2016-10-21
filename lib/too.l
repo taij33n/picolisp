@@ -1,4 +1,4 @@
-# 25jul16abu
+# 17oct16abu
 # (c) Software Lab. Alexander Burger
 
 (de admin "Prg"
@@ -280,6 +280,7 @@
          (for Rel (getl "Cls")
             (and
                (pair Rel)
+               (isa '+relation (car Rel))
                (or
                   (isa '+index (car Rel))
                   (isa '+Swap (car Rel))

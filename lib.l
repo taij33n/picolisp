@@ -1,4 +1,4 @@
-# 17jul16abu
+# 20oct16abu
 # (c) Software Lab. Alexander Burger
 
 (de task (Key . Prg)
@@ -188,23 +188,6 @@
    (pass pack *Tmp) )
 
 ### List ###
-(de insert (N Lst X)
-   (conc
-      (cut (dec N) 'Lst)
-      (cons X)
-      Lst ) )
-
-(de remove (N Lst)
-   (conc
-      (cut (dec N) 'Lst)
-      (cdr Lst) ) )
-
-(de place (N Lst X)
-   (conc
-      (cut (dec N) 'Lst)
-      (cons X)
-      (cdr Lst) ) )
-
 (de uniq (Lst)
    (let R NIL
       (filter

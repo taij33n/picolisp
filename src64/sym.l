@@ -1,4 +1,4 @@
-# 16jul16abu
+# 13sep16abu
 # (c) Software Lab. Alexander Burger
 
 ### Compare long names ###
@@ -1239,14 +1239,6 @@
    if nz  # Yes
       call dbZapE  # Mark as "deleted"
    else
-      cmp (EnvIntern) pico  # Inside 'pico'?
-      if eq  # Yes
-         cmp E Nil  # Between 'NIL' and '*Dbg'?
-         if ge
-            cmp E Dbg
-            jle protErrEX  # Yes
-         end
-      end
       push Y
       ld X (E TAIL)
       call nameX_X  # Get name
