@@ -1,4 +1,4 @@
-# 20oct16abu
+# 24oct16abu
 # (c) Software Lab. Alexander Burger
 
 (de task (Key . Prg)
@@ -194,13 +194,6 @@
          '((X)
             (not (idx 'R (cons (hash X) X) T)) )
          Lst ) ) )
-
-(de group (Lst)
-   (make
-      (for X Lst
-         (if (assoc (car X) (made))
-            (conc @ (cons (cdr X)))
-            (link (list (car X) (cdr X))) ) ) ) )
 
 ### Symbol ###
 (de qsym "Sym"

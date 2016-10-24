@@ -1,4 +1,4 @@
-/* 20oct16abu
+/* 24oct16abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -555,6 +555,7 @@ any doGet(any);
 any doGetd(any);
 any doGetl(any);
 any doGlue(any);
+any doGroup(any);
 any doGt(any);
 any doGt0(any);
 any doHash(any);

@@ -1,4 +1,4 @@
-/* 20oct16abu
+/* 24oct16abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -153,6 +153,7 @@ static symInit Symbols[] = {
    {doGetd, "getd"},
    {doGetl, "getl"},
    {doGlue, "glue"},
+   {doGroup, "group"},
    {doGt, ">"},
    {doGt0, "gt0"},
    {doHash, "hash"},

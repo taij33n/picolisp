@@ -1,7 +1,20 @@
+24oct16
+   'group' in Asm/C
+      {src64,pilos/src}/subr.l
+      {src64,pilos/src}/glob.l
+      pilos/init/lib.l
+      src/pico.h
+      src/subr.c
+      src/tab.c
+      lib.l
+      test/lib.l
+      test/src/subr.l
+
 20oct16
    'insert', 'remove' and 'place' in Asm/C
       {src64,pilos/src}/subr.l
       {src64,pilos/src}/glob.l
+      pilos/init/lib.l
       src/pico.h
       src/subr.c
       src/tab.c

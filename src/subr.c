@@ -1,4 +1,4 @@
-/* 20oct16abu
+/* 24oct16abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -1717,6 +1717,40 @@ static bool cmp(any ex, any foo, cell c[2]) {
    if (isNil(foo))
       return compare(car(data(c[0])), car(data(c[1]))) < 0;
    return !isNil(apply(ex, foo, YES, 2, c));
+}
+
+// (group 'lst) -> lst
+any doGroup(any x) {
+   any y, z;
+   cell c1, c2;
+
+   x = cdr(x);
+   if (!isCell(x = EVAL(car(x))))
+      return Nil;
+   Push(c1, x);
+   Push(c2, y = cons(cdar(x), Nil));
+   data(c2) = cons(cons(caar(x), cons(y,y)), Nil);
+   while (isCell(x = cdr(x))) {
+      y = cons(cdar(x), Nil);
+      for (z = data(c2);;) {
+         if (equal(caar(z), caar(x))) {
+            z = cdar(z),  car(z) = cdar(z) = y;
+            break;
+         }
+         if (!isCell(cdr(z))) {
+            cdr(z) = y;
+            cdr(z) = cons(cons(caar(x), cons(y,y)), Nil);
+            break;
+         }
+         z = cdr(z);
+      }
+   }
+   x = data(c2);
+   do
+      cdar(x) = cddar(x);
+   while (isCell(x = cdr(x)));
+   drop(c1);
+   return data(c2);
 }
 
 // (sort 'lst ['fun]) -> lst

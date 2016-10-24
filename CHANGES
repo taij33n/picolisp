@@ -1,4 +1,4 @@
-   'insert', 'remove' and 'place' in Asm/C
+   'insert', 'remove', 'place' and 'group' in Asm/C
    '+Obj2' GUI prefix class
    Removed 'zap' protection in pil64
    Bug in 'prin' of anonymous symbols

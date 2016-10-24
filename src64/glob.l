@@ -1,4 +1,4 @@
-# 20oct16abu
+# 24oct16abu
 # (c) Software Lab. Alexander Burger
 
 (data 'Data)
@@ -480,6 +480,7 @@
    initFun NIL       "prove"     doProve
    initFun NIL       "->"        doArrow
    initFun NIL       "unify"     doUnify
+   initFun NIL       "group"     doGroup
    initFun NIL       "sort"      doSort
 
    # Arithmetics

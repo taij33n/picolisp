@@ -1,4 +1,4 @@
-# 20oct16abu
+# 24oct16abu
 # (c) Software Lab. Alexander Burger
 
 ### task ###
@@ -153,11 +153,6 @@
 
 ### uniq ###
 (test (2 4 6 1 3 5) (uniq (2 4 6 1 2 3 4 5 6 1 3 5)))
-
-
-### group ###
-(test '((1 a b c) (2 d e f))
-   (group '((1 . a) (1 . b) (1 . c) (2 . d) (2 . e) (2 . f))) )
 
 
 ### qsym ###

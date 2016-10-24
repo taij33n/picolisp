@@ -1,4 +1,4 @@
-# 20oct16abu
+# 24oct16abu
 # (c) Software Lab. Alexander Burger
 
 # (car 'var) -> any
@@ -1603,7 +1603,7 @@
    ld E (Y)
    eval  # Eval 'lst'
    link
-   push E  # <L I/II> 'lst'
+   push E  # Save 'lst'
    link
    ld Y (Y CDR)  # Point to third arg
    atom E  # Second arg atomic?
@@ -1667,7 +1667,7 @@
             ld E (E CDR)  # Return CDR
          else
             link
-            push E  # <L II> 'lst'
+            push E  # Save 'lst'
             link
             call consE_X  # Cons first cell
             ld (X) (E)
@@ -1715,7 +1715,7 @@
       eval
    else
       link
-      push E  # <L I/II> 'lst'
+      push E  # Save 'lst'
       link
       dec Z  # Count <= 1?
       if sz  # Yes
@@ -4119,6 +4119,80 @@
    end
    drop
    pop Z
+   pop Y
+   pop X
+   ret
+
+# (group 'lst) -> lst
+(code 'doGroup 2)
+   ld E ((E CDR))  # Get arg
+   eval  # Eval 'lst'
+   atom E  # Atomic?
+   jnz retNil  # Yes
+   push X
+   push Y
+   link
+   push E  # Save 'lst'
+   link
+   ld X E  # in X
+   call cons_A  # Build first tail cell
+   ld (A) ((X) CDR)  # First value
+   ld (A CDR) Nil
+   call consA_C  # Link to tail cell
+   ld (C) A
+   ld (C CDR) A
+   call consC_A  # Build first list
+   ld (A) ((X))  # from first key
+   ld (A CDR) C
+   call consA_C  # Initial list
+   ld (C) A
+   ld (C CDR) Nil
+   tuck C  # <L I> Result
+   link
+   do
+      ld X (X CDR)
+      atom X  # More cells?
+   while z  # Yes
+      call cons_C  # New cell
+      ld (C) ((X) CDR)  # Value
+      ld (C CDR) Nil
+      ld Y (L I)  # Result so far
+      do
+         ld A ((Y))  # Compare keys
+         ld E ((X))
+         call equalAE_F  # Same?
+         if eq  # Yes
+            ld Y ((Y) CDR)  # Get tail link
+            ld ((Y) CDR) C  # Concatenate new cell to tail
+            ld (Y) C  # New tail
+            break T
+         end
+         atom (Y CDR)  # Done?
+         if nz  # Yes
+            call consC_A  # Link to tail cell
+            ld (A) C
+            ld (A CDR) C
+            call consA_C  # Build list
+            ld (C) ((X))  # from key
+            ld (C CDR) A
+            call consC_A  # New list
+            ld (A) C
+            ld (A CDR) Nil
+            ld (Y CDR) A  # Concatenate to result
+            break T
+         end
+         ld Y (Y CDR)
+      loop
+   loop
+   ld E (L I)  # Get result
+   ld C E  # Remove tail links
+   do
+      ld A (C)
+      ld (A CDR) ((A CDR) CDR)
+      ld C (C CDR)  # Done?
+      atom C
+   until nz  # Yes
+   drop
    pop Y
    pop X
    ret
