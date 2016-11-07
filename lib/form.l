@@ -1,4 +1,4 @@
-# 17oct16abu
+# 06nov16abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -29,6 +29,10 @@
          (get "*Lst" (- "*Cnt" *Get) *Form)
          (prog1
             (setq *Top (new NIL NIL 'able T 'evt 0))
+            ~(as *Dbg
+               (when (file)
+                  (put *Top '*Dbg
+                     (list (cons (cddr @) (pack (car @) (cadr @)))) ) ) )
             (queue (nth "*Lst" (- "*Cnt" *Get)) *Top) ) )
       (let "Lst" (get "*Lst" (- "*Cnt" *Get) 1)
          (for ("F" . "L") "Lst"

@@ -1,3 +1,19 @@
+06nov16
+   *Dbg info in GUI form (vi *Top)
+      lib/form.l
+
+04nov16
+   More examples for 'filter'
+      doc/refF.html
+
+03nov16
+   Terminate 'native' char arrays on null bytes
+      src64/main.l
+   Bug in 'native', needs 'consE_Y'
+      src64/main.l
+   Introduce 'consE_Y' to save E across garbage collection
+      {src64,pilos/src}/gc.l
+
 25oct16
    Minor typo
       doc/refG.html

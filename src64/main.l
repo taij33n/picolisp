@@ -1,4 +1,4 @@
-# 27jul16abu
+# 03nov16abu
 # (c) Software Lab. Alexander Burger
 
 (code 'Code)
@@ -2028,43 +2028,58 @@
                               ld X E  # Get specification in X
                               ld E (X)
                               call natRetACE_CE  # First item
-                              call cons_Y  # Make cell
-                              ld (Y) E
-                              ld (Y CDR) Nil
-                              link
-                              push Y  # <L I> Result
-                              link
-                              do
-                                 ld Z (X CDR)
-                                 cnt Z  # (sym . cnt)
-                                 if nz
-                                    shr Z 4  # Normalize
-                                    do
-                                       dec Z  # Decrement count
-                                    while nz
-                                       ld E (X)  # Repeat last type
-                                       call natRetACE_CE  # Next item
-                                       call cons_A  # Cons into cell
-                                       ld (A) E
-                                       ld (A CDR) Nil
-                                       ld (Y CDR) A  # Append to result
-                                       ld Y A
-                                    loop
-                                    break T
-                                 end
-                                 atom Z  # End of specification?
-                              while z  # No
-                                 ld X Z
-                                 ld E (X)  # Next type
-                                 call natRetACE_CE  # Next item
-                                 call cons_A  # Cons into cell
-                                 ld (A) E
-                                 ld (A CDR) Nil
-                                 ld (Y CDR) A  # Append to result
-                                 ld Y A
-                              loop
-                              ld E (L I)  # Get result
-                              drop
+                              cmp E Nil  # NIL?
+                              jne 10  # No
+                              cmp (X) CSym  # Was it 'C'?
+                              if ne  # No
+10                               call consE_Y  # Make cell
+                                 ld (Y) E
+                                 ld (Y CDR) Nil
+                                 link
+                                 push Y  # <L I> Result
+                                 link
+                                 do
+                                    ld Z (X CDR)
+                                    cnt Z  # (sym . cnt)
+                                    if nz
+                                       shr Z 4  # Normalize
+                                       do
+                                          dec Z  # Decrement count
+                                       while nz
+                                          ld E (X)  # Repeat last type
+                                          call natRetACE_CE  # Next item
+                                          cmp E Nil  # NIL?
+                                          if eq  # Yes
+                                             cmp (X) CSym  # Was it 'C'?
+                                             break eq  # Yes
+                                          end
+                                          call consE_A  # Cons into cell
+                                          ld (A) E
+                                          ld (A CDR) Nil
+                                          ld (Y CDR) A  # Append to result
+                                          ld Y A
+                                       loop
+                                       break T
+                                    end
+                                    atom Z  # End of specification?
+                                 while z  # No
+                                    ld X Z
+                                    ld E (X)  # Next type
+                                    call natRetACE_CE  # Next item
+                                    cmp E Nil  # NIL?
+                                    if eq  # Yes
+                                       cmp (X) CSym  # Was it 'C'?
+                                       break eq  # Yes
+                                    end
+                                    call consE_A  # Cons into cell
+                                    ld (A) E
+                                    ld (A CDR) Nil
+                                    ld (Y CDR) A  # Append to result
+                                    ld Y A
+                                 loop
+                                 ld E (L I)  # Get result
+                                 drop
+                              end
                               pop Z
                               pop Y
                               pop X
