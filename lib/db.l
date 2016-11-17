@@ -1,4 +1,4 @@
-# 06sep16abu
+# 16nov16abu
 # (c) Software Lab. Alexander Burger
 
 # *Dbs *Jnl *Blob upd
@@ -1077,6 +1077,11 @@
 (dm url2> () (url> This 2))
 (dm url3> () (url> This 3))
 (dm url4> () (url> This 4))
+(dm url5> () (url> This 5))
+(dm url6> () (url> This 6))
+(dm url7> () (url> This 7))
+(dm url8> () (url> This 8))
+(dm url9> () (url> This 9))
 
 (dm gui> ())
 
