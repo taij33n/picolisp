@@ -1,3 +1,5 @@
+* XXnov16 picoLisp-16.11
+   '++' function
    'insert', 'remove', 'place' and 'group' in Asm/C
    '+Obj2' GUI prefix class
    Removed 'zap' protection in pil64

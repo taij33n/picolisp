@@ -1,4 +1,4 @@
-# 06nov16abu
+# 24nov16abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -2085,7 +2085,7 @@
 (dm T (Lst . @)
    (pass super
       (cons
-         (pop 'Lst)
+         (++ Lst)
          (append '(: home obj) (cons (car Lst))) ) )
    (=: sub Lst)
    (=: able (bool (: able))) )

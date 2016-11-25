@@ -1,4 +1,4 @@
-# 24oct16abu
+# 24nov16abu
 # (c) Software Lab. Alexander Burger
 
 (data 'Data)
@@ -349,6 +349,7 @@
    initFun NIL       "push1"     doPush1
    initFun NIL       "push1q"    doPush1q
    initFun NIL       "pop"       doPop
+   initFun NIL       "++"        doPopq
    initFun NIL       "cut"       doCut
    initFun NIL       "del"       doDel
    initFun NIL       "queue"     doQueue

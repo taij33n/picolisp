@@ -1,3 +1,76 @@
+24nov16
+   '++' function
+      {src64,pilos/src}/sym.l
+      {src64,pilos/src}/glob.l
+      src/sym.c
+      src/tab.c
+      src/pico.h
+      mini/src/sym.c
+      mini/src/init.s
+      ersatz/fun.src
+      doc/ref.html
+      doc/ref_.html
+      doc/refP.html
+      test/src/sym.l
+      bin/pilIndent
+      games/chess.l
+      misc/trip.l
+      misc/rcsim.l
+      misc/calc.l
+      lib/xm.l
+      lib/xml.l
+      lib/conDbgc.l
+      lib/misc.l
+      mini/lib/misc.l
+      lib/app.l
+      lib/complete.l
+      lib/too.l
+      lib/form.l
+      lib/tex.l
+      lib/simul.l
+      lib/ps.l
+      lib/xmlrpc.l
+      lib/lint.l
+      lib/btree.l
+      lib/adm.l
+      lib/debug.l
+      mini/lib/debug.l
+      lib/json.l
+      lib/dbase.l
+      lib/http.l
+      lib/tinymce.l
+      lib/sq.l
+      lib/eled.l
+      lib/db32-64.l
+      lib/led.l
+      lib/rsa.l
+      lib/db.l
+      mini/lib/db.l
+      lib/scrape.l
+      lib/xhtml.l
+      lib/pilog.l
+      mini/lib/pilog.l
+      lib/svg.l
+      ersatz/lib.l
+      app/lib.l
+      lib.l
+      pilos/init/lib/misc.l
+      pilos/init/lib/dbg.l
+      pilos/init/lib/btree.l
+      pilos/init/lib/sq.l
+      pilos/init/lib/db.l
+      pilos/init/lib/pilog.l
+      pilos/init/lib.l
+   Incomplete error diagnoses in pil64 (X register)
+   'de', 'read', 'with', 'bind', 'co', 'on', 'off', 'onOff', 'zero' and 'one'
+      {src64,pilos/src}/sym.l
+      {src64,pilos/src}/flow.l
+      {src64,pilos/src}/io.l
+
+23nov16
+   Surplus parenthesis
+      doc/tut.html
+
 16nov16
    Added 'url5>' .. 'url9>'
       lib/db.l

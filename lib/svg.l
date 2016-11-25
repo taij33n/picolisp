@@ -1,4 +1,4 @@
-# 10sep16abu
+# 24nov16abu
 # (c) Software Lab. Alexander Burger
 
 # *Unit *DX *DY *Pos *Page *StrokeWidth
@@ -177,7 +177,7 @@
       (let X (next)
          (if (atom X)
             (ht:Prin X)
-            (casq (pop 'X)
+            (casq (++ X)
                (B  # Bold
                   (prin (if X "<tspan font-weight=\"bold\">" "</tspan>")) )
                (I  # Italic

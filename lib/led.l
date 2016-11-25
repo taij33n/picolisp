@@ -1,4 +1,4 @@
-# 08jul16abu
+# 24nov16abu
 # (c) Software Lab. Alexander Burger
 
 # Line editor
@@ -269,7 +269,7 @@
 (de expandTab ()
    (let ("L" (head (dec "LPos") "Line")  "S" "L")
       (while (find "skipFun" "S")
-         (pop '"S") )
+         (++ "S") )
       (ifn "S"
          (prog
             (off "Complete")
@@ -356,7 +356,7 @@
       ("k" (uMove))
       ("l" (rMove))
       ("n" (ledSearch "Line"))
-      ("N" (if "Found" (setHist (pop '"Found")) (beep)))
+      ("N" (if "Found" (setHist (++ "Found")) (beep)))
       ("p" (doUndo) ((if (= "LPos" (length "Line")) xMove rMove)) (doPaste))
       ("P" (doUndo) (doPaste))
       ("r" (ifn "Line" (beep) (doUndo) (rplChar (key))))

@@ -1,4 +1,4 @@
-/* 24oct16abu
+/* 24nov16abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -665,6 +665,7 @@ any doPlace(any);
 any doPoll(any);
 any doPool(any);
 any doPop(any);
+any doPopq(any);
 any doPort(any);
 any doPr(any);
 any doPreQ(any);

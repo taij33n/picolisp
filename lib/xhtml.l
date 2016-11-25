@@ -1,4 +1,4 @@
-# 05sep16abu
+# 24nov16abu
 # (c) Software Lab. Alexander Burger
 
 # *JS "*JS" *Style *Menu *Tab *ID
@@ -277,11 +277,11 @@
       (quote
          (let (L Prg  H (up "Head"))
             (while L
-               (let (X (pop 'L)  A (car (pop 'H))  N 1)
+               (let (X (++ L)  A (car (++ H))  N 1)
                   (while (== '- (car L))
                      (inc 'N)
-                     (pop 'L)
-                     (pop 'H) )
+                     (++ L)
+                     (++ H) )
                   (tag 'td
                      (style Attr
                         (style
@@ -314,13 +314,13 @@
                            (let
                               (C
                                  (cond
-                                    ((pair X) (pop 'X))
-                                    ((= "." (pop 'L)) 'align) )
-                                 E (pop 'Lst) )
+                                    ((pair X) (++ X))
+                                    ((= "." (++ L)) 'align) )
+                                 E (++ Lst) )
                               (unless (== '- E)
                                  (when (== '- (car Lst))
                                     (let N 1
-                                       (for (P Lst (and P (== '- (pop 'P))))
+                                       (for (P Lst (and P (== '- (++ P))))
                                           (inc 'N) )
                                        (push 'N "colspan")
                                        (setq C (if C (list C N) N)) ) )
@@ -358,7 +358,7 @@
 (zero "LayX" "LayY")
 
 (de <layout> "Lst"
-   (let P (and (=T (car "Lst")) (pop '"Lst"))
+   (let P (and (=T (car "Lst")) (++ "Lst"))
       (recur ("Lst" "LayX")
          (use "LayY"
             (for "L" "Lst"
@@ -366,7 +366,7 @@
                   ("Args" (mapcar eval (cddar "L"))
                      "DX" (eval (caar "L"))
                      "DY" (eval (cadar "L"))
-                     "Cls" (unless (sub? ":" (car "Args")) (pop '"Args"))
+                     "Cls" (unless (sub? ":" (car "Args")) (++ "Args"))
                      "Style"
                      (cons 'style
                         (glue "; "
@@ -491,14 +491,14 @@
 
 ### DB Linkage ###
 (de mkUrl (Lst)
-   (pack (pop 'Lst) "?"
+   (pack (++ Lst) "?"
       (make
          (while Lst
             (and
                (sym? (car Lst))
                (= `(char '*) (char (car Lst)))
-               (link (pop 'Lst) "=") )
-            (link (ht:Fmt (pop 'Lst)))
+               (link (++ Lst) "=") )
+            (link (ht:Fmt (++ Lst)))
             (and Lst (link "&")) ) ) ) )
 
 (de <$> (Str Obj Msg Tab)

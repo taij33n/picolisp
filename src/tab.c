@@ -1,4 +1,4 @@
-/* 24oct16abu
+/* 24nov16abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -262,6 +262,7 @@ static symInit Symbols[] = {
    {doPoll, "poll"},
    {doPool, "pool"},
    {doPop, "pop"},
+   {doPopq, "++"},
    {doPort, "port"},
    {doPr, "pr"},
    {doPreQ, "pre?"},

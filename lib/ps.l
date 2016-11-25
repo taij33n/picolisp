@@ -1,4 +1,4 @@
-# 27jul16abu
+# 24nov16abu
 # (c) Software Lab. Alexander Burger
 
 # "*Glyph" "*PgX" "*PgY"
@@ -84,7 +84,7 @@
    (use "N"
       (cond
          ((pair "F")
-            (setq "N" (pop '"F")) )
+            (setq "N" (++ "F")) )
          ((num? "F")
             (setq "N" "F"  "F" "*Font") )
          (T (setq "N" "*Size")) )
@@ -219,11 +219,11 @@
    (prin "[")
    (while Lst
       (if (>= (car Lst) `(char 128))
-         (prin "/" (or (glyph (pop 'Lst)) ".notdef"))
+         (prin "/" (or (glyph (++ Lst)) ".notdef"))
          (prin "(")
-         (escPs (pop 'Lst))
+         (escPs (++ Lst))
          (while (and Lst (>= `(char 127) (car Lst)))
-            (escPs (pop 'Lst)) )
+            (escPs (++ Lst)) )
          (prin ")") )
       (and Lst (space)) )
    (prin "]") )
@@ -266,7 +266,7 @@
       (for X "Lst"
          (if (atom X)
             (ps+ X)
-            (casq (pop 'X)
+            (casq (++ X)
                (F
                   (ifn X
                      (prinl "setfont")
@@ -320,8 +320,8 @@
 (de psEval ("Prg")
    (while "Prg"
       (if (atom (car "Prg"))
-         (ps (eval (pop '"Prg")))
-         (eval (pop '"Prg")) ) ) )
+         (ps (eval (++ "Prg")))
+         (eval (++ "Prg")) ) ) )
 
 (de page (Flg)
    (when (=T Flg)
@@ -335,18 +335,18 @@
          (setq "*DX" "*PgX"  "*DY" "*PgY"  "*Lim") )
       (T (prin "%%DocumentFonts:")
          (while "*Fonts"
-            (prin " " (pop '"*Fonts")) )
+            (prin " " (++ "*Fonts")) )
          (prinl)
          (prinl "%%EOF") ) ) )
 
 (de pages (Lst . Prg)
-   (setq "*Pag" Lst  "*Lim" (pop '"*Pag")  "*FF" Prg) )
+   (setq "*Pag" Lst  "*Lim" (++ "*Pag")  "*FF" Prg) )
 
 (de "?ff" ()
    (when (and "*Lim" (>= "*Pos" "*Lim"))
       (off "*Lim")
       (run "*FF")
-      (setq "*Lim" (pop '"*Pag")) ) )
+      (setq "*Lim" (++ "*Pag")) ) )
 
 (de noff "Prg"
    (let "*Lim" NIL

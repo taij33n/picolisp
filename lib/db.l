@@ -1,4 +1,4 @@
-# 16nov16abu
+# 24nov16abu
 # (c) Software Lab. Alexander Burger
 
 # *Dbs *Jnl *Blob upd
@@ -58,7 +58,7 @@
                (fetch Tree Val) )
             (let Key (cons (if (isa '+Fold This) (fold Val) Val))
                (let? A (: aux)
-                  (while (and (args) (== (pop 'A) (arg 1)))
+                  (while (and (args) (== (++ A) (arg 1)))
                      (next)
                      (queue 'Key (next)) )
                   (and (: ub) (setq Key (ubZval Key))) )
@@ -628,14 +628,14 @@
       (for S Olds
          (while (nth S (: min))
             (store Tree (cons (pack S) Aux2) NIL (: dbf))
-            (pop 'S) ) )
+            (++ S) ) )
       (unless (get Obj T)
          (and New (store Tree (cons @ Aux) Obj (: dbf)))
          (and New2 (store Tree (cons @ Aux2) Obj (: dbf)))
          (for S News
             (while (nth S (: min))
                (store Tree (cons (pack S) Aux2) Obj (: dbf))
-               (pop 'S) ) ) ) ) )
+               (++ S) ) ) ) ) )
 
 (de idxRel? (Obj Val Val2 Vals Hook)
    (let
@@ -651,7 +651,7 @@
                (loop
                   (NIL (nth S (: min)) T)
                   (NIL (== Obj (fetch Tree (cons (pack S) Aux2))))
-                  (pop 'S) ) )
+                  (++ S) ) )
             Vals ) ) ) )
 
 (dm rel> (Obj Old New Hook)
@@ -1068,7 +1068,7 @@
 
 (dm zap> ()
    (for X (getl This)
-      (let V (or (atom X) (pop 'X))
+      (let V (or (atom X) (++ X))
          (and (meta This X) (zap> @ This V)) ) )
    (unless (: T) (decECnt This)) )
 
@@ -1198,7 +1198,7 @@
 (dm lose> (Lst)
    (unless (: T)
       (for X (getl This)
-         (let V (or (atom X) (pop 'X))
+         (let V (or (atom X) (++ X))
             (and
                (not (memq X Lst))
                (meta This X)
@@ -1227,7 +1227,7 @@
       (=: T)
       (incECnt This)
       (for X (getl This)
-         (let V (or (atom X) (pop 'X))
+         (let V (or (atom X) (++ X))
             (and
                (not (memq X Lst))
                (meta This X)
@@ -1387,13 +1387,13 @@
 
 (de obj Lst
    (let Obj
-      (let L (pop 'Lst)
+      (let L (++ Lst)
          (if (pair (car L))
             (apply request L)
-            (cache '*ObjIdx (pop 'Lst)
+            (cache '*ObjIdx (++ Lst)
                (new (or (meta L 'Dbf 1) 1) L) ) ) )
       (while Lst
-         (let (K (pop 'Lst)  V (pop 'Lst))
+         (let (K (++ Lst)  V (++ Lst))
             (if (=T K)
                (lose> Obj)
                (put> Obj K V) ) ) )
