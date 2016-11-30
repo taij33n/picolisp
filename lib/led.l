@@ -1,4 +1,4 @@
-# 24nov16abu
+# 25nov16abu
 # (c) Software Lab. Alexander Burger
 
 # Line editor
@@ -87,7 +87,7 @@
 
 # Check for delimiter
 (de delim? (C)
-   (member C '`(chop '" ^I^J^M\"'()[]`~")) )
+   (member C '`(chop " ^I^J^M\"'()[]`~")) )
 
 # Move left
 (de lMove ()

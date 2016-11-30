@@ -1,3 +1,11 @@
+29nov16
+   Reference clarification for 'diff'
+      doc/refD.html
+
+25nov16
+   Minor fix, quote in 'delim?' not needed
+      lib/led.l
+
 24nov16
    '++' function
       {src64,pilos/src}/sym.l

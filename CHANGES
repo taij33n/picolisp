@@ -1,4 +1,4 @@
-* XXnov16 picoLisp-16.11
+* XXdec16 picoLisp-16.12
    '++' function
    'insert', 'remove', 'place' and 'group' in Asm/C
    '+Obj2' GUI prefix class
