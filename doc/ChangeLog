@@ -1,3 +1,16 @@
+05dec16
+   Stub for 'PIE = -no-pie' in Linux/x86_64 (enable in Debian Sid)
+      src64/Makefile
+
+04dec16
+   Example for 'need'
+      doc/refN.html
+
+02dec16
+   'T' result specification for 'native'
+      src64/main.l
+      doc/refN.html
+
 29nov16
    Reference clarification for 'diff'
       doc/refD.html
