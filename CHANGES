@@ -1,4 +1,4 @@
-* XXdec16 picoLisp-16.12
+* 08dec16 picoLisp-16.12
    'T' result specification for 'native'
    '++' function
    'insert', 'remove', 'place' and 'group' in Asm/C
