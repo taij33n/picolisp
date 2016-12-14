@@ -1,3 +1,11 @@
+14dec16
+   Better error diagnostics
+      src64/mkAsm
+
+12dec16
+   Minor typo, duplicated line
+      doc/refR.html
+
 09dec16
    Reverse bind order (for duplicate symbols)
       {src64,pilos/src}/main.l
