@@ -1,3 +1,15 @@
+18dec16
+   'expDat' accepts "." and "+/-<num>" for "today"
+      lib/misc.l
+      doc/refE.html
+      test/lib/misc.l
+
+16dec16
+   Base64-encode 'mail' subject if necessary
+      lib/misc.l
+   Wrong link to 'mail'
+      doc/refP.html
+
 14dec16
    Better error diagnostics
       src64/mkAsm
@@ -7,7 +19,7 @@
       doc/refR.html
 
 09dec16
-   Reverse bind order (for duplicate symbols)
+   Reverse bind order (for (pathologically) duplicated symbols)
       {src64,pilos/src}/main.l
       {src64,pilos/src}/flow.l
 
