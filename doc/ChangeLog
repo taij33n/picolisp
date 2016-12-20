@@ -1,3 +1,7 @@
+19dec16
+   Add '+Rid' to 'resetButton'
+      lib/form.l
+
 18dec16
    'expDat' accepts "." and "+/-<num>" for "today"
       lib/misc.l

@@ -1,4 +1,4 @@
-# 24nov16abu
+# 19dec16abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -1990,7 +1990,7 @@
    (gui '(+Rid +JS +Tip +Button) ,"Start search" ,"Search" Exe) )
 
 (de resetButton (Lst)
-   (gui '(+Force +ClrButton) T ,"Reset" Lst) )
+   (gui '(+Rid +Force +ClrButton) T ,"Reset" Lst) )
 
 (de newButton (Able Dst . Args)
    (gui '(+Rid +Able +Close +Tip +Button) Able ,"Create new object" ',"New"
