@@ -1,3 +1,7 @@
+22dec16
+   Preserve "LayX" in <layout>
+      lib/xhtml.l
+
 19dec16
    Add '+Rid' to 'resetButton'
       lib/form.l
