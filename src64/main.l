@@ -1,4 +1,4 @@
-# 02dec16abu
+# 07jan17abu
 # (c) Software Lab. Alexander Burger
 
 (code 'Code)
@@ -3001,6 +3001,15 @@
 90 ld E Nil  # Can't convert time
    pop Y
    pop X
+   ret
+
+# (tzo) -> cnt
+(code 'doTzo 2)
+   cc localtime(Tv)  # (Any) time to local time
+   ld4 (A TM_GMTOFF)  # Time offset in seconds east of GMT
+   ld E A
+   shl E 4  # Make short number
+   or E CNT
    ret
 
 # (usec ['flg]) -> num

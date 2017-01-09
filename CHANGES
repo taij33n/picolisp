@@ -1,3 +1,4 @@
+   'tzo' function
    'expDat' accepts "." and "+/-<num>" for "today"
 
 * 08dec16 picoLisp-16.12

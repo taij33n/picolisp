@@ -1,3 +1,35 @@
+09jan17
+   Make 'tzo' Linux-only
+      src/main.c
+      doc/refT.html
+      test/src/main.l
+   Remove lib/dbase.l from distribution
+      lib/dbase.l
+   Avoid race condition in 'tzo' unit test
+      test/src/main.l
+
+07jan17
+   'tzo' function
+      src64/sys/arm64.linux.defs.l
+      src64/sys/x86-64.linux.defs.l
+      src64/sys/ppc64.linux.defs.l
+      src64/sys/x86-64.freeBsd.defs.l
+      src64/sys/x86-64.openBsd.defs.l
+      src64/sys/x86-64.sunOs.defs.l
+      src64/sysdefs.c
+      src64/main.l
+      src64/glob.l
+      src/pico.h
+      src/tab.c
+      src/main.c
+      doc/ref.html
+      doc/refT.html
+      test/src/main.l
+
+02jan17
+   One more example for 'fish'
+      doc/refF.html
+
 22dec16
    Preserve "LayX" in <layout>
       lib/xhtml.l

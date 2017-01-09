@@ -1,4 +1,4 @@
-# 24nov16abu
+# 07jan17abu
 # (c) Software Lab. Alexander Burger
 
 (data 'Data)
@@ -205,6 +205,7 @@
    initFun NIL       "rest"      doRest
    initFun NIL       "date"      doDate
    initFun NIL       "time"      doTime
+   initFun NIL       "tzo"       doTzo
    initFun NIL       "usec"      doUsec
    initFun NIL       "pwd"       doPwd
    initFun NIL       "cd"        doCd
