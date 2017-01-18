@@ -1,5 +1,11 @@
+17jan17
+   Bug in 'port', guarantee 16-bit value after ntohs()
+      src64/net.l
+   More ref fixes (Jon / Mattias)
+      doc/form/refQ.html
+
 13jan17
-   Missing '#' in link
+   Missing '#' in link (Jon / Mattias)
       doc/form/refP.html
 
 09jan17

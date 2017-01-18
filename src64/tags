@@ -1273,15 +1273,15 @@ sys/arm64.linux.defs.l,2137
 
 ./net.l,192
 doPort5,96
-tcpAcceptA_FE111,2846
-doAccept150,4228
-doListen162,4464
-doHost195,5137
-doConnect229,6020
-serverCEY_FE278,7224
-doUdp306,7988
-getUdpZ_FB375,9921
-putUdpBZ382,10068
+tcpAcceptA_FE112,2897
+doAccept151,4279
+doListen163,4515
+doHost196,5188
+doConnect230,6071
+serverCEY_FE279,7275
+doUdp307,8039
+getUdpZ_FB376,9972
+putUdpBZ383,10119
 
 sys/arm64.linux.code.l,94
 errno_A5,67
