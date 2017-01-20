@@ -1,4 +1,4 @@
-# 24nov16abu
+# 20jan17abu
 # (c) Software Lab. Alexander Burger
 
 (de task (Key . Prg)
@@ -157,24 +157,26 @@
 
 (de rc (File Key . @)
    (ctl File
-      (let Lst (in File (read))
-         (ifn (args)
-            (cdr (assoc Key Lst))
-            (let Val (next)
-               (if (assoc Key Lst)
-                  (con @ Val)
-                  (push 'Lst (cons Key Val)) )
-               (protect
-                  (out File (println Lst)) )
-               Val ) ) ) ) )
+      (in File
+         (let Lst (read)
+            (ifn (args)
+               (cdr (assoc Key Lst))
+               (let Val (next)
+                  (if (assoc Key Lst)
+                     (con @ Val)
+                     (push 'Lst (cons Key Val)) )
+                  (protect
+                     (out File (println Lst)) )
+                  Val ) ) ) ) ) )
 
 (de acquire (File)
    (ctl File
-      (let P (in File (rd))
-         (or
-            (= P *Pid)
-            (unless (and P (kill P 0))
-               (out File (pr *Pid)) ) ) ) ) )
+      (in File
+         (let P (rd)
+            (or
+               (= P *Pid)
+               (unless (and P (kill P 0))
+                  (out File (pr *Pid)) ) ) ) ) ) )
 
 (de release (File)
    (ctl File (out File)) )

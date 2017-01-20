@@ -1,3 +1,4 @@
+   Incorrect usage of 'ctl' in 'rc' and 'acquire'
    Bug in 'port' in pil64
    'tzo' function
    'expDat' accepts "." and "+/-<num>" for "today"

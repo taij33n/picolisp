@@ -1,3 +1,7 @@
+20jan17
+   Incorrect usage of 'ctl' in 'rc' and 'acquire'
+      lib.l
+
 17jan17
    Bug in 'port', guarantee 16-bit value after ntohs()
       src64/net.l
