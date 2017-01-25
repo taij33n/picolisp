@@ -1,3 +1,16 @@
+25jan17
+   More tag fixes
+      doc/form/refF.html
+      doc/form/refO.html
+      doc/form/refQ.html
+      doc/form/refS.html
+      doc/form/refV.html
+      doc/form/form.html
+
+24jan17
+   Bug in indent script with closing comments '}#'
+      bin/pilIndent
+
 23jan17
    More typos in docs
       doc/app.html
