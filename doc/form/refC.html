@@ -301,8 +301,8 @@
     (&lt;table&gt; 'chart NIL '((NIL "Media"))
        (do 3
           (&lt;row&gt; (alternating)
-             (gui 1 '(+ObjView +TextField) '(: nm)) # Binary name (gui 2
-             '(+DelRowButton)) (gui 3 '(+BubbleButton)) ) )
+             (gui 1 '(+ObjView +TextField) '(: nm)) # Binary name
+             (gui 2 '(+DelRowButton)) (gui 3 '(+BubbleButton)) ) )
        (&lt;row&gt; NIL (scroll 3 T)) )
     </code></pre>
     
@@ -314,8 +314,10 @@
     <pre><code>
     (=: mup
          (list
-            (and (: obj mup) (in (blob @ 'txt) (till NIL T))) # txt NIL # sum
-            NIL # min (: obj mup bin) ) )
+            (and (: obj mup) (in (blob @ 'txt) (till NIL T))) # txt
+            NIL # sum
+            NIL # min
+            (: obj mup bin) ) )
     </code></pre>
     
     'mup' is a list here, and <code>(: mup -3)</code> picks
