@@ -1,3 +1,7 @@
+05feb17
+   Minor fixes to some 'chk>' methods
+      lib/form.l
+
 30jan17
    Note 'flush' in the 'out' reference
       doc/refO.html

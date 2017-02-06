@@ -1,4 +1,4 @@
-# 19dec16abu
+# 05feb17abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -1557,7 +1557,7 @@
 (dm chk> ()
    (and
       (str> This)
-      (not (val> This))
+      (not (expDat @))
       ,"Bad date format" ) )
 
 
@@ -1575,7 +1575,7 @@
 (dm chk> ()
    (and
       (str> This)
-      (not (val> This))
+      (not ($tim @))
       ,"Bad time format" ) )
 
 
@@ -1714,7 +1714,7 @@
 (dm chk> ()
    (and
       (str> This)
-      (not (val> This))
+      (not (expTel @))
       ,"Bad phone number format" ) )
 
 
