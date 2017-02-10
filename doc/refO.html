@@ -238,7 +238,10 @@ opt "abc"
 <dt><a name="or"><code>(or 'any ..) -> any</code></a>
 <dd>Logical OR. The expressions <code>any</code> are evaluated from left to
 right. If a non-<code>NIL</code> value is encountered, it is returned
-immediately. Else the result of the last expression is returned.
+immediately. Else the result of the last expression is returned. See also
+<code><a href="refN.html#nor">nor</a></code>, <code><a
+href="refA.html#and">and</a></code> and <code><a
+href="refU.html#unless">unless</a></code>.
 
 <pre><code>
 : (or (= 3 3) (read))

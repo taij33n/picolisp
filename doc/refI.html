@@ -122,6 +122,7 @@ href="refM.html#member">member</a></code>.
 <dd>Conditional execution: If the condition <code>any1</code> evaluates to
 non-<code>NIL</code>, <code>any2</code> is evaluated and returned. Otherwise,
 <code>prg</code> is executed and the result returned. See also <code><a
+href="refI.html#ifn">ifn</a></code>, <code><a
 href="refC.html#cond">cond</a></code>, <code><a
 href="refW.html#when">when</a></code> and <code><a
 href="refI.html#if2">if2</a></code>.
@@ -159,7 +160,12 @@ the result returned. See also <code><a href="refI.html#if">if</a></code> and
 <dt><a name="ifn"><code>(ifn 'any1 any2 . prg) -> any</code></a>
 <dd>Conditional execution ("If not"): If the condition <code>any1</code>
 evaluates to <code>NIL</code>, <code>any2</code> is evaluated and returned.
-Otherwise, <code>prg</code> is executed and the result returned.
+Otherwise, <code>prg</code> is executed and the result returned. See also
+<code><a href="refI.html#if">if</a></code>, <code><a
+href="refN.html#nor">nor</a></code>, <code><a
+href="refN.html#nand">nand</a></code>, <code><a
+href="refU.html#unless">unless</a></code> and <code><a
+href="refN.html#nond">nond</a></code>.
 
 <pre><code>
 : (ifn (= 3 4) (println 'OK) (println 'Bad))

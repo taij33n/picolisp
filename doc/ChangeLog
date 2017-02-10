@@ -1,3 +1,18 @@
+08feb17
+   idFocus() function and disable '+Focus' on touch devices
+      lib/form.js
+      lib/form.l
+
+07feb17
+   More "See also" entries for flow functions
+      doc/refA.html
+      doc/refC.html
+      doc/refI.html
+      doc/refN.html
+      doc/refO.html
+      doc/refU.html
+      doc/refW.html
+
 05feb17
    Minor fixes to some 'chk>' methods
       lib/form.l

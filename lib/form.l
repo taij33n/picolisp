@@ -1,4 +1,4 @@
-# 05feb17abu
+# 08feb17abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -976,10 +976,7 @@
    (extra "Var")
    (when (and (able) (not "*Foc"))
       (on "*Foc")
-      (javascript NIL
-         "window.setTimeout(\"document.getElementById(\\\""
-         "i" *Form "-" (: id)
-         "\\\").focus()\",420)" ) ) )
+      (javascript NIL "idFocus(\"" "i" *Form "-" (: id) "\")") ) )
 
 
 ### Styles ###
