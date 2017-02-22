@@ -1,3 +1,7 @@
+17feb17
+   Minor ref fix
+      doc/ref.html
+
 08feb17
    idFocus() function and disable '+Focus' on touch devices
       lib/form.js
