@@ -1,3 +1,4 @@
+   Namespace chaining instead of merging
    Disable '+Focus' on touch devices
    Incorrect usage of 'ctl' in 'rc' and 'acquire'
    Bug in 'port' in pil64

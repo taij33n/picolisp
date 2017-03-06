@@ -1,4 +1,4 @@
-# 07jan17abu
+# 03mar17abu
 # (c) Software Lab. Alexander Burger
 
 (code 'Code)
@@ -88,18 +88,20 @@
    ld (StkLimit) 0  # Initially without stack limit
    ld L 0  # Init link register
    call heapAlloc  # Allocate initial heap
-   ld E Nil  # Init internal symbols
-   lea Z (E VI)  # Skip padding and 'pico' cell
-   do
+   ld E Nil  # Init NIL
+   ld X (E TAIL)  # Get name
+   ld Y Pico  # Use initial symbol namespace
+   ld Z E  # NIL: No more namespaces
+   call internEXYZ_FE  # Store NIL to internals
+   add E VI  # Skip padding and 'Pico' cell
+   do  # Init internal symbols
       ld X (E TAIL)  # Get name
-      ld Y Pico  # From initial symbol namespace
-      call internEXY_FE  # Store to internals
-      ld E Z
-      cnt (Z TAIL)  # Short name?
+      call internEXYZ_FE  # Store to internals
+      cnt (E TAIL)  # Short name?
       if nz  # Yes
-         add Z II  # Next symbol
+         add E II  # Next symbol
       else
-         add Z IV
+         add E IV
       end
       cmp E SymTabEnd
    until gt

@@ -177,9 +177,7 @@ OK
 <dd>Wrapper function for <code><a href="refI.html#intern">intern</a></code>.
 Typically used to import symbols from other namespaces, as created by <code><a
 href="refS.html#symbols">symbols</a></code>. <code>lst</code> should be a list
-of symbols. An import conflict error is issued when a symbol with the same name
-already exists in the current namespace. See also <code><a
-href="refP.html#pico">pico</a></code> and <code><a
+of symbols. See also <code><a href="refP.html#pico">pico</a></code> and <code><a
 href="refL.html#local">local</a></code>.
 
 <pre><code>
@@ -329,12 +327,15 @@ href="refR.html#replace">replace</a></code>.
 -> (a b c d e 777)
 </code></pre>
 
-<dt><a name="intern"><code>(intern 'sym) -> sym</code></a>
+<dt><a name="intern"><code>(intern 'sym ['flg]) -> sym</code></a>
 <dd>Creates or finds an internal symbol. If a symbol with the name
 <code>sym</code> is already intern, it is returned. Otherwise, <code>sym</code>
-is interned and returned. See also <code><a
+is interned in the current namespace and returned. If <code>flg</code> is
+non-<code>NIL</code>, <code>sym</code> is always interned in the current
+namespace even if it is found in other namespaces. See also <code><a
 href="refS.html#symbols">symbols</a></code>, <code><a
 href="refZ.html#zap">zap</a></code>, <code><a
+href="refI.html#import">import</a></code>, <code><a
 href="refE.html#extern">extern</a></code> and <code><a
 href="ref_.html#====">====</a></code>.
 

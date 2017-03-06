@@ -1,4 +1,4 @@
-# 03nov16abu
+# 03mar17abu
 # (c) Software Lab. Alexander Burger
 
 # Mark data
@@ -75,12 +75,13 @@
    ### Prepare all cells ###
    ld X Nil  # Symbol table
    or (X) 1  # Set mark bit
-   add X 32  # Skip padding
+   add X IV  # Skip padding
    do
       or (X) 1  # Set mark bit
       add X II  # Next symbol
       cmp X GcSymEnd
    until gt
+   or (Pico1 CDR) 1  # Mark default namespace
    ld X (Heaps)  # Heap pointer
    do
       ld C CELLS

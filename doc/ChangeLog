@@ -1,3 +1,37 @@
+06mar17
+   Bug in namespace chaining
+      {src64,pilos/src}/sym.l
+   Added 'url1>'
+      lib/db.l
+
+04mar17
+   Namespace chaining instead of merging
+      {src64,pilos/src}/glob.l
+      {src64,pilos/src}/main.l
+      {src64,pilos/src}/gc.l
+      {src64,pilos/src}/sym.l
+      {src64,pilos/src}/io.l
+      {src64,pilos/src}/err.l
+      src64/ht.l
+      lib.l
+      lib/debug.l
+      pilos/init/lib.l
+      pilos/init/lib/dbg.l
+      test/src/sym.l
+      doc/ref.html
+      doc/refI.html
+      doc/refL.html
+      doc/refP.html
+      doc/refS.html
+      doc/refZ.html
+
+03mar17
+   French localization
+      loc/FR.l
+      loc/fr
+      app/loc/fr
+      app/main.l
+
 24feb17
    Input fields without border
       lib.css

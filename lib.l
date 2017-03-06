@@ -1,4 +1,4 @@
-# 20jan17abu
+# 04mar17abu
 # (c) Software Lab. Alexander Burger
 
 (de task (Key . Prg)
@@ -210,13 +210,16 @@
             (loc S (car X))
             (loc S (cdr X)) ) ) ) )
 
-(de local Lst
-   (mapc zap Lst) )
+(de local ()
+   (prog1
+      (symbols)
+      (symbols (list (car @)))
+      (read)
+      (symbols @) ) )
 
 (de import Lst
    (for Sym Lst
-      (unless (== Sym (intern Sym))
-         (quit "Import conflict" Sym) ) ) )
+      (intern Sym T) ) )
 
 ### OOP ###
 (de class Lst

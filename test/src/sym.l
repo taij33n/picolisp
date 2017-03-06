@@ -1,4 +1,4 @@
-# 24nov16abu
+# 03mar17abu
 # (c) Software Lab. Alexander Burger
 
 ### name ###
@@ -47,11 +47,11 @@
 ### symbols ###
 (when symbols
    (test T (bool (pair pico)))
-   (test 'pico (symbols 'myLib 'pico)) )
+   (test '(pico) (symbols 'myLib 'pico)) )
 
 (when symbols
    (one Foo)
-   (test 'myLib (symbols 'pico)) )
+   (test '(myLib pico) (symbols 'pico)) )
 
 (when symbols
    (test 1 myLib~Foo) )

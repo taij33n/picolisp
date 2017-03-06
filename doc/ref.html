@@ -981,7 +981,7 @@ surrounding whitespace), the first is taken as a namespace to look up the second
 
 <pre><code>
 : 'libA~foo  # Look up 'foo' in namespace 'libA'
--> "foo"     # "foo" is not interned in the current namespace
+-> libA~foo  # "foo" is not interned in the current namespace
 </code></pre>
 
 <p>Reading <code>libA~foo</code> is equivalent to switching the current

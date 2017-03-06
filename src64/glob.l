@@ -1,4 +1,4 @@
-# 07jan17abu
+# 04mar17abu
 # (c) Software Lab. Alexander Burger
 
 (data 'Data)
@@ -596,6 +596,16 @@
    word (short `(caddr *Version))
    word Nil
 
+# Initial namespace
+: Pico1
+   word pico
+   word Nil
+
+# Temporary cell
+: Cell1
+   word Nil
+   word Nil
+
 : ExtCnt       word  1           # External symbol count
 : ExtSkip      word  0           # External tree skip
 :: Extern      word  0           # External symbol tree
@@ -614,7 +624,7 @@
 : EnvOutFrames word  0           # Output frames
 : EnvErrFrames word  0           # Error frames
 : EnvCtlFrames word  0           # Control frames
-:: EnvIntern   word  pico        # Current namespace of internal symbols
+:: EnvIntern   word  Pico1       # Current namespaces of internal symbols
 : EnvArgs      word  0           # Varargs frame
 : EnvNext      word  0           # Next vararg
 : EnvCls       word  0           # Method class
