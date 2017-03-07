@@ -1054,6 +1054,7 @@
 
 # (symbols) -> lst
 # (symbols 'lst) -> lst
+# (symbols 'lst . prg) -> any
 # (symbols 'sym1 'sym2 ..) -> lst
 (code 'doSymbols 2)
    push X
@@ -1062,12 +1063,27 @@
    ld Y (E CDR)  # Y on args
    atom Y  # Any?
    if nz  # No
-      ld E (EnvIntern)  # Return current symbol namespaces
+      ld E (EnvIntern)  # Return current namespaces
    else
       ld E (Y)  # Eval first
       eval
       atom E  # List?
-      if nz  # No
+      if z  # Yes
+         ld Y (Y CDR)  # 'prg'?
+         atom Y
+         if z  # Yes
+            xchg (EnvIntern) E  # Set new namespaces
+            link
+            push E  # <L I> Save current
+            link
+            prog Y  # Run 'prog'
+            ld (EnvIntern) (L I)  # Restore namespaces
+            drop
+            pop Y
+            pop X
+            ret
+         end
+      else
          num E  # Need symbol
          jnz symErrEX
          sym E

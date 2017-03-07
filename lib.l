@@ -1,4 +1,4 @@
-# 04mar17abu
+# 06mar17abu
 # (c) Software Lab. Alexander Burger
 
 (de task (Key . Prg)
@@ -210,16 +210,15 @@
             (loc S (car X))
             (loc S (cdr X)) ) ) ) )
 
+(unless (== 64 64) (from "####"))
 (de local ()
-   (prog1
-      (symbols)
-      (symbols (list (car @)))
-      (read)
-      (symbols @) ) )
+   (symbols (list (car (symbols)))
+      (read) ) )
 
 (de import Lst
    (for Sym Lst
       (intern Sym T) ) )
+####
 
 ### OOP ###
 (de class Lst

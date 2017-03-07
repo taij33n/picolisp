@@ -1009,16 +1009,18 @@ href="refE.html#ext?">ext?</a></code>.
 
 <dt><a name="symbols"><code>(symbols) -> lst</code></a>
 <dt><code>(symbols 'lst) -> lst</code>
+<dt><code>(symbols 'lst . prg) -> any</code>
 <dt><code>(symbols 'sym1 'sym2 ..) -> lst</code>
 <dd>(64-bit version only) Creates and manages namespaces of internal symbols: In
 the first form, the current list of namespaces is returned. In the second form,
 the current namespace list is set to <code>lst</code>, and the previous
-namespace list is returned. In the third form, <code>sym1</code> is initialized
-to a new namespace if its value is <code>NIL</code> and not modified otherwise,
-and <code>sym1</code>, <code>sym2</code> and all following arguments are set as
-the current namespace list. See also <code><a
-href="refP.html#pico">pico</a></code>, <code><a
-href="refL.html#local">local</a></code>, <code><a
+namespace list is returned. In the third form, the current namespace list is set
+to <code>lst</code> during the execution of <code>prg</code>, and the result is
+returned. In the fourth form, <code>sym1</code> is initialized to a new
+namespace if its value is <code>NIL</code> and not modified otherwise, and
+<code>sym1</code>, <code>sym2</code> and all following arguments are set as the
+current namespace list. See also <code><a href="refP.html#pico">pico</a></code>,
+<code><a href="refL.html#local">local</a></code>, <code><a
 href="refI.html#import">import</a></code>, <code><a
 href="refI.html#intern">intern</a></code> and <code><a
 href="refL.html#load">load</a></code>.

@@ -1,4 +1,11 @@
 06mar17
+   'symbols' optional 'prg' for local namespace list
+      {src64,pilos/src}/sym.l
+      lib.l
+      doc/refS.html
+      doc/refL.html
+   Omit 'local' and 'import' from pil32
+      lib.l
    Bug in namespace chaining
       {src64,pilos/src}/sym.l
    Added 'url1>'
