@@ -1,4 +1,4 @@
-# 06mar17abu
+# 08mar17abu
 # (c) Software Lab. Alexander Burger
 
 ### Compare long names ###
@@ -30,7 +30,7 @@
    pop X
    ret
 
-(code 'nextInternEXYZ_FE 0)  # Y
+(code 'nextIsInternEXYZ_FE 0)  # Y
    ld Y ((Z))  # Get next tree
    ld Z (Z CDR)
 
@@ -74,7 +74,7 @@
             jmp 10
          end
       end
-      ret  # Return YES or NO
+      ret  # Return YES
    end
    # Long name
 20 ld Y (Y CDR)  # Y on second tree
@@ -109,7 +109,7 @@
          jmp 10
       end
    end
-   ret   # Return YES or NO
+   ret   # Return YES
 
 ### Intern a symbol/name ###
 # E symbol
@@ -125,7 +125,7 @@
          atom Z  # More namespaces?
          if z  # Yes
             push Y
-            call nextInternEXYZ_FE    # Check
+            call nextIsInternEXYZ_FE    # Check
             pop Y
             jeq Ret  # Return if found
          end
@@ -154,7 +154,7 @@
                atom Z  # More namespaces?
                if z  # Yes
                   push C
-                  call nextInternEXYZ_FE    # Check
+                  call nextIsInternEXYZ_FE    # Check
                   pop C
                   jeq Ret  # Return if found
                end
@@ -179,7 +179,7 @@
                atom Z  # More namespaces?
                if z  # Yes
                   push C
-                  call nextInternEXYZ_FE    # Check
+                  call nextIsInternEXYZ_FE    # Check
                   pop C
                   jeq Ret  # Return if found
                end
@@ -200,7 +200,7 @@
                atom Z  # More namespaces?
                if z  # Yes
                   push C
-                  call nextInternEXYZ_FE    # Check
+                  call nextIsInternEXYZ_FE    # Check
                   pop C
                   jeq Ret  # Return if found
                end
@@ -225,7 +225,7 @@
                atom Z  # More namespaces?
                if z  # Yes
                   push C
-                  call nextInternEXYZ_FE    # Check
+                  call nextIsInternEXYZ_FE    # Check
                   pop C
                   jeq Ret  # Return if found
                end
@@ -250,7 +250,7 @@
       atom Z  # More namespaces?
       if z  # Yes
          push Y
-         call nextInternEXYZ_FE    # Check
+         call nextIsInternEXYZ_FE    # Check
          pop Y
          jeq Ret  # Return if found
       end
@@ -279,7 +279,7 @@
             atom Z  # More namespaces?
             if z  # Yes
                push C
-               call nextInternEXYZ_FE    # Check
+               call nextIsInternEXYZ_FE    # Check
                pop C
                jeq Ret  # Return if found
             end
@@ -304,7 +304,7 @@
             atom Z  # More namespaces?
             if z  # Yes
                push C
-               call nextInternEXYZ_FE    # Check
+               call nextIsInternEXYZ_FE    # Check
                pop C
                jeq Ret  # Return if found
             end
@@ -325,7 +325,7 @@
             atom Z  # More namespaces?
             if z  # Yes
                push C
-               call nextInternEXYZ_FE    # Check
+               call nextIsInternEXYZ_FE    # Check
                pop C
                jeq Ret  # Return if found
             end
@@ -350,7 +350,7 @@
             atom Z  # More namespaces?
             if z  # Yes
                push C
-               call nextInternEXYZ_FE    # Check
+               call nextIsInternEXYZ_FE    # Check
                pop C
                jeq Ret  # Return if found
             end
@@ -1155,12 +1155,16 @@
       link
       ld E ((Y CDR))  # Eval 'flg'
       eval
-      ld A (EnvIntern)  # Insert internal
+      ld A (EnvIntern)  # Internals
       ld Y ((A))  # First tree
       cmp E Nil  # 'flg'?
-      ldnz Z Nil  # No: Search only current namespace
-      ldz Z (A CDR)  # Yes: Search all namespaces
-      ld E (L I)
+      if eq  # No
+         ld E 0  # No symbol yet
+         ldz Z (A CDR)  # Search all namespaces
+      else
+         ld E (L I)  # Get symbol
+         ld Z Nil  # Search only current namespace
+      end
       call internEXYZ_FE
       drop
       pop Z

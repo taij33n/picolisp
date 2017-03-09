@@ -173,7 +173,7 @@ OK
 -> OK
 </code></pre>
 
-<dt><a name="import"><code>(import . lst) -> NIL</code></a>
+<dt><a name="import"><code>(import . lst) -> lst</code></a>
 <dd>Wrapper function for <code><a href="refI.html#intern">intern</a></code>.
 Typically used to import symbols from other namespaces, as created by <code><a
 href="refS.html#symbols">symbols</a></code>. <code>lst</code> should be a list
@@ -182,7 +182,7 @@ href="refL.html#local">local</a></code>.
 
 <pre><code>
 : (import libA~foo libB~bar)
--> NIL
+-> (foo bar)
 </code></pre>
 
 <dt><a name="in"><code>(in 'any . prg) -> any</code></a>

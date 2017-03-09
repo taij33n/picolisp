@@ -95,17 +95,17 @@ href="refI.html#intern">intern</a></code>.
 -> NIL
 : (de foo (Lst) (car Lst))  # 'foo' calls 'car'
 -> foo
-: (intern (name (zap 'car) "xxx"))  # Globally change the name of 'car'
+: (intern (name (zap 'car) "xxx") T)   # Globally change the name of 'car'
 -> xxx
 : (xxx (1 2 3))
 -> 1
 : (pp 'foo)
 (de foo (Lst)
-   (xxx Lst) )                      # Name changed
+   (xxx Lst) )                         # Name changed
 -> foo
-: (foo (1 2 3))                     # 'foo' still works
+: (foo (1 2 3))                        # 'foo' still works
 -> 1
-: (car (1 2 3))                     # Reader returns a new 'car' symbol
+: (car (1 2 3))                        # Reader returns a new 'car' symbol
 !? (car (1 2 3))
 car -- Undefined
 ?

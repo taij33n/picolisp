@@ -1,4 +1,4 @@
-# 06mar17abu
+# 08mar17abu
 # (c) Software Lab. Alexander Burger
 
 (de task (Key . Prg)
@@ -217,7 +217,8 @@
 
 (de import Lst
    (for Sym Lst
-      (intern Sym T) ) )
+      (intern Sym T) )
+   Lst )
 ####
 
 ### OOP ###
