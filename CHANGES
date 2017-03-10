@@ -1,3 +1,4 @@
+   Added "lib/gis.l" and "lib/android.l"
    Namespace chaining instead of merging
    Disable '+Focus' on touch devices
    Incorrect usage of 'ctl' in 'rc' and 'acquire'

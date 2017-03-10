@@ -1,3 +1,20 @@
+10mar17
+   Pass either unit or zoom to <svg>
+      lib/svg.l
+   Local renames
+      lib/gis.l
+
+09mar17
+   Bug lookup of long names in secondary namespaces
+      {src64,pilos/src}/sym.l
+   New files
+      lib/gis.l
+      lib/android.l
+      lib/nodroid.l
+   'all' also for given namespace
+      {src64,pilos/src}/sym.l
+      doc/refA.html
+
 08mar17
    Minor change (Danilo Kordic)
       lib/eled.l

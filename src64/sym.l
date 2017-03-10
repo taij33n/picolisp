@@ -1,4 +1,4 @@
-# 08mar17abu
+# 09mar17abu
 # (c) Software Lab. Alexander Burger
 
 ### Compare long names ###
@@ -106,7 +106,7 @@
       cmp E (Y)  # Same Symbol?
       if nz  # No
          ld C (Z)  # Try next namespace if any
-         jmp 10
+         jmp 20
       end
    end
    ret   # Return YES
@@ -939,9 +939,10 @@
    ld E Nil
    ret
 
-# (all ['NIL | 'T | '0 | '(NIL . flg) | '(T . flg) | '(0)]) -> lst
+# (all ['NIL | 'T | '0 | 'sym | '(NIL . flg) | '(T . flg) | '(0)]) -> lst
 (code 'doAll 2)
    push X
+   push Y
    ld E ((E CDR))  # Eval arg
    eval
    atom E  # Direct tree?
@@ -964,7 +965,6 @@
    else
       cmp E Nil  # Nil?
       if eq  # Yes
-         push Y
          ld Y (EnvIntern)  # Namespace list
          do
             ld X (((Y)) I)  # Internal symbols
@@ -974,7 +974,6 @@
             ld Y (Y CDR)  # More?
             atom Y
          until nz  # No
-         pop Y
       else
          cmp E TSym  # T?
          if eq  # Yes
@@ -983,12 +982,22 @@
             call consTreeXE_E
             ld X (Transient)
          else
-            ld E Nil
-            ld X (Extern)  # External symbols
+            cmp E ZERO  # Zero?
+            if eq  # Yes
+               ld E Nil
+               ld X (Extern)  # External symbols
+            else
+               ld Y (E)  # Given namespace
+               ld E Nil
+               ld X (Y I)
+               call consTreeXE_E
+               ld X (Y)
+            end
          end
          call consTreeXE_E
       end
    end
+   pop Y
    pop X
    ret
 
