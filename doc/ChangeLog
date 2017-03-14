@@ -1,4 +1,10 @@
+11mar17
+   Missing part in '+Joint' example
+      doc/refJ.html
+
 10mar17
+   Still bug in secondary namespace lookup
+      {src64,pilos/src}/sym.l
    Pass either unit or zoom to <svg>
       lib/svg.l
    Local renames

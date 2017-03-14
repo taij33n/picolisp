@@ -1,4 +1,4 @@
-# 09mar17abu
+# 10mar17abu
 # (c) Software Lab. Alexander Burger
 
 ### Compare long names ###
@@ -71,6 +71,8 @@
          cmp E (Y)  # Same Symbol?
          if nz  # No
             ld C (Z)  # Try next namespace if any
+            ld Y (C)
+            ld Z (Z CDR)
             jmp 10
          end
       end
@@ -106,6 +108,8 @@
       cmp E (Y)  # Same Symbol?
       if nz  # No
          ld C (Z)  # Try next namespace if any
+         ld Y (C)
+         ld Z (Z CDR)
          jmp 20
       end
    end
