@@ -1,4 +1,4 @@
-# 08feb17abu
+# 15mar17abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -341,24 +341,33 @@
 (de repl (Attr DX DY)
    (default DX 80  DY 25)
    (form Attr
-      (gui 'view '(+FileField) '(tmp "repl") DX DY)
+      (=: repl (tmp "repl"))
+      (gui 'view '(+FileField) (: repl) DX DY)
       (--)
       (gui 'line '(+Focus +TextField) (*/ DX 3 4) ":")
-      (gui '(+JS +Button) "eval"
+      (gui '(+JS +Button) "?"
          '(let Str (val> (: home line))
-            (out (pack "+" (tmp "repl"))
+            (out (pack "+" (: home repl))
                (err NIL
                   (prinl ": " Str)
                   (flush)
+                  (setq
+                     @@@ (: @@@)
+                     @@ (=: @@@ (: @@))
+                     @ (=: @@ (: @)) )
                   (catch '(NIL)
                      (in "/dev/null"
-                        (setq @ "Result"  "Result" (eval (any Str))) )
-                     (prin "-> ")
-                     (println "Result") ) )
+                        (setq @ (=: @ (eval (any Str)))) ) )
+                  (prin "-> ")
+                  (println @) )
                (when *Msg (prinl @) (off *Msg)) )
             (clr> (: home line)) ) )
-      (gui '(+JS +Button) "clear"
-         '(clr> (: home view)) ) ) )
+      (gui '(+JS +Button)
+         '(if (= (: home view file) (: home repl)) ,"Edit" ,"Done")
+         '(file> (: home view)
+            (if (= (: home view file) (: home repl))
+               (val> (: home line))
+               (: home repl) ) ) ) ) )
 
 
 # Dialogs
@@ -1650,6 +1659,10 @@
             (and
                (info F)
                (in F (ctl NIL (till NIL T))) ) ) ) ) )
+
+(dm file> (Exe)
+   (=: file Exe)
+   (upd> This) )
 
 
 (class +Url)

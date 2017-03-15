@@ -1,3 +1,11 @@
+15mar17
+   Internal 'Intent' methods in addition to 'putExtra'
+      lib/android.l
+   'repl' '@@' and '@@@' handling
+   'file>' method for '+FileField'
+   "Edit" button in 'repl'
+      lib/form.l
+
 11mar17
    Missing part in '+Joint' example
       doc/refJ.html

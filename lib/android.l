@@ -1,4 +1,4 @@
-# 08mar17abu
+# 15mar17abu
 # (c) Software Lab. Alexander Burger
 
 (setq *Uuid (in "UUID" (line T)))
@@ -106,7 +106,10 @@
    (let Intent (java "android.content.Intent" T Action)
       (when (java Intent 'resolveActivity (java CONTEXT 'getPackageManager))
          (while (args)
-            (java Intent 'putExtra (next) (next)) )
+            (let S (next)
+               (if (str? S)
+                  (java Intent 'putExtra S (next))
+                  (java Intent S (next) (next)) ) ) )
          (unless *ResultProxy
             (java CONTEXT 'setResultProxy
                (setq *ResultProxy (java T "de.software_lab.pilbox.ResultProxy")) ) )
