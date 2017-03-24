@@ -1,4 +1,32 @@
+23mar17
+   Unmark default namespace
+      {src64,pilos/src}/sym.l
+
+21mar17
+   Clear line with ^U 
+      lib/led.l
+   Suppress unnecceary "?" in 'url'
+      lib/form.l
+
+18mar17
+   Handle "301 Moved Permanently" in 'httpGate'
+      src/httpGate.c
+   Default "PIE = -no-pie" for x86_64
+      src64/Makefile
+
+17mar17
+   Handle "301 Moved Permanently" in 'httpGate'
+      src/httpGate.c
+      doc/httpGate.html
+
+16mar17
+   Removed legacy version checks
+      src64/arch/emu.l
+      pilos/make.l
+
 15mar17
+   Fix ref example for 'struct' (03nov16: Terminate char arrays on null bytes)
+      doc/refS.html
    Internal 'Intent' methods in addition to 'putExtra'
       lib/android.l
    'repl' '@@' and '@@@' handling
@@ -572,7 +600,7 @@
       java/Reflector.java
 
 20jun16
-   httpGate documentation (Mattias Sundblad)
+   'httpGate' documentation (Mattias Sundblad)
       doc/httpGate.html
 
 19jun16

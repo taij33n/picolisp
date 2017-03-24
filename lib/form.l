@@ -1,4 +1,4 @@
-# 15mar17abu
+# 21mar17abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -284,7 +284,8 @@
    (when Url
       (off *PRG)
       (timeout `(* 3600 1000))
-      (redirect (baseHRef) *SesId Url "?"
+      (redirect (baseHRef) *SesId Url
+         (and (args) "?")
          (pack
             (make
                (loop
@@ -344,29 +345,33 @@
       (=: repl (tmp "repl"))
       (gui 'view '(+FileField) (: repl) DX DY)
       (--)
-      (gui 'line '(+Focus +TextField) (*/ DX 3 4) ":")
-      (gui '(+JS +Button) "?"
+      (gui 'line '(+Focus +Able +TextField)
+         '(= (: home view file) (: home repl))
+         (*/ DX 3 4)
+         ":" )
+      (gui '(+JS +Able +Button) '(= (: home view file) (: home repl)) "?"
          '(let Str (val> (: home line))
             (out (pack "+" (: home repl))
                (err NIL
                   (prinl ": " Str)
                   (flush)
-                  (setq
-                     @@@ (: @@@)
-                     @@ (=: @@@ (: @@))
-                     @ (=: @@ (: @)) )
+                  (setq @@@ "@@@"  @@ "@@"  @ "@"  "@@@" "@@" "@@" "@")
                   (catch '(NIL)
                      (in "/dev/null"
-                        (setq @ (=: @ (eval (any Str)))) ) )
+                        (setq "@" (eval (any Str))) ) )
                   (prin "-> ")
-                  (println @) )
+                  (println (setq @ "@")) )
                (when *Msg (prinl @) (off *Msg)) )
             (clr> (: home line)) ) )
       (gui '(+JS +Button)
          '(if (= (: home view file) (: home repl)) ,"Edit" ,"Done")
          '(file> (: home view)
             (if (= (: home view file) (: home repl))
-               (val> (: home line))
+               (if (val> (: home line))
+                  (setq "file" @)
+                  (set> (: home line) "file")
+                  "file" )
+               (clr> (: home line))
                (: home repl) ) ) ) ) )
 
 

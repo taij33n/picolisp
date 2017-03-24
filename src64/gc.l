@@ -1,4 +1,4 @@
-# 03mar17abu
+# 23mar17abu
 # (c) Software Lab. Alexander Burger
 
 # Mark data
@@ -387,6 +387,7 @@
       until ge  # Yes
       ld Y (Z I)  # Next frame
    loop
+   off (Pico1 CDR) 1  # Unmark default namespace
    ### Sweep ###
    ld X 0  # Avail list
    ld Y (Heaps)  # Heap list in Y

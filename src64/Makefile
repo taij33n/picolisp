@@ -1,4 +1,4 @@
-# 05dec16abu
+# 18mar17abu
 # (c) Software Lab. Alexander Burger
 
 bin = ../bin
@@ -59,7 +59,7 @@ ifeq ($(UNAME), Linux)
 			SYS = .linux
 			FMT = .s
 			ARCH = x86-64
-			## PIE = -no-pie
+			PIE = -no-pie
 			AS = as
 		else
 			ifeq ($(MACHINE), ppc64le)

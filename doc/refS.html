@@ -873,13 +873,13 @@ Calls</a>.
 
 # Extract the structure
 : (struct P '((I . 2) (1.0 . 3) N (C . 4)))
--> ((7 4) (11 22 33) 7 ("A" "B" "C" NIL))
+-> ((7 4) (11 22 33) 7 ("A" "B" "C"))
 
 # Do both in a single call (allowing conversions of data types)
 : (struct P
    '((I . 2) (1.0 . 3) N (C . 4))
    -7 -4 (1.0 0.11 0.22 0.33) (7 . 8) 65 66 67 0 )
--> ((7 4) (11 22 33) 7 ("A" "B" "C" NIL))
+-> ((7 4) (11 22 33) 7 ("A" "B" "C"))
 
 # De-allocate structure
 : (native "@" "free" NIL P)
