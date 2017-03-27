@@ -1,9 +1,19 @@
+25mar17
+   Bug in case conversions ('fold', 'uppc' etc.) for TOP character
+      {src64,pilos/src}/sym.l
+
+24mar17
+   'repl' history as '+Hint1'
+      lib/form.l
+   'repl' eval with environment offset
+      lib/form.l
+
 23mar17
    Unmark default namespace
       {src64,pilos/src}/sym.l
 
 21mar17
-   Clear line with ^U 
+   Clear line with ^U
       lib/led.l
    Suppress unnecceary "?" in 'url'
       lib/form.l

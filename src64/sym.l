@@ -1,4 +1,4 @@
-# 10mar17abu
+# 25mar17abu
 # (c) Software Lab. Alexander Burger
 
 ### Compare long names ###
@@ -3632,6 +3632,8 @@
    sym E  # Symbol?
    jz retNil  # No
    call firstCharE_A  # Get first character
+   cmp A TOP  # Special "top" character?
+   jeq retNil  # Yes
    call caseDataA_AC  # Get case info
    and B (hex "1F")  # Character type
    cmp B CHAR_LOWERCASE  # Lower case?
@@ -3647,6 +3649,8 @@
    sym E  # Symbol?
    jz retNil  # No
    call firstCharE_A  # Get first character
+   cmp A TOP  # Special "top" character?
+   jeq retNil  # Yes
    call caseDataA_AC  # Get case info
    and B (hex "1F")  # Character type
    cmp B CHAR_UPPERCASE  # Lower case?
@@ -3681,13 +3685,16 @@
                   call symCharCX_FACX  # Next char?
                while nz
                   ld E C  # Save C
-                  call caseDataA_AC  # Get case info
-                  and A (hex "FFFF")
-                  shr A 6  # Make index
-                  off A 1
-                  ld2 (A CaseLower)  # Get lower case entry
-                  add A C  # plus character
-                  and A (hex "FFFF")
+                  cmp A TOP  # Special "top" character?
+                  if ne  # No
+                     call caseDataA_AC  # Get case info
+                     and A (hex "FFFF")
+                     shr A 6  # Make index
+                     off A 1
+                     ld2 (A CaseLower)  # Get lower case entry
+                     add A C  # plus character
+                     and A (hex "FFFF")
+                  end
                   ld C (S I)  # Swap status
                   xchg X (S)
                   call charSymACX_CX  # Pack char
@@ -3733,13 +3740,16 @@
                   call symCharCX_FACX  # Next char?
                while nz
                   ld E C  # Save C
-                  call caseDataA_AC  # Get case info
-                  and A (hex "FFFF")
-                  shr A 6  # Make index
-                  off A 1
-                  ld2 (A CaseUpper)  # Get upper case entry
-                  add A C  # plus character
-                  and A (hex "FFFF")
+                  cmp A TOP  # Special "top" character?
+                  if ne  # No
+                     call caseDataA_AC  # Get case info
+                     and A (hex "FFFF")
+                     shr A 6  # Make index
+                     off A 1
+                     ld2 (A CaseUpper)  # Get upper case entry
+                     add A C  # plus character
+                     and A (hex "FFFF")
+                  end
                   ld C (S I)  # Swap status
                   xchg X (S)
                   call charSymACX_CX  # Pack char
@@ -3795,6 +3805,8 @@
                do
                   call symCharCX_FACX  # Next char?
                while nz
+                  cmp A TOP  # Special "top" character?
+                  continue eq  # Yes
                   ld E C  # Save C
                   call isLetterOrDigitA_F  # Letter or digit?
                   if nz  # Yes

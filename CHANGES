@@ -1,3 +1,4 @@
+   Bug in case conversions for TOP character
    "Edit" button in 'repl'
    Added "lib/gis.l" and "lib/android.l"
    Namespace chaining instead of merging

@@ -1146,11 +1146,11 @@ sys/arm64.linux.defs.l,2137
 metaCX_E3589,82793
 caseDataA_AC3615,83392
 doLowQ3627,83695
-doUppQ3642,84054
-doLowc3657,84407
-doUppc3709,85915
-doFold3761,87430
-isLetterOrDigitA_F3829,89463
+doUppQ3644,84116
+doLowc3661,84531
+doUppc3716,86168
+doFold3771,87812
+isLetterOrDigitA_F3841,89938
 
 ./subr.l,2269
 doCar5,71

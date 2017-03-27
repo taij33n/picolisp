@@ -1,4 +1,4 @@
-# 21mar17abu
+# 24mar17abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -345,8 +345,9 @@
       (=: repl (tmp "repl"))
       (gui 'view '(+FileField) (: repl) DX DY)
       (--)
-      (gui 'line '(+Focus +Able +TextField)
+      (gui 'line '(+Focus +Able +Hint1 +TextField)
          '(= (: home view file) (: home repl))
+         '(: home hint)
          (*/ DX 3 4)
          ":" )
       (gui '(+JS +Able +Button) '(= (: home view file) (: home repl)) "?"
@@ -358,10 +359,11 @@
                   (setq @@@ "@@@"  @@ "@@"  @ "@"  "@@@" "@@" "@@" "@")
                   (catch '(NIL)
                      (in "/dev/null"
-                        (setq "@" (eval (any Str))) ) )
+                        (setq "@" (eval (any Str) 99)) ) )
                   (prin "-> ")
                   (println (setq @ "@")) )
                (when *Msg (prinl @) (off *Msg)) )
+            (push1 (:: home hint) Str)
             (clr> (: home line)) ) )
       (gui '(+JS +Button)
          '(if (= (: home view file) (: home repl)) ,"Edit" ,"Done")
