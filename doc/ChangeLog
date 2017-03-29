@@ -1,3 +1,11 @@
+28mar17
+   Conditional "PIE = -no-pie" for x86_64 (Mike Pechkin)
+      src64/Makefile
+   Add SSL_shutdown() to httpGate
+      src/httpGate.c
+   Bug in 'ssl', needs SSL_clear()
+      src/ssl.c
+
 25mar17
    Bug in case conversions ('fold', 'uppc' etc.) for TOP character
       {src64,pilos/src}/sym.l

@@ -1,4 +1,4 @@
-/* 18mar17abu
+/* 28mar17abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -489,6 +489,7 @@ int main(int ac, char *av[]) {
                      break;
                   wrBytes(srv, buf, n);
                }
+               SSL_shutdown(ssl);
                shutdown(cli, SHUT_RD);
                shutdown(srv, SHUT_WR);
             }
@@ -503,6 +504,7 @@ int main(int ac, char *av[]) {
                      wrBytes(cli, buf, n);
                   alarm(0);
                }
+               SSL_shutdown(ssl);
                shutdown(srv, SHUT_RD);
                shutdown(cli, SHUT_WR);
             }
