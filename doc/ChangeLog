@@ -1,3 +1,7 @@
+29mar17
+   Missing 'flood' function
+      doc/ref.html
+
 28mar17
    Conditional "PIE = -no-pie" for x86_64 (Mike Pechkin)
       src64/Makefile
