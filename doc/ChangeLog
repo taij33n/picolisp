@@ -1,3 +1,15 @@
+04apr17
+   Minor fix in 'genKey', make 'ubZval' non-destructive
+      pilos/init/lib/db.l
+   Delete multiple list elements in '(del> . +List)'
+      {lib,mini/lib,pilos/init/lib}/db.l
+   Optional 'flg' argument for 'delete' and 'delq'
+      {src64,pilos/src}/subr.l
+      {src,mini/src}/subr.c
+      ersatz/fun.src
+      doc/refD.html
+      test/src/subr.l
+
 29mar17
    Missing 'flood' function
       doc/ref.html

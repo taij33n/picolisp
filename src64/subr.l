@@ -1,4 +1,4 @@
-# 24oct16abu
+# 04apr17abu
 # (c) Software Lab. Alexander Burger
 
 # (car 'var) -> any
@@ -1415,101 +1415,124 @@
    pop X
    ret
 
-# (delete 'any 'lst) -> lst
+# (delete 'any 'lst ['flg]) -> lst
 (code 'doDelete 2)
    push X
+   push Y
    ld X (E CDR)  # Args
    ld E (X)  # Eval 'any'
    eval
    link
    push E  # <L II/III> 'any'
-   ld E ((X CDR))  # Eval 'lst'
+   ld X (X CDR)
+   ld E (X)  # Eval 'lst'
    eval+
    push E  # <L I/II> 'lst'
    link
-   atom E  # Atomic?
-   if z  # No
-      ld X E  # Keep in X
+   ld E ((X CDR))  # Eval 'flg'
+   eval
+   ld Y E  # 'flg' in Y
+   ld X (L I)  # 'lst' in X
+   do
+      atom X  # Done?
+      ldnz E X  # Yes
+      jnz 90  # Return
       ld A (L II)  # 'any'
       ld E (X)  #  Equal to CAR?
       call equalAE_F
+   while eq  # Yes
+      cmp Y Nil  # 'flg'?
+      ldz E (X CDR)  # No
+      jz 90  # Return
+      ld X (X CDR)
+   loop
+   ld E (X)  # Get CAR again
+   call cons_C  # Cons first item into C
+   ld (C) (X)
+   ld (C CDR) Nil
+   tuck C  # <L I> Result
+   link
+   do
+      ld X (X CDR)  # Next item
+      atom X  # More cells?
+   while z  # Yes
+      ld A (L III)  # 'any'
+      ld E (X)  #  Equal to CAR?
+      call equalAE_F
       if eq  # Yes
-         ld E (X CDR)  # Return CDR
-      else
-         call cons_C  # Cons first item into C
-         ld (C) (X)
-         ld (C CDR) Nil
-         tuck C  # <L I> Result
-         link
-         do
-            ld X (X CDR)  # Next item
-            atom X  # More cells?
-         while z  # Yes
-            ld A (L III)  # 'any'
-            ld E (X)  #  Equal to CAR?
-            call equalAE_F
-            if eq  # Yes
-               ld X (X CDR)  # Skip this item
-               break T
-            end
-            call cons_A  # Cons next item
-            ld (A) (X)
-            ld (A CDR) Nil
-            ld (C CDR) A  # Append
-            ld C A
-         loop
-         ld (C CDR) X  # Set tail
-         ld E (L I)  # Get result
+         cmp Y Nil  # 'flg'?
+         continue ne  # Yes
+         ld X (X CDR)  # Skip this item
+         break T
       end
-   end
-   drop
+      call cons_A  # Cons next item
+      ld (A) (X)
+      ld (A CDR) Nil
+      ld (C CDR) A  # Append
+      ld C A
+   loop
+   ld (C CDR) X  # Set tail
+   ld E (L I)  # Get result
+90 drop
+   pop Y
    pop X
    ret
 
-# (delq 'any 'lst) -> lst
+# (delq 'any 'lst ['flg]) -> lst
 (code 'doDelq 2)
    push X
+   push Y
    ld X (E CDR)  # Args
    ld E (X)  # Eval 'any'
    eval
    link
    push E  # <L II/III> 'any'
-   ld E ((X CDR))  # Eval 'lst'
+   ld X (X CDR)
+   ld E (X)  # Eval 'lst'
    eval+
    push E  # <L I/II> 'lst'
    link
-   atom E  # Atomic?
-   if z  # No
-      ld X (L II)  # 'any'
-      cmp X (E)  #  Equal to CAR?
+   ld E ((X CDR))  # Eval 'flg'
+   eval
+   ld Y E  # 'flg' in Y
+   ld X (L II)  # 'any' in X
+   ld E (L I)  # 'lst' in E
+   do
+      atom E  # Done?
+      jnz 90  # Yes: Return
+      cmp X (E)  #  'any' equal to CAR?
+   while eq  # Yes
+      cmp Y Nil  # 'flg'?
+      ldz E (E CDR)  # No
+      jz 90  # Return
+      ld E (E CDR)
+   loop
+   call cons_C  # Cons first item into C
+   ld (C) (E)
+   ld (C CDR) Nil
+   tuck C  # <L I> Result
+   link
+   do
+      ld E (E CDR)  # Next item
+      atom E  # More cells?
+   while z  # Yes
+      cmp X (E)  #  'any' equal to CAR?
       if eq  # Yes
-         ld E (E CDR)  # Return CDR
-      else
-         call cons_C  # Cons first item into C
-         ld (C) (E)
-         ld (C CDR) Nil
-         tuck C  # <L I> Result
-         link
-         do
-            ld E (E CDR)  # Next item
-            atom E  # More cells?
-         while z  # Yes
-            cmp X (E)  #  'any' equal to CAR?
-            if eq  # Yes
-               ld E (E CDR)  # Skip this item
-               break T
-            end
-            call cons_A  # Cons next item
-            ld (A) (E)
-            ld (A CDR) Nil
-            ld (C CDR) A  # Append
-            ld C A
-         loop
-         ld (C CDR) E  # Set tail
-         ld E (L I)  # Get result
+         cmp Y Nil  # 'flg'?
+         continue ne  # Yes
+         ld E (E CDR)  # Skip this item
+         break T
       end
-   end
-   drop
+      call cons_A  # Cons next item
+      ld (A) (E)
+      ld (A CDR) Nil
+      ld (C CDR) A  # Append
+      ld C A
+   loop
+   ld (C CDR) E  # Set tail
+   ld E (L I)  # Get result
+90 drop
+   pop Y
    pop X
    ret
 
