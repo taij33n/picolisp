@@ -1,4 +1,4 @@
-   Optional 'flg' argument for 'delete' and 'delq'
+   Optional 'flg' argument for 'delete', 'delq' and 'del'
    Bug in 'ssl', needs SSL_clear()
    Bug in case conversions for TOP character
    "Edit" button in 'repl'

@@ -1,4 +1,4 @@
-/* 04apr17abu
+/* 05apr17abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -573,11 +573,11 @@ any doDelete(any ex) {
       }
       if (!equal(y, car(x)))
          break;
+      x = cdr(x);
       if (!flg) {
          drop(c1);
-         return cdr(x);
+         return x;
       }
-      x = cdr(x);
    }
    Push(c2, x);
    Push(c3, z = cons(car(x), Nil));
@@ -612,11 +612,11 @@ any doDelq(any ex) {
       }
       if (y != car(x))
          break;
+      x = cdr(x);
       if (!flg) {
          drop(c1);
-         return cdr(x);
+         return x;
       }
-      x = cdr(x);
    }
    Push(c2, x);
    Push(c3, z = cons(car(x), Nil));

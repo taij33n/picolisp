@@ -1,3 +1,14 @@
+05apr17
+   Optional 'flg' argument also for 'del'
+      {src64,pilos/src}/subr.l
+      {src64,pilos/src}/sym.l
+      {src,mini/src}/subr.c
+      {src,mini/src}/sym.c
+      doc/refD.html
+      test/src/sym.l
+   Revert httpGate (without SSL_shutdown())
+      src/httpGate.c
+
 04apr17
    Minor fix in 'genKey', make 'ubZval' non-destructive
       pilos/init/lib/db.l

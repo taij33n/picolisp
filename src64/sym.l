@@ -1,4 +1,4 @@
-# 25mar17abu
+# 05apr17abu
 # (c) Software Lab. Alexander Burger
 
 ### Compare long names ###
@@ -2201,7 +2201,7 @@
    pop X
    ret
 
-# (del 'any 'var) -> lst
+# (del 'any 'var ['flg]) -> lst
 (code 'doDel 2)
    push X
    push Y
@@ -2211,11 +2211,11 @@
    ld E (Y)  # Eval first
    eval
    link
-   push E  # <L II/III> 'any'
+   push E  # <L II> 'any'
    ld Y (Y CDR)
    ld E (Y)  # Eval second
    eval+
-   push E  # <L I/II> 'var'
+   push E  # <L I> 'var'
    link
    call needVarEX  # Need variable
    sym E  # Symbol?
@@ -2225,44 +2225,50 @@
          call dbTouchEX  # Touch it
       end
    end
+   ld E ((Y CDR))  # Eval 'flg'
+   eval
+   ld Y E  # 'flg' in Y
    ld E ((L I))  # Get value of 'var'
-   atom E  # List?
-   if z  # Yes
-      ld Y E  # Keep value in Y
-      ld E (Y)  # First element
+   do
+      atom E  # Done?
+      jnz 90  # Yes
+      ld X E  # Keep list in X
       ld A (L II)  # 'any'
-      call equalAE_F  # Equal?
-      if eq  # Yes
-         ld E (Y CDR)  # Get value's CDR
-         ld ((L I)) E  # Set 'var'
-      else
-         call cons_Z  # Copy first cell
-         ld (Z) (Y)
-         ld (Z CDR) Nil
-         tuck Z  # <L I> Save it
-         link
-         do
-            ld Y (Y CDR)  # More cells?
-            atom Y
-         while z  # Yes
-            ld E (Y)  # Next element
-            ld A (L III)  # 'any'
-            call equalAE_F  # Equal?
-            if eq  # Yes
-               ld (Z CDR) (Y CDR)  # Skip found element
-               ld E (L I)  # Result
-               ld ((L II)) E  # Set 'var'
-               jmp 90
-            end
-            call cons_A  # Copy next cell
-            ld (A) (Y)
-            ld (A CDR) Nil
-            ld (Z CDR) A   # Append to result
-            ld Z (Z CDR)
-         loop
-         ld E ((L II))  # Not found: Return old value of 'var'
-      end
-   end
+      ld E (X)  #  Equal to CAR?
+      call equalAE_F
+   while eq  # Yes
+      ld E (X CDR)
+      ld ((L I)) E  # Save new value
+      cmp Y Nil  # 'flg'?
+      jeq 90  # No
+   loop
+   lea Z ((L I) -I)  # Point to "CAR" of dummy cell
+   do
+      ld C X  # Search in rest
+      do
+         atom C  # Done?
+         jnz 80  # Yes
+         ld A (L II)  # 'any'
+         ld E (C)  #  Equal to CAR?
+         call equalAE_F
+      while ne  # No
+         ld C (C CDR)  # Next
+      loop
+      do
+         cmp X C  # Reached found cell?
+      while ne  # No
+         call cons_A  # Copy traversed cells
+         ld (A) (X)
+         ld X (X CDR)
+         ld (A CDR) X
+         ld (Z CDR) A  # Append to result
+         ld Z A
+      loop
+      ld X (X CDR)  # Skip found cell
+      ld (Z CDR) X
+      cmp Y Nil  # 'flg'?
+   until eq  # Yes
+80 ld E ((L I))  # Get result
 90 drop
    pop Z
    pop Y
