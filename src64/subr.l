@@ -1,4 +1,4 @@
-# 05apr17abu
+# 07apr17abu
 # (c) Software Lab. Alexander Burger
 
 # (car 'var) -> any
@@ -1432,27 +1432,14 @@
    link
    ld E ((X CDR))  # Eval 'flg'
    eval
+   ld X (L I)  # 'lst' in X
    ld Y E  # 'flg' in Y
-   ld E (L I)  # 'lst' in E
-   do
-      atom E  # Done?
-      jnz 90  # Yes
-      ld X E  # Keep list in X
-      ld A (L II)  # 'any'
-      ld E (X)  #  Equal to CAR?
-      call equalAE_F
-   while eq  # Yes
-      ld E (X CDR)
-      ld (L I) E  # Save new value
-      cmp Y Nil  # 'flg'?
-      jeq 90  # No
-   loop
    ld Z L  # Point to "CAR" of dummy cell
    do
       ld C X  # Search in rest
       do
          atom C  # Done?
-         jnz 80  # Yes
+         jnz 90  # Yes
          ld A (L II)  # 'any'
          ld E (C)  #  Equal to CAR?
          call equalAE_F
@@ -1473,8 +1460,8 @@
       ld (Z CDR) X
       cmp Y Nil  # 'flg'?
    until eq  # Yes
-80 ld E (L I)  # Get result
-90 drop
+90 ld E (L I)  # Get result
+   drop
    pop Z
    pop Y
    pop X
@@ -1497,25 +1484,15 @@
    link
    ld E ((X CDR))  # Eval 'flg'
    eval
-   ld Y E  # 'flg' in Y
    ld X (L II)  # 'any' in X
+   ld Y E  # 'flg' in Y
    ld E (L I)  # 'lst' in E
-   do
-      atom E  # Done?
-      jnz 90  # Yes
-      cmp X (E)  #  'any' equal to CAR?
-   while eq  # Yes
-      ld E (E CDR)
-      ld (L I) E  # Save new value
-      cmp Y Nil  # 'flg'?
-      jeq 90  # No
-   loop
    ld Z L  # Point to "CAR" of dummy cell
    do
       ld C E  # Search in rest
       do
          atom C  # Done?
-         jnz 80  # Yes
+         jnz 90  # Yes
          cmp X (C)  #  'any' equal to CAR?
       while ne  # No
          ld C (C CDR)  # Next
@@ -1534,8 +1511,8 @@
       ld (Z CDR) E
       cmp Y Nil  # 'flg'?
    until eq  # Yes
-80 ld E (L I)  # Get result
-90 drop
+90 ld E (L I)  # Get result
+   drop
    pop Z
    pop Y
    pop X

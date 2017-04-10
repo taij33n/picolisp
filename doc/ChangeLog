@@ -1,3 +1,8 @@
+07apr17
+   Simplification of 'delete' etc.
+      {src64,pilos/src}/subr.l
+      {src64,pilos/src}/sym.l
+
 05apr17
    Optional 'flg' argument also for 'del'
       {src64,pilos/src}/subr.l

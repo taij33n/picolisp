@@ -1,4 +1,4 @@
-# 05apr17abu
+# 07apr17abu
 # (c) Software Lab. Alexander Burger
 
 ### Compare long names ###
@@ -2227,27 +2227,14 @@
    end
    ld E ((Y CDR))  # Eval 'flg'
    eval
+   ld X ((L I))  # Get value of 'var'
    ld Y E  # 'flg' in Y
-   ld E ((L I))  # Get value of 'var'
-   do
-      atom E  # Done?
-      jnz 90  # Yes
-      ld X E  # Keep list in X
-      ld A (L II)  # 'any'
-      ld E (X)  #  Equal to CAR?
-      call equalAE_F
-   while eq  # Yes
-      ld E (X CDR)
-      ld ((L I)) E  # Save new value
-      cmp Y Nil  # 'flg'?
-      jeq 90  # No
-   loop
    lea Z ((L I) -I)  # Point to "CAR" of dummy cell
    do
       ld C X  # Search in rest
       do
          atom C  # Done?
-         jnz 80  # Yes
+         jnz 90  # Yes
          ld A (L II)  # 'any'
          ld E (C)  #  Equal to CAR?
          call equalAE_F
@@ -2268,8 +2255,8 @@
       ld (Z CDR) X
       cmp Y Nil  # 'flg'?
    until eq  # Yes
-80 ld E ((L I))  # Get result
-90 drop
+90 ld E ((L I))  # Get result
+   drop
    pop Z
    pop Y
    pop X
