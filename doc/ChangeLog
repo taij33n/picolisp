@@ -1,3 +1,7 @@
+12apr17
+   Use "302 Found" instead of "301 Moved Permanently" in 'httpGate'
+      src/httpGate.c
+
 07apr17
    Simplification of 'delete' etc.
       {src64,pilos/src}/subr.l

@@ -1,4 +1,4 @@
-/* 18mar17abu
+/* 12apr17abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -39,8 +39,8 @@ static name *Names;
 static char *Config;
 static char Ciphers[] = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:AES128-GCM-SHA256:AES128-SHA256:AES128-SHA:DES-CBC3-SHA";
 
-static char Head_301[] =
-   "HTTP/1.0 301 Moved Permanently\r\n"
+static char Head_302[] =
+   "HTTP/1.0 302 Found\r\n"
    "Server: PicoLisp\r\n"
    "Location: %s\r\n"
    "\r\n";
@@ -435,7 +435,7 @@ int main(int ac, char *av[]) {
                      return 1;
 
             if (np && port == 0) {
-               i = sprintf(buf, Head_301, np->dir);
+               i = sprintf(buf, Head_302, np->dir);
                if (ssl)
                   sslWrite(ssl, buf, i);
                else
