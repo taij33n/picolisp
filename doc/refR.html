@@ -22,7 +22,9 @@ or a negative number (denoting a timeout value in milliseconds (in that case
 another number must follow to hold the remaining time)). A <code>select</code>
 system call is performed with these values, and the corresponding
 <code>prg</code> body is executed when input data are available or when a
-timeout occurred. See also <code><a href="refT.html#task">task</a></code>.
+timeout occurred (with <code><a href="ref_.html#@">@</a></code> set to the file
+descriptor or timeout value). See also <code><a
+href="refT.html#task">task</a></code>.
 
 <pre><code>
 : (de *Run (-2000 0 (println '2sec)))     # Install 2-sec-timer

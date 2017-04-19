@@ -1,3 +1,11 @@
+19apr17
+   Fixes for the mail header parser by Rowan Thorpe
+      misc/mailing
+
+18apr17
+   Add '@' to the '*Run' reference
+      doc/refR.html
+
 12apr17
    Use "302 Found" instead of "301 Moved Permanently" in 'httpGate'
       src/httpGate.c
