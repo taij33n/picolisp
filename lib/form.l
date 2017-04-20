@@ -1,4 +1,4 @@
-# 24mar17abu
+# 20apr17abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -2215,7 +2215,7 @@
    (dbHint (extra Str)
       (: objVar)
       (last (: objTyp))
-      (: objHook) ) )
+      (eval (: objHook)) ) )
 
 (dm txt> (Obj)
    (if (ext? Obj)

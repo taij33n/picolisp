@@ -1,3 +1,7 @@
+20apr17
+   Evaluate 'objHook' in '(hint> . +Obj)'
+      lib/form.l
+
 19apr17
    Fixes for the mail header parser by Rowan Thorpe
       misc/mailing
