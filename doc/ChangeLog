@@ -1,3 +1,7 @@
+21apr17
+   Pass hook to 'panel'
+      lib/form.l
+
 20apr17
    Evaluate 'objHook' in '(hint> . +Obj)'
       lib/form.l

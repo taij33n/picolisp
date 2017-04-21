@@ -1,4 +1,4 @@
-# 20apr17abu
+# 21apr17abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -2466,7 +2466,10 @@
             (or
                (pair "Cho")
                (list 'choDlg NIL (lit "Cho") (lit (list (fin "Var") "Cls"))) )
-            "Var" "Cls" )
+            "Var" "Cls"
+            (and
+               (or (get "Cls" "Var" 'hook) (meta "Cls" "Var" 'hook))
+               (get (: obj) @) ) )
          (run "Prg") ) ) )
 
 
