@@ -1,3 +1,19 @@
+02may17
+   Removed 'cut>' and 'paste>' from '+Chart'
+      lib/form.l
+
+01may17
+   Hint filename in 'repl'
+      lib/form.l
+
+30apr17
+   Wrong '@' value in 'repl'
+      lib/form.l
+
+28apr17
+   Fix hook for '+ObjVal'
+      lib/form.l
+
 24apr17
    Handle hook for '+ObjVal', and for 'Fld' in 'choDlg'
       lib/form.l

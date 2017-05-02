@@ -1,4 +1,4 @@
-# 24apr17abu
+# 02may17abu
 # (c) Software Lab. Alexander Burger
 
 # *PRG *Top *Gui *Btn *Get *Got *Form *Evt *Lock *Spans
@@ -356,12 +356,13 @@
                (err NIL
                   (prinl ": " Str)
                   (flush)
-                  (setq @@@ "@@@"  @@ "@@"  @ "@"  "@@@" "@@" "@@" "@")
                   (catch '(NIL)
                      (in "/dev/null"
-                        (setq "@" (eval (any Str) 99)) ) )
-                  (prin "-> ")
-                  (println (setq @ "@")) )
+                        (up 99 @@@ "@3")
+                        (up 99 @@ "@2")
+                        (up 99 @ "@1")
+                        (setq  "@3" "@2"  "@2" "@1"  "@1" (eval (any Str) 99)) ) )
+                  (println '-> "@1") )
                (when *Msg (prinl @) (off *Msg)) )
             (push1 (:: home hint) Str)
             (clr> (: home line)) ) )
@@ -370,7 +371,7 @@
          '(file> (: home view)
             (if (= (: home view file) (: home repl))
                (if (val> (: home line))
-                  (setq "file" @)
+                  (setq "file" (push1 (:: home hint) @))
                   (set> (: home line) "file")
                   "file" )
                (clr> (: home line))
@@ -1762,7 +1763,7 @@
 
 ### GUI charts ###
 (class +Chart)
-# home gui rows cols ofs lock put get data clip
+# home gui rows cols ofs lock put get data
 
 # (cols [put [get]])
 (dm T (N Put Get)
@@ -1868,20 +1869,6 @@
 (dm upd> ())
 
 (dm chk> ())
-
-(dm cut> (N)
-   (get> This)
-   (=: clip (get (val> This) (: ofs)))
-   (set> This
-      (remove (or N (: ofs)) (val> This)) ) )
-
-(dm paste> (Flg N)
-   (get> This)
-   (set> This
-      (insert
-         (or N (: ofs))
-         (val> This)
-         (unless Flg (: clip)) ) ) )
 
 
 (class +Chart1 +Chart)
@@ -2332,7 +2319,7 @@
             (=: obj NIL) )
          ((: obj)
             (dbSync)
-            (=: obj (new! (: objTyp)))
+            (=: obj (new (or (meta (: objTyp) 'Dbf 1) 1) (: objTyp)))
             (when (: hook)
                (put> (: obj) (: hook) (eval (: objHook))) )
             (put> (: obj) (: objVar) Val)
