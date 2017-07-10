@@ -1,5 +1,7 @@
-# 06jun17abu
+# 09jul17abu
 # (c) Software Lab. Alexander Burger
+
+(push1 '*JS (allow "@lib/gis.js"))
 
 (symbols 'gis 'pico)
 
@@ -76,14 +78,28 @@
             (mkUrl @) )
          (super "Var") ) ) )
 
+# OpenStreetMap / OpenLayers
+(local) [OL-CSS <osm> <poi>]
+(de OL-CSS . "https://openlayers.org/en/v4.2.0/css/ol.css")
+
+(de <osm> (Lat Lon Zoom)
+   (<div> '(map (id . map)))
+   (javascript "https://openlayers.org/en/v4.2.0/build/ol.js"
+      "osm('map', " (lat Lat) ", " (lon Lon) ", " Zoom ")" ) )
+
+(de <poi> (Lat Lon Img X Y Txt DY Col)
+   (javascript NIL
+      "poi(" (lat Lat) ", " (lon Lon) ", '"
+         (sesId Img) "', " X ", " Y ", '"
+         Txt "', " DY ", '" Col "')" ) )
+
 # Google Maps
-(local) google
+(local) [google <google>]
 (de google (Ttl Lat Lon Zoom Tar)
    (<href> Ttl
       (pack "https://www.google.com/maps/@" (fmt Lat "," Lon) "," Zoom "z")
       Tar ) )
 
-(local) <google>
 (de <google> (Lat Lon DX DY)
    (prinl
       "<iframe width=\"" DX "\" height=\"" DY "\" frameborder=\"3\" \

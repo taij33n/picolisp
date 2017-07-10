@@ -1,3 +1,26 @@
+09jul17
+   '<poi>' function
+      lib/gis.l
+      lib/gis.js
+
+08jul17
+   New file
+      lib/gis.js
+   Minor 'javascript' cosmetics
+      lib/xhtml.l
+      lib/form.l
+      lib/gis.l
+
+07jul17
+   Preserve namespaces in error handler
+      {src64,pilos/src}/err.l
+
+06jul17
+   'OL-CSS' URL and '<osm>' function
+      lib/gis.l
+   Fix for Cygwin|Msys (Mike Pechkin)
+      src/Makefile
+
 05jul17
    Minor addition to greek localiztion
       loc/gr
