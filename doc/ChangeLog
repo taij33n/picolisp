@@ -1,3 +1,13 @@
+16jul17
+   Needs 'fileUri' ('FileProvider') instead of 'fromFile' for SDK >= 24
+      lib/android.l
+
+15jul17
+   Bug in 'doMulDiv' ('*/')
+      {src64,pilos/src}/big.l
+   Minor typo
+      doc/refT.html
+
 13jul17
    Reference examples
       doc/ref_.html
