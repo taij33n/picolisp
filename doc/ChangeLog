@@ -1,3 +1,17 @@
+18jul17
+   Added 'help' function (Peter Nagy)
+      lib/debug.l
+      doc/ref.html
+      doc/refH.html
+   Enable 'paste' plugin
+      lib/tinymce.l
+
+17jul17
+   Print PID if 8th argument is zero
+      src/ssl.c
+   Added 'terminate' function
+      lib/android.l
+
 16jul17
    Needs 'fileUri' ('FileProvider') instead of 'fromFile' for SDK >= 24
       lib/android.l
