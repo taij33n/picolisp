@@ -1,9 +1,9 @@
-# 10jul17abu
+# 29jul17abu
 # (c) Software Lab. Alexander Burger
 
-(push1 '*JS (allow "@lib/gis.js"))
-
 (symbols 'gis 'pico)
+
+(push1 '*JS (allow "@lib/gis.js"))
 
 (local) nm
 (de nm (Lat Lon)
@@ -79,20 +79,71 @@
          (super "Var") ) ) )
 
 # OpenStreetMap / OpenLayers
-(local) [OL-CSS <osm> <poi>]
+# (val *Osm) -> ((lat1 . lat2) (lon1 . lon2) . zoom)
+(local) [*Osm OL-CSS <osm> osmStat osmClick osmDrag <poi>]
 (de OL-CSS . "https://openlayers.org/en/v4.2.0/css/ol.css")
 
-(de <osm> (Lat Lon Zoom)
-   (<div> '(map (id . map)))
-   (javascript "https://openlayers.org/en/v4.2.0/build/ol.js"
-      "osm('map', " (lat Lat) ", " (lon Lon) ", " Zoom ")" ) )
+(mapc allow '(osmStat osmClick osmDrag))
 
-(de <poi> (Lat Lon Img X Y Txt DY Col Url)
-   (javascript NIL
-      "poi(" (lat Lat) ", " (lon Lon) ", '"
-         (sesId Img) "', " X ", " Y ", '"
-         Txt "', " DY ", '" Col "', '"
-         (sesId Url) "')" ) )
+(de <osm> (Lat Lon Zoom Click Upd)
+   (<div> '(map (id . map)))
+   (when (val *Osm)
+      (setq
+         Lat (*/ (+ (caar @) (cdar @)) 2)
+         Lon (*/ (+ (caadr @) (cdadr @)) 2)
+         Zoom (cddr @) ) )
+   (with *Top
+      (javascript "https://openlayers.org/en/v4.2.0/build/ol.js"
+         "osm('map', " Lat ", " Lon ", " Zoom ", "
+         (if2 Click (and Upd (: able)) 2 1 0 0) ")" )
+      (=: osmClick Click)
+      (when *Osm
+         (set @
+            (let Z (>> (- Zoom) 1)
+               (cons
+                  (cons
+                     (- Lat (*/ 600.0 Z))
+                     (+ Lat (*/ 600.0 Z)) )
+                  (cons
+                     (- Lon (*/ 800.0 Z))
+                     (+ Lon (*/ 800.0 Z)) )
+                  Zoom ) ) ) ) ) )
+
+(de osmStat (Lat1 Lon1 Lat2 Lon2 Zoom)
+   (when *Osm
+      (set @
+         (cons
+            (cons Lat1 Lat2)
+            (cons Lon1 Lon2)
+            Zoom ) ) ) )
+
+(de osmClick (Lat Lon)
+   (with *Top
+      (and (: osmClick) (@ Lat Lon)) ) )
+
+(de osmDrag (Txt Lat Lon)
+   (with *Top
+      (and
+         (: able)
+         (assoc Txt (: osmDrag))
+         ((cdr @) Txt Lat Lon) ) ) )
+
+(de <poi> (Lat Lon Img X Y Txt DY Col Url Drag Upd)
+   (let V (val *Osm)
+      (when
+         (or
+            (not V)
+            (and
+               (>= (cdar V) Lat (caar V))
+               (>= (cdadr V) Lon (caadr V)) ) )
+         (with *Top
+            (javascript NIL
+               "poi('map', " Lat ", " Lon ", '"
+               (sesId Img) "', " X ", " Y ", '"
+               Txt "', " DY ", '" Col "', '"
+               (and Url (sesId @)) "', "
+               (if2 (and Drag (: able)) Upd 2 1 0 0) ")" )
+            (and Drag (push (:: osmDrag) (cons Txt @))) ) ) ) )
 
 # Google Maps
 (local) [google <google>]

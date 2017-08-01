@@ -1,3 +1,55 @@
+31jul17
+   'notify' returns 'Notification' object
+      lib/android.l
+
+30jul17
+   National trunk prefix in localization
+      lib/misc.l
+      pilos/init/lib/misc.l
+      loc/[A-Z]*.l
+      doc/refE.html
+      doc/refT.html
+   Minor reference additions to '+Entity'
+      doc/refE.html
+
+29jul17
+   OSM continued
+      lib/gis.l
+   Change 'edit' style to transient
+      lib/form.l
+
+28jul17
+   OSM view, click and drag events
+      lib/gis.l
+      lib/gis.js
+   'xxxECnt' for PilOS
+      pilos/init/lib/db.l
+
+27jul17
+   Fixes for 'incECnt', 'decECnt', 'badECnt' and 'fixECnt' (Andreas Rüegger)
+      lib/db.l
+      lib/too.l
+   Documentation fix about T/NIL naming conventions (Nehal Singhal)
+      doc/ref.html
+
+26jul17
+   'httpGate' shutdown() on SIGALRM
+      src/httpGate.c
+
+24jul17
+   '+Stop' GUI prefix class
+      lib/form.l
+   Fix WakeLock release
+      lib/android.l
+
+22jul17
+   Use home-relative path
+      lib/tinymce.l
+   Typos in documentation (Nehal Singhal)
+      doc/ref.html
+      doc/faq.html
+      doc/native.html
+
 20jul17
    Changed 'rdOpen[EXY]' to set SIGPIPE to default
       src64/io.l
