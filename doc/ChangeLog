@@ -1,3 +1,9 @@
+07aug17
+   Use 'run'/'str' instead of 'eval'/'any' in 'repl'
+      lib/form.l
+   No namespace modification in 'java'
+      lib/android.l
+
 04aug17
    Keep 'repl' state in global variables
       lib/form.l
