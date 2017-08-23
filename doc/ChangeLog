@@ -1,7 +1,20 @@
+21aug17
+   Added 'toast' function
+   (wake) only initializes, (wake 'flg) acquires/releases
+      lib/android.l
+   '*Osm' without implicit clipping
+      lib/gis.l
+
+20aug17
+   Set '<line>' local
+      lib/gis.l
+
 18aug17
+   Added '<line>' function
+      lib/gis.l
+      lib/gis.js
    Make 'css' function global
       lib/xhtml.l
-      lib/gis.l
 
 17aug17
    Use "$ " prefix in 'repl' instead of "Shell" button

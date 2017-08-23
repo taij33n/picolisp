@@ -1,4 +1,4 @@
-# 18aug17abu
+# 21aug17abu
 # (c) Software Lab. Alexander Burger
 
 (symbols 'gis 'pico)
@@ -78,9 +78,9 @@
             (mkUrl @) )
          (super "Var") ) ) )
 
-# OpenStreetMap / OpenLayers
+# OpenLayers / OpenStreetMap
 # (val *Osm) -> ((lat1 . lat2) (lon1 . lon2) . zoom)
-(local) [*Osm <osm> osmStat osmClick osmDrag <poi>]
+(local) [*Osm <osm> osmStat osmClick osmDrag <poi> <line>]
 
 (mapc allow '(osmStat osmClick osmDrag))
 
@@ -96,18 +96,7 @@
       (javascript "https://openlayers.org/en/v4.2.0/build/ol.js"
          "osm('map', " Lat ", " Lon ", " Zoom ", "
          (if2 Click (and Upd (: able)) 2 1 0 0) ")" )
-      (=: osmClick Click)
-      (when *Osm
-         (set @
-            (let Z (>> (- Zoom) 1)
-               (cons
-                  (cons
-                     (- Lat (*/ 600.0 Z))
-                     (+ Lat (*/ 600.0 Z)) )
-                  (cons
-                     (- Lon (*/ 800.0 Z))
-                     (+ Lon (*/ 800.0 Z)) )
-                  Zoom ) ) ) ) ) )
+      (=: osmClick Click) ) )
 
 (de osmStat (Lat1 Lon1 Lat2 Lon2 Zoom)
    (when *Osm
@@ -129,21 +118,17 @@
          ((cdr @) Txt Lat Lon) ) ) )
 
 (de <poi> (Lat Lon Img X Y Txt DY Col Url Drag Upd)
-   (let V (val *Osm)
-      (when
-         (or
-            (not V)
-            (and
-               (>= (cdar V) Lat (caar V))
-               (>= (cdadr V) Lon (caadr V)) ) )
-         (with *Top
-            (javascript NIL
-               "poi('map', " Lat ", " Lon ", '"
-               (sesId Img) "', " X ", " Y ", '"
-               Txt "', " DY ", '" Col "', '"
-               (and Url (sesId @)) "', "
-               (if2 (and Drag (: able)) Upd 2 1 0 0) ")" )
-            (and Drag (push (:: osmDrag) (cons Txt @))) ) ) ) )
+   (with *Top
+      (javascript NIL
+         "poi(" Lat ", " Lon ", '" (sesId Img) "', " X ", " Y ", '"
+         Txt "', " DY ", '" Col "', '" (and Url (sesId @)) "', "
+         (if2 (and Drag (: able)) Upd 2 1 0 0) ")" )
+      (and Drag (push (:: osmDrag) (cons Txt @))) ) )
+
+(de <line> (Col Lat1 Lon1 Lat2 Lon2)
+   (with *Top
+      (javascript NIL
+         "line('" Col "', " Lat1 ", " Lon1 ", " Lat2 ", " Lon2 ")" ) ) )
 
 # Google Maps
 (local) [google <google>]
