@@ -1,4 +1,8 @@
 30aug17
+   Added 'distance' function
+      lib/gis.l
+   Added padding to 'tiny' class
+      lib/phone.css
    Note about the higher bits in 'rand'
       doc/refR.html
 
