@@ -1,3 +1,8 @@
+31aug17
+   Added 'clearHistory' and 'clearCache' functions
+   'toast' returns argument string
+      lib/android.l
+
 30aug17
    Added 'distance' function
       lib/gis.l
