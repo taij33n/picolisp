@@ -1,4 +1,4 @@
-# 18oct17abu
+# 12nov17abu
 # (c) Software Lab. Alexander Burger
 
 (symbols 'vip 'pico)
@@ -12,7 +12,7 @@
    (pass native "libncurses.so") )
 
 ### VIP Editor ###
-(local) [*Buffers +Buffer rdLines delim? markup status]
+(local) [*Buffers +Buffer fName rdLines delim? markup status]
 (class +Buffer)
 # text file key undo redo dirt pos lastX lastY <c>
 
@@ -21,11 +21,16 @@
    (=: pos (or Y 1))
    (=: lastX (=: lastY 1)) )
 
+(de fName (File)
+   (if (pre? "~/" File)
+      (pack (sys "HOME") "/" (cddr (chop File)))
+      File ) )
+
 (de rdLines ()
    (make (until (eof) (link (line)))) )
 
 (de delim? (C)
-   (member C '`(cons NIL (chop " ^I^J^M\"'(),[]`~{}"))) )
+   (member C '`(cons NIL (chop " \t\n\r\"'(),[]"))) )
 
 (de markup (Lst)
    (let (S 'text  N 1)
@@ -67,14 +72,14 @@
 (dm load> ()
    (markup
       (=: text
-         (when (info (: file))
-            (gc (inc (*/ (car @) 32768)))  # 2 cells / char
-            (if (sys "CCRYPT" (: key))
-               (pipe
-                  (in (: file)
-                     (out '("ccrypt" "-d" "-ECCRYPT") (echo)) )
-                  (rdLines) )
-               (in (: file) (rdLines)) ) ) ) )
+         (let? F (fName (: file))
+            (when (info F)
+               (gc (inc (*/ (car @) 32768)))  # 2 cells / char
+               (if (sys "CCRYPT" (: key))
+                  (pipe
+                     (in F (out '("ccrypt" "-d" "-ECCRYPT") (echo)))
+                     (rdLines) )
+                  (in F (rdLines)) ) ) ) ) )
    (=: undo (=: redo (=: dirt)))
    (=: pos (min1 (: pos) (length (: text)))) )
 
@@ -84,8 +89,8 @@
          (pipe
             (out '("ccrypt" "-e" "-ECCRYPT")
                (mapc prinl (: text)) )
-            (out (: file) (echo)) )
-         (out (: file) (mapc prinl (: text))) )
+            (out (fName (: file)) (echo)) )
+         (out (fName (: file)) (mapc prinl (: text))) )
       (=: dirt (: undo))
       (for (This *CmdWin (setq This (: next)))
          (status) ) ) )
@@ -672,7 +677,7 @@
          (while
             (case (or (next) (getch))
                (NIL)
-               (("^M" "^J")
+               (("\n" "\r")
                   (cond
                      (Rpl (curses "beep") T)
                      ((== This *CmdWin) (nil (command Win (car P))))
@@ -693,7 +698,7 @@
                (T
                   (let S (list @)
                      (nond
-                        ((= @ "^I") (off *Complete))
+                        ((= @ "\t") (off *Complete))
                         ((unless Rpl (setq S (pack (getWord))))
                            (setq S
                               (make
@@ -712,7 +717,7 @@
                                        '((X)
                                           (let? F (and (pre? S X) (pack P X))
                                              (if (=T (car (info F))) (pack F "/") F) ) )
-                                       (dir P T) ) ) ) )
+                                       (dir (fName P) T) ) ) ) )
                            (do (length (car *Complete)) (_bs))
                            (setq S (chop (car (rot *Complete)))) ) )
                      (when (= "^V" (car S))
@@ -794,11 +799,14 @@
 (de patMatch (Fun Pat)
    (moveSearch Fun
       (setq *Search
-         (let @Pat
-            (if (= "$" (last Pat))
-               (head -1 Pat)
-               (append Pat '(@)) )
-            (curry (@Pat) (L) (match '@Pat L)) ) ) ) )
+         (if (= "\\" (car Pat))
+            (let @Pat (cdr Pat)
+               (curry (@Pat) (L) (head '@Pat L)) )
+            (let @Pat
+               (if (= "$" (last Pat))
+                  (head -1 Pat)
+                  (append Pat '(@)) )
+               (curry (@Pat) (L) (match '@Pat L)) ) ) ) ) )
 
 (de parMatch (Fun1 @Par1 @Sup1 @ParO @ParC @SupO @SupC)
    (moveSearch Fun1
@@ -845,7 +853,7 @@
 
 (de shFile (S)
    (when (: buffer file)
-      (shell (text S (path @) *Cnt)) ) )
+      (shell (text S (path (fName @)) *Cnt)) ) )
 
 (de reset ()
    (off *Count *Change)
@@ -887,7 +895,9 @@
                   ("n" (nextBuf))  # Next buffer
                   ("N" (nextBuf T))  # Previous buffer
                   ("e" (reload Line))  # (Edit) Reload buffer
-                  ("r" (in Line (paste (cons T (rdLines)) 1)))  # Read file contents
+                  ("r"  # Read file contents
+                     (in (fName Line)
+                        (paste (cons T (rdLines)) 1) ) )
                   ("w" (save> (: buffer)))  # (Write) Save buffer
                   ("x"  # (Exit) Save buffer and close window
                      (unless (= (: buffer undo) (: buffer dirt))
@@ -990,7 +1000,7 @@
                   (T
                      (case *Chr
                         (NIL)
-                        (("^M" "^J")
+                        (("\n" "\r")
                            (if (== This *CmdWin)
                               (command (: next) (get (: buffer text) (: posY)))
                               (cmdMode) ) )
@@ -1131,9 +1141,8 @@
                         (`(char (+ 264 5)) (nextBuf T))  # [F5] Previous buffer
                         (`(char (+ 264 6)) (nextBuf))  # [F6] Next buffer
                         (`(char (+ 264 7))  # [F7] Load file
-                           (when (info (: buffer file))
-                              (symbols '(pico)
-                                 (catch '(NIL) (load (: buffer file))) ) ) )
+                           (let? F (fName (: buffer file))
+                              (and (info F) (catch '(NIL) (load F))) ) )
                         ## (`(char (+ 264 8)) ())  # [F8]
                         ## (`(char (+ 264 9)) ())  # [F9]
                         ## (`(char (+ 264 10)) ())  # [F10]
