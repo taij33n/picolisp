@@ -1,4 +1,4 @@
-# 19nov17abu
+# 02jan18abu
 # (c) Software Lab. Alexander Burger
 
 (ifn (info "UUID")
@@ -32,9 +32,9 @@
 # (java "cls" "fld" ["fld" ..]) -> any   Value of class field
 # (java T "cls" ["cls" ..]) -> obj       Define interface
 # (java 'obj) -> [lst ..]                Reflect object
-# (java "cls") -> [lst lst ..]           Reflect class
-(local) [java *Java *Lisp]
-(de java @
+# (java "cls") -> cls                    Get class
+(local) [java1 java *Java *Lisp]
+(de java1 ()
    (unless *Java
       (setq *Java (open "JAVA")  *Lisp (open "LISP"))
       (task (open "RQST")  R (open "RPLY")
@@ -48,8 +48,9 @@
                            (rd)
                            NIL ) ) ) ) ) ) )
       (forked)
-      (queue '*Ext (cons 65535 java))
-      (con java (cddr java)) )
+      (queue '*Ext (cons 65535 java)) ) )
+
+(de java @
    (ext 65535
       (out *Java (pr (rest)))
       (let? Val (in *Lisp (rd))
@@ -139,7 +140,7 @@
       (java B 'setContentText Msg)
       (java B 'setAutoCancel T)
       (java B 'setLights `(hex "FFFFFF") 500 500)
-      (let Intent (java "android.content.Intent" T CONTEXT (; CONTEXT GUI 0 1))  # Activity class
+      (let Intent (java "android.content.Intent" T CONTEXT (java "de.software_lab.pilbox.PilBoxActivity"))  # Activity class
          (java Intent 'setFlags `(hex "24000000"))  # FLAG_ACTIVITY_SINGLE_TOP | FLAG_ACTIVITY_NEW_TASK
          (java B 'setContentIntent
             (java "android.app.PendingIntent" 'getActivity CONTEXT 0 Intent `(hex "10000000")) ) )  # FLAG_ACTIVITY_NEW_TASK
@@ -249,6 +250,28 @@
    (startActivityForResult Fun
       "com.google.zxing.client.android.SCAN"
       "SCAN_MODE" "QR_CODE_MODE" ) )
+
+# Alarm
+(local) [alarm RPC elapsedRealtime getBroadcast]
+(de alarm (N Sec File)
+   (java (; CONTEXT RPC) 'putExtra "LOAD" File)
+   (java (java CONTEXT 'getSystemService "alarm")  # AlarmManager
+      'set
+      2  # ELAPSED_REALTIME_WAKEUP
+      (cons 'L
+         (+
+            `(* 1000 9)
+            (java "android.os.SystemClock" 'elapsedRealtime) ) )
+      (java "android.app.PendingIntent" 'getBroadcast
+         CONTEXT N (; CONTEXT RPC) 0 ) ) )
+
+(local) cancel
+(de cancel (N)
+   (java
+      (java CONTEXT 'getSystemService "alarm")
+      'cancel
+      (java "android.app.PendingIntent" 'getBroadcast
+         CONTEXT N (; CONTEXT RPC) 0 ) ) )
 
 # Terminate PilBox
 (local) [terminate finishAndRemoveTask]
