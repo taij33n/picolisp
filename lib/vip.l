@@ -1,4 +1,4 @@
-# 12jan18abu
+# 13jan18abu
 # (c) Software Lab. Alexander Burger
 
 (symbols 'vip 'pico)
@@ -30,7 +30,7 @@
    (make (until (eof) (link (line)))) )
 
 (de delim? (C)
-   (member C '`(cons NIL (chop " \t\n\r\"'(),[]`~{}"))) )
+   (member C '`(cons NIL (chop " \t\n\r\"'(),[]`{}"))) )
 
 (de markup (Lst)
    (let (S 'text  N 1)
@@ -737,7 +737,9 @@
                                     (extract
                                        '((X)
                                           (let? F (and (pre? S X) (pack P X))
-                                             (if (=T (car (info F))) (pack F "/") F) ) )
+                                             (if (=T (car (info F)))
+                                                (pack F "/")
+                                                F ) ) )
                                        (dir (fName P) T) ) ) ) )
                            (do (length (car *Complete)) (_bs))
                            (setq S (chop (car (rot *Complete)))) ) )
@@ -907,7 +909,9 @@
                            (shell Line)
                            (pipeN Cnt Line) ) ) )
                   ("bak" (shFile "mv @1 @1- && cp -p @1- @1"))  # Backup to <file>-
-                  ("kab" (shFile "mv @1- @1 && cp -p @1 @1-"))  # Restore from <file>-
+                  ("kab"  # Restore from <file>-
+                     (shFile "mv @1- @1 && cp -p @1 @1-")
+                     (reload) )
                   ("ls"  # List buffers
                      (let L
                         (make

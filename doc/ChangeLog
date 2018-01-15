@@ -1,4 +1,16 @@
+15jan18
+   Minor typo
+      doc/refB.html
+
+13jan18
+   "~" no delimiter
+   'reload' after "kab"
+      lib/vip.l
+
 12jan18
+   Remove "time" from 'proc', and enable for Android
+      lib/debug.l
+      ersatz/lib.l
    Missing delimiter characters "`~{}"
       lib/vip.l
 
