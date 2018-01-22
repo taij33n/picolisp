@@ -1,4 +1,4 @@
-# 15jan18abu
+# 21jan18abu
 # (c) Software Lab. Alexander Burger
 
 (ifn (info "UUID")
@@ -135,28 +135,34 @@
 
 # Notification
 (local) [
-   notify setSmallIcon setContentTitle setContentText setAutoCancel setLights
-   setContentIntent getActivity build ]
-(de notify (Ttl Msg Id)
-   (let B (java "android.support.v4.app.NotificationCompat$Builder" T CONTEXT)
-      (java B 'setSmallIcon (java "de.software_lab.pilbox.R$drawable" "notify"))
-      (java B 'setContentTitle Ttl)
-      (java B 'setContentText Msg)
-      (java B 'setAutoCancel T)
-      (java B 'setLights `(hex "FFFFFF") 500 500)
-      (let Intent (java "android.content.Intent" T CONTEXT (java "de.software_lab.pilbox.PilBoxActivity"))  # Activity class
-         (java Intent 'setFlags `(hex "24000000"))  # FLAG_ACTIVITY_SINGLE_TOP | FLAG_ACTIVITY_NEW_TASK
-         (java B 'setContentIntent
-            (java "android.app.PendingIntent" 'getActivity CONTEXT 0 Intent `(hex "10000000")) ) )  # FLAG_ACTIVITY_NEW_TASK
-      (prog1 (java B 'build)  # Notification
-         (java (java CONTEXT 'getSystemService "notification")  # NotificationManager
-            'notify Id @ ) ) ) )
+   notify cancel setSmallIcon setContentTitle setContentText setAutoCancel
+   setLights setAction putExtra setContentIntent getActivity build ]
+(de notify (Id Ttl Msg File)
+   (let N (java CONTEXT 'getSystemService "notification")  # NotificationManager
+      (ifn Ttl
+         (java N 'cancel Id)
+         (let B (java "android.support.v4.app.NotificationCompat$Builder" T CONTEXT)
+            (java B 'setSmallIcon (java "de.software_lab.pilbox.R$drawable" "notify"))
+            (java B 'setContentTitle Ttl)
+            (java B 'setContentText Msg)
+            (java B 'setAutoCancel T)
+            (java B 'setLights `(hex "FFFFFF") 500 500)
+            (let Intent (java "android.content.Intent" T CONTEXT (java "de.software_lab.pilbox.PilBoxActivity"))  # Activity class
+               (java Intent 'setFlags `(hex "24000000"))  # FLAG_ACTIVITY_SINGLE_TOP | FLAG_ACTIVITY_NEW_TASK
+               (when File
+                  (java Intent 'setAction "RPC")
+                  (java Intent 'putExtra "LOAD" File) )
+               (java B 'setContentIntent
+                  (java "android.app.PendingIntent" 'getActivity
+                     CONTEXT 0 Intent `(hex "18000000") ) ) )  # FLAG_ACTIVITY_NEW_TASK | FLAG_UPDATE_CURRENT
+            (prog1 (java B 'build)  # Notification
+               (java N 'notify Id @) ) ) ) ) )
 
 # Service foreground state
 (local) [startForeground stopForeground]
 (de startForeground (Ttl Msg)
    (java CONTEXT 'startForeground 1
-      (notify Ttl Msg 1) ) )
+      (notify 1 Ttl Msg) ) )
 
 (de stopForeground ()
    (java CONTEXT 'stopForeground T) )
@@ -164,7 +170,7 @@
 # Start Activity for a result
 (local) [
    startActivityForResult *ResultProxy *ProxyResults resolveActivity
-   getPackageManager putExtra setResultProxy good bad ]
+   getPackageManager setResultProxy good bad ]
 (de startActivityForResult (Fun Action . @)
    (let Intent (java "android.content.Intent" T Action)
       (when (java Intent 'resolveActivity (java CONTEXT 'getPackageManager))
@@ -256,35 +262,32 @@
       "SCAN_MODE" "QR_CODE_MODE" ) )
 
 # Alarm
-(local) [alarm RPC elapsedRealtime getInstance getTimeInMillis getBroadcast]
+(local) [alarm elapsedRealtime getInstance getTimeInMillis getBroadcast]
 (de alarm (N When File)
-   (java (; CONTEXT RPC) 'putExtra "LOAD" File)
-   (java (java CONTEXT 'getSystemService "alarm")  # AlarmManager
-      'set
-      (if (atom When) 2 0)  # ELAPSED_REALTIME_WAKEUP RTC_WAKEUP
-      (cons 'L
-         (if (atom When)
-            (+
-               (* 1000 When)
-               (java "android.os.SystemClock" 'elapsedRealtime) )
-            (let
-               (Dat (date (car When))
-                  Tim (time (cdr When))
-                  C (java "android.icu.util.Calendar" 'getInstance) )
-               (java C 'set
-                  (car Dat) (dec (cadr Dat)) (caddr Dat)
-                  (car Tim) (cadr Tim) (caddr Tim) )
-               (java C 'getTimeInMillis) ) ) )
-      (java "android.app.PendingIntent" 'getBroadcast
-         CONTEXT N (; CONTEXT RPC) 0 ) ) )
-
-(local) cancel
-(de cancel (N)
-   (java
-      (java CONTEXT 'getSystemService "alarm")
-      'cancel
-      (java "android.app.PendingIntent" 'getBroadcast
-         CONTEXT N (; CONTEXT RPC) 0 ) ) )
+   (let
+      (Intent (java "android.content.Intent" T CONTEXT (java "de.software_lab.pilbox.Receiver"))
+         Alarm (java CONTEXT 'getSystemService "alarm") )  # AlarmManager
+      (ifn When
+         (java Alarm 'cancel
+            (java "android.app.PendingIntent" 'getBroadcast CONTEXT N Intent 0) )
+         (java Intent 'putExtra "LOAD" File)
+         (java Alarm 'set
+            (if (atom When) 2 0)  # ELAPSED_REALTIME_WAKEUP RTC_WAKEUP
+            (cons 'L
+               (if (atom When)
+                  (+
+                     (* 1000 When)
+                     (java "android.os.SystemClock" 'elapsedRealtime) )
+                  (let
+                     (Dat (date (car When))
+                        Tim (time (cdr When))
+                        C (java "android.icu.util.Calendar" 'getInstance) )
+                     (java C 'set
+                        (car Dat) (dec (cadr Dat)) (caddr Dat)
+                        (car Tim) (cadr Tim) (caddr Tim) )
+                     (java C 'getTimeInMillis) ) ) )
+            (java "android.app.PendingIntent" 'getBroadcast
+               CONTEXT N Intent 0 ) ) ) ) )
 
 # Terminate PilBox
 (local) [terminate finishAndRemoveTask]
