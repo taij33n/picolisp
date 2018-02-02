@@ -1,9 +1,9 @@
-# 14sep17abu
+# 02feb18abu
 # (c) Software Lab. Alexander Burger
 
 # *HPorts *Home *Gate *Host *Port *Port1 *Port% *Http1 *Chunked
 # *Sock *Agent *ContL *ContLen *MPartLim *MPartEnd "*HtSet"
-# *Post *Url *Timeout *SesAdr *SesId *ConId
+# *Post *Url *Timeout *SesId *ConId
 # *Referer *Cookies "*Cookies"
 
 (default
@@ -75,7 +75,7 @@
    (nond
       (Pw (println *Port) (bye))
       ((nand (= Pw (pw)) (ctty Tty))
-         (off *Run)
+         (or *SesId (off *Run))
          (println *Pid)
          (load (if *Dbg "@lib/too.l" "@dbg.l"))
          (off *Err)
@@ -144,9 +144,9 @@
    (unless *SesId
       (setq
          *Port% (not *Gate)
-         *SesAdr *Adr
          *SesId (pack (in "/dev/urandom" (rd 7)) "~")
          *Sock (port *HPorts '*Port) )
+      (out 2 (prinl *Pid " = " *Port " " *SesId))
       (timeout *Timeout) ) )
 
 # Set a cookie
@@ -185,7 +185,7 @@
                   (task (close *HtSock))
                   (off *HtSock)
                   (throw 'http) ) )
-            (if (or (<> *ConId *SesId) (and *SesAdr (<> @ *Adr)))
+            (if (<> *ConId *SesId)
                (prog (task (close *HtSock)) (off *HtSock))
                (setq
                   L (split U "?")
