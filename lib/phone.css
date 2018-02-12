@@ -1,4 +1,4 @@
-/* 30aug17abu
+/* 10feb18abu
  * (c) Software Lab. Alexander Burger
  */
 
@@ -12,6 +12,10 @@
 
 body {
    font-size: 3.0vw;
+}
+
+input {
+   font-size: large;
 }
 
 caption {
@@ -36,4 +40,5 @@ caption {
 /* Fonts */
 .tiny {
    padding: 0 1ex;
+   font-size: large;
 }
