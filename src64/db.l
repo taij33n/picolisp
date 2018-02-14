@@ -1126,6 +1126,7 @@
    cmp B 1  # One?
    jne idErrXL  # Bad ID
    ld (GetBinZ_FB) getBlockZ_FB  # Set binary read function
+   ld (Extn) (ExtN)  # Set external symbol offset
    call binReadZ_FE  # Read value
    call consE_A  # Cons with NIL
    ld (A) E
