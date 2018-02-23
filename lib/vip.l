@@ -1,4 +1,4 @@
-# 18feb18abu
+# 22feb18abu
 # (c) Software Lab. Alexander Burger
 
 (symbols 'vip 'pico)
@@ -12,7 +12,7 @@
    (pass native "libncurses.so") )
 
 ### VIP Editor ###
-(local) [*Buffers +Buffer fName rdLines delim? markup status]
+(local) [*Buffers +Buffer fName fileBuffer rdLines delim? markup status]
 (class +Buffer)
 # text file key undo redo dirt pos lastX lastY <c>
 
@@ -25,6 +25,22 @@
    (if (pre? "~/" File)
       (pack (sys "HOME") "/" (cddr (chop File)))
       File ) )
+
+(de fileBuffer (File Y)
+   (when File
+      (use (R @P)
+         (unless (=0 (native "@" "realpath" 'N (fName File) '(R (4096 C . 4096))))
+            (setq File
+               (pack
+                  (cond
+                     ((match (conc (chop (pwd)) '(@P)) R)
+                        (cdr @P) )
+                     ((match (conc (chop (sys "HOME")) '(@P)) R)
+                        (cons "~/" (cdr @P)) )
+                     (T R) ) ) ) ) ) )
+   (or
+      (find '((This) (= File (: file))) *Buffers)
+      (new '(+Buffer) File Y) ) )
 
 (de rdLines ()
    (make (until (eof) (link (line)))) )
@@ -92,7 +108,7 @@
                               (chop (setq F (pack D F)))
                               (when (=T (car (info F)))
                                  (list (char `(char "/"))) ) ) )
-                        (dir File) ) )
+                        (sort (dir File)) ) )
                   (gc (inc (*/ (car I) 32768)))  # 2 cells / char
                   (if (sys "CCRYPT" (: key))
                      (pipe
@@ -103,7 +119,7 @@
    (=: pos (min1 (: pos) (length (: text)))) )
 
 (dm save> ()
-   (when (: file)
+   (when (fName (: file))
       (unless (=T (car (info @)))
          (if (sys "CCRYPT" (: key))
             (pipe
@@ -310,10 +326,7 @@
    (unless (== This *CmdWin)
       (when File
          (=: last (: buffer))
-         (=: buffer
-            (or
-               (find '((This) (= File (: file))) *Buffers)
-               (new '(+Buffer) File) ) ) )
+         (=: buffer (fileBuffer File)) )
       (load> (: buffer))
       (goto 1 (or N (: buffer pos)) T)
       (repaint) ) )
@@ -741,7 +754,7 @@
                                     (extract
                                        '((X)
                                           (let? F (and (pre? S X) (pack P X))
-                                             (if (=T (car (info F)))
+                                             (if (=T (car (info (fName F))))
                                                 (pack F "/")
                                                 F ) ) )
                                        (dir (fName P) T) ) ) ) )
@@ -959,10 +972,10 @@
    (for X Lst
       (cond
          ((not X))
-         ((atom X) (new '(+Buffer) X))
+         ((atom X) (fileBuffer X))
          ((not (cdr X)) (wordFun (car X)))
          (T
-            (new '(+Buffer)
+            (fileBuffer
                (cdr X)
                (or (num? (car X)) T) ) ) ) )
    (when *Buffers
