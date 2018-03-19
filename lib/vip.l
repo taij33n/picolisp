@@ -1,4 +1,4 @@
-# 06mar18abu
+# 18mar18abu
 # (c) Software Lab. Alexander Burger
 
 (symbols 'vip 'pico)
@@ -12,7 +12,7 @@
    (pass native "libncurses.so") )
 
 ### VIP Editor ###
-(local) [*Buffers +Buffer fName fileBuffer rdLines delim? markup status]
+(local) [*Buffers +Buffer fName rplFile fileBuffer rdLines delim? markup status]
 (class +Buffer)
 # text file key undo redo dirt pos lastX lastY <c>
 
@@ -25,6 +25,9 @@
    (if (pre? "~/" File)
       (pack (sys "HOME") "/" (cddr (chop File)))
       File ) )
+
+(de rplFile (File)
+   (pack (replace (chop File) "%" (: buffer file))) )
 
 (de fileBuffer (File Y)
    (when File
@@ -138,7 +141,7 @@
 
 (local) [*Window +Window]
 (class +Window)
-# buffer top lines status ptr winX winY posX posY prev next last
+# buffer top lines status ptr winX winY posX posY prev next last mark
 
 (dm T (Buffer Top Height WinX WinY PosX PosY Prev)
    (=: buffer Buffer)
@@ -219,6 +222,8 @@
                   (: buffer file)
                   (unless (= (: buffer undo) (: buffer dirt)) " [+]") )
                Z (pack
+                  (: mark)
+                  " "
                   (: posX) "," (: posY) "/" N " "
                   (if (gt0 (dec N))
                      (*/ 100 (dec (: posY)) @)
@@ -336,6 +341,8 @@
       (repaint) ) )
 
 (de done ()
+   (when (: mark)
+      (out @ (println (: posX) (: posY))) )
    (nond
       ((; *CmdWin next next) (throw 'done))
       ((n== This *CmdWin))
@@ -927,7 +934,7 @@
                   ("!"  # External filter
                      (when Line
                         (if (=0 Cnt)
-                           (shell Line)
+                           (shell (rplFile Line))
                            (pipeN Cnt Line) ) ) )
                   ("bak" (shFile "mv @1 @1- && cp -p @1- @1"))  # Backup to <file>-
                   ("kab"  # Restore from <file>-
@@ -942,13 +949,20 @@
                            (paste (cons T L) T)
                            (inc (:: posY) (dec (length L))) ) ) )
                   ("key" (=: buffer key Line) (reload))
+                  ("m"
+                     (when (info (=: mark (rplFile Line)))
+                        (in (: mark) (move 'goAbs (read) (read))) ) )
                   ("n" (nextBuf))  # Next buffer
                   ("N" (nextBuf T))  # Previous buffer
-                  ("e" (reload Line))  # (Edit) Reload buffer
+                  ("e" (reload (rplFile Line)))  # (Edit) Reload buffer
                   ("r"  # Read file contents
-                     (in (fName Line)
+                     (in (fName (rplFile Line))
                         (paste (cons T (rdLines)) 1) ) )
-                  ("w" (save> (: buffer)))  # (Write) Save buffer
+                  ("w"  # (Write) Save buffer
+                     (if Line
+                        (out (fName (rplFile @))
+                           (mapc prinl (: buffer text)) )
+                        (save> (: buffer)) ) )
                   ("x"  # (Exit) Save buffer and close window
                      (unless (= (: buffer undo) (: buffer dirt))
                         (save> (: buffer)) )
