@@ -1,3 +1,9 @@
+19mar18
+   Use hard links if more than one mirror directory
+      src/ssl.c
+   Persistent marks continued
+      lib/vip.l
+
 18mar18
    Persistent marks with "m" command
    "%" replacement for "!", "r" and "w" commands
