@@ -1,3 +1,21 @@
+16apr18
+   Nested block comments
+      {src64,pilos/src}/io.l
+      {src,mini/src}/io.c
+      ersatz/sys.src
+      doc/ref.html
+
+15apr18
+   Return true from ':x' command
+      bin/vip
+      lib/vip.l
+
+13apr18
+   Dangling indexes in duplicate (+List +Bag) items revisited
+      lib/db.l
+      mini/lib/db.l
+      pilos/init/lib/db.l
+
 12apr18
    Ignore non-existing file in ":r" command
       lib/vip.l
