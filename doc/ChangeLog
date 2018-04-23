@@ -1,3 +1,25 @@
+23apr18
+   Minor cosmetics
+      doc/refL.html
+
+22apr18
+   Return true from ':x' command continued
+      lib/vip.l
+   'nsp' function
+      {src64,pilos/src}/sym.l
+      {src64,pilos/src}/glob.l
+      doc/ref.html
+      doc/refN.html
+      doc/refP.html
+      doc/refS.html
+      test/src/sym.l
+
+21apr18
+   Handle namespaces in "^]" command
+      lib/vip.l
+   Minor cosmetics
+      {src64,pilos/src}/sym.l
+
 20apr18
    Restore "~" as delimiter
       lib/vip.l

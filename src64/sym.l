@@ -1,4 +1,4 @@
-# 07apr17abu
+# 22apr18abu
 # (c) Software Lab. Alexander Burger
 
 ### Compare long names ###
@@ -728,6 +728,44 @@
    pop X
    ret
 
+# (nsp 'sym) -> sym
+(code 'doNsp 2)
+   push X
+   push Y
+   push Z
+   ld X E
+   ld Y (E CDR)  # Y on args
+   ld E (Y)  # Eval 'sym'
+   eval
+   num E  # Need symbol
+   jnz symErrEX
+   sym E
+   jz symErrEX
+   ld X (E TAIL)  # Get name
+   call nameX_X
+   ld Z (EnvIntern)  # Namespaces in Z
+   do
+      ld Y ((Z))  # Next tree
+      push Z
+      ld Z Nil  # Search single namespace
+      call isInternEXYZ_FCE  # Internal?
+      pop Z
+      if eq  # Yes
+         ld E (Z)  # Return namespace
+         pop Z
+         pop Y
+         pop X
+         ret
+      end
+      ld Z (Z CDR)  # Next?
+      atom Z
+   until nz  # No
+   ld E Nil
+   pop Z
+   pop Y
+   pop X
+   ret
+
 # Make single-char symbol
 (code 'mkCharA_A 0)
    cmp A (hex "80")  # ASCII?
@@ -1173,7 +1211,7 @@
       cmp E Nil  # 'flg'?
       if eq  # No
          ld E 0  # No symbol yet
-         ldz Z (A CDR)  # Search all namespaces
+         ld Z (A CDR)  # Search all namespaces
       else
          ld E (L I)  # Get symbol
          ld Z Nil  # Search only current namespace

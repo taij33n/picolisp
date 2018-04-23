@@ -1,4 +1,4 @@
-# 20apr18abu
+# 22apr18abu
 # (c) Software Lab. Alexander Burger
 
 (symbols 'vip 'pico)
@@ -48,8 +48,10 @@
 (de rdLines ()
    (make (until (eof) (link (line)))) )
 
-(de delim? (C)
-   (member C '`(cons NIL (chop " \t\n\r\"'(),[]`~{}"))) )
+(de delim? (C Str)
+   (or
+      (member C '`(cons NIL (chop " \t\n\r\"'(),[]`{}")))
+      (sub? C Str) ) )
 
 (de markup (Lst)
    (let (S 'text  N 1)
@@ -471,14 +473,14 @@
 (de lend (L)
    (and (not (sp? (car L))) (sp? (cadr L))) )
 
-(de getWord (Flg)
+(de getWord (Flg Str)
    (make
       (let (Lst (get (: buffer text) (: posY))  L (nth Lst (: posX)))
          (when Flg
             (for C L
                (T (delim? C))
                (link C) ) )
-         (until (delim? (car (setq L (prior L Lst))))
+         (until (delim? (car (setq L (prior L Lst))) Str)
             (yoke (car L)) ) ) ) )
 
 (de _forward (Lst C 1st)
@@ -866,9 +868,9 @@
    (setq *Search
       (curry (@W) (L C)
          (and
-            (delim? C)
+            (delim? C "~")
             (match '@W L)
-            (delim? (car "@Z")) ) ) ) )
+            (delim? (car "@Z") "~") ) ) ) )
 
 (de moveSearch (Fun1 Fun2)
    (move Fun1 (lit Fun2) *Cnt) )
@@ -1137,7 +1139,7 @@
                            ("n" (and *Search (move 'goForward (lit @) *Cnt)))  # Search next
                            ("N" (and *Search (move 'goBackward (lit @) *Cnt)))  # Search previous
                            ("*"  # Search word under cursor
-                              (and (getWord T) (moveSearch 'goForward (wordFun @))) )
+                              (and (getWord T "~") (moveSearch 'goForward (wordFun @))) )
                            ("%"  # Matching parenthesis
                               (case (get (: buffer text) (: posY) (: posX))
                                  ("(" (parMatch 'goForward 1 0 "(" ")" "[" "]"))
@@ -1222,7 +1224,7 @@
                                        (chgwin (inc (: lines))) ) ) ) )
                            ("=" (eqwin))  # Set all windows to equal size
                            ("^]"  # Edit symbol
-                              (when (get (intern (pack (getWord T))) '*Dbg 1)
+                              (when (get (any (pack (getWord T))) '*Dbg 1)
                                  (push '*TagStack (: posY) (: buffer file))
                                  (reload (cdr @) (car @)) ) )
                            ("^T"  # Pop tag stack
@@ -1309,14 +1311,15 @@
 
 (undef 'pico~vi)
 (de pico~vi ("X" C)
-   (vi
-      (list
-         (cond
-            ((pair "X")
-               (get (cdr "X") '*Dbg -1 (car "X")) )
-            (C (get C '*Dbg -1 "X"))
-            ((str? "X") "X")
-            (T (get "X" '*Dbg 1)) ) ) )
-   "X" )
+   (and
+      (vi
+         (list
+            (cond
+               ((pair "X")
+                  (get (cdr "X") '*Dbg -1 (car "X")) )
+               (C (get C '*Dbg -1 "X"))
+               ((str? "X") "X")
+               (T (get "X" '*Dbg 1)) ) ) )
+      "X" ) )
 
 # vi:et:ts=3:sw=3
