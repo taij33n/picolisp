@@ -1,3 +1,16 @@
+02may18
+   No timeouts when '*Timeout' is NIL
+      lib/http.l
+      lib/form.l
+      lib/adm.l
+   Accept text from stdin
+      lib/vip.l
+
+01may18
+   Allow empty (vi) calls
+      bin/vip
+      lib/vip.l
+
 26apr18
    Disable 'repl' text area unless in edit mode
       lib/form.l
@@ -316,7 +329,7 @@
       doc/refM.html
 
 02jan18
-   Clean up *Java, *Lisp etc. in '*Fork'
+   Clean up '*Java', '*Lisp' etc. in '*Fork'
    'android~cancel' function
       lib/android.l
 
