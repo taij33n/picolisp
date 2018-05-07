@@ -1,3 +1,14 @@
+06may18
+   Pedantics
+      doc/refA.html
+
+05may18
+   Minor extension
+      ersatz/README
+   Generalize and simplify 'serverSentEvent' + 'serverSend'
+      lib/xhtml.l
+      lib/form.js
+
 02may18
    Minor typo
       doc/refT.html
