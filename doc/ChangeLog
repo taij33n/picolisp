@@ -1,4 +1,14 @@
+20may18
+   HTML markup mismatch
+      doc/refP.html
+   Variable size for 'less', default 3
+      lib/debug.l
+      pilos/init/lib/dbg.l
+      doc/refL.html
+
 17may18
+   '<thead>' and '<tbody>' functions
+      lib/xhtml.l
    'local' fix for 'distance'
       lib/gis.l
    Minor reference fixes
