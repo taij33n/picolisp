@@ -1,4 +1,4 @@
-# 16jun18abu
+# 09jul18abu
 # (c) Software Lab. Alexander Burger
 
 (symbols 'vip 'pico)
@@ -1011,6 +1011,12 @@
                         (if (=0 Cnt)
                            (shell (rplFile Line))
                            (pipeN Cnt Line) ) ) )
+                  ("copy"  # Copy to system clipboard
+                     (out '("copy")  # System dependent script
+                        (let V (val *Clip)
+                           (if (=T (car V))
+                              (mapc prinl (cdr V))
+                              (prin V) ) ) ) )
                   ("bak" (shFile "mv @1 @1- && cp -p @1- @1"))  # Backup to <file>-
                   ("kab"  # Restore from <file>-
                      (shFile "mv @1- @1 && cp -p @1 @1-")
