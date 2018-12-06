@@ -1,10 +1,10 @@
-# 02jul18abu
+# 21nov18abu
 # (c) Software Lab. Alexander Burger
 
 (ifn (info "UUID")
    (off *Uuid)
    (setq *Uuid (in "UUID" (line T)))
-   (for F '("JAVA" "LISP" "RQST" "RPLY" "BOSS")
+   (for F '("JAVA" "LISP" "BOSS")
       (native "@" "unlink" 'I F)
       (native "@" "mkfifo" 'I F `(oct "600")) )
    (hear (open "BOSS")) )
@@ -25,42 +25,43 @@
 (de CONTEXT . {OOOO40000000000})
 
 # Java I/O
-# (java "cls" 'T ['any ..]) -> obj       New object
-# (java 'obj 'msg ['any ..]) -> any      Send message to object
-# (java 'obj "fld" ["fld" ..]) -> any    Value of object field
-# (java "cls" 'msg ['any ..]) -> any     Call method in class
-# (java "cls" "fld" ["fld" ..]) -> any   Value of class field
-# (java T "cls" ["cls" ..]) -> obj       Define interface
-# (java 'obj) -> [lst ..]                Reflect object
-# (java "cls") -> cls                    Get class
-(local) [java1 java *Java *Lisp]
+# (java "cls" 'T ['any ..]) -> obj         New object
+# (java 'obj ['n] 'msg ['any ..]) -> any   Send message to object
+# (java 'obj "fld" ["fld" ..]) -> any      Value of object field
+# (java "cls" ['n] 'msg ['any ..]) -> any  Call method in class
+# (java "cls" "fld" ["fld" ..]) -> any     Value of class field
+# (java T "cls" ["cls" ..]) -> obj         Define interface
+# (java 'obj) -> [lst ..]                  Reflect object
+# (java "cls") -> cls                      Get class
+(local) [java1 java *Java *Lisp null]
 (de java1 ()
    (unless *Java
       (setq *Java (open "JAVA")  *Lisp (open "LISP"))
-      (let R (open "RPLY")
-         (task (open "RQST")  R R
-            (in @
-               (out R
-                  (ext 65535
-                     (pr
-                        (with (rd)  # Obj
-                           (if (get (rd) This)
-                              (apply @ (rd))
-                              (rd)
-                              NIL ) ) ) ) ) ) )
-         (push '*Fork
-            '(off *Java *Lisp)
-            (list 'mapc 'close (list R *Java *Lisp)) )
-         (forked) )
+      (task *Lisp
+         (ext 65535
+            (in *Lisp
+               (prog1
+                  (if (get (rd) (rd))
+                     (apply @ (rd))
+                     (rd)
+                     NIL )
+                  (out *Java (pr T @)) ) ) ) )
+      (forked)
       (queue '*Ext (cons 65535 java)) ) )
 
 (de java @
    (ext 65535
-      (out *Java (pr (rest)))
-      (let? Val (in *Lisp (rd))
-         (if (== 'err (car (pair Val)))
-            (nil (msg (cdr Val)))
-            Val ) ) ) )
+      (out *Java (pr NIL (rest)))
+      (in *Lisp
+         (for (X (rd) X (rd))
+            (and (=0 X) (quit (rd)))  # 0: Exception
+            (prog1                    # Callback
+               (if (get X (rd))
+                  (apply @ (rd))
+                  (rd)
+                  NIL )
+               (out *Java (pr T @)) ) )
+         (rd) ) ) )
 
 # Android device ID
 (local) [dev getString getContentResolver]
@@ -70,12 +71,17 @@
       "android_id" ) )
 
 # Push-Load
-(local) loadTxt loadUrl
+(local) [loadTxt loadData loadUrl]
 (de loadTxt @
-   (java CONTEXT 'loadTxt (pass pack)) )
+   (java (; CONTEXT GUI) 'runOnUiThread
+      (java (; CONTEXT GUI PilView) 0 'loadData
+         (pack "<html><body>" (pass pack) "</body></html>")
+         "text/html; charset=utf-8"
+         'null ) ) )
 
 (de loadUrl @
-   (java CONTEXT 'loadUrl (pass pack)) )
+   (java (; CONTEXT GUI) 'runOnUiThread
+      (java (; CONTEXT GUI PilView) 0 'loadUrl (pass pack)) ) )
 
 # Clear WebView history and cache
 (local) [clearHistory clearCache]
@@ -83,10 +89,11 @@
    (java CONTEXT 'clearHistory) )
 
 (de clearCache ()
-   (java CONTEXT 'clearCache) )
+   (java (; CONTEXT GUI) 'runOnUiThread
+      (java (; CONTEXT GUI PilView) 0 'clearCache T) ) )
 
 # Wake lock
-(local) [wake *Wake getSystemService newWakeLock acquire release)]
+(local) [wake *Wake getSystemService newWakeLock acquire release]
 (de wake @
    (default *Wake
       (java
@@ -129,9 +136,9 @@
 
 # Toast
 (local) toast
-(de toast (Str)
-   (java CONTEXT 'toast Str)
-   Str )
+(de toast (X . @)
+   (java CONTEXT 'toast (pass pack X))
+   X )
 
 # Notification
 (local) [
@@ -181,18 +188,18 @@
                   (java Intent 'putExtra S (next))
                   (java Intent S (next) (next)) ) ) )
          (unless *ResultProxy
-            (java CONTEXT 'setResultProxy
-               (setq *ResultProxy (java T "de.software_lab.pilbox.ResultProxy")) ) )
-         (def 'good *ResultProxy
-            '((Req Intent)
-               (when (asoq Req *ProxyResults)
-                  (del @ '*ProxyResults)
-                  ((cdr @) Intent) ) ) )
-         (def 'bad *ResultProxy
-            '((Req Res)
-               (del (asoq Req *ProxyResults) '*ProxyResults) ) )
+            (setq *ResultProxy (java T "de.software_lab.pilbox.ResultProxy"))
+            (def 'good *ResultProxy
+               '((Req Intent)
+                  (when (asoq Req *ProxyResults)
+                     (del @ '*ProxyResults)
+                     ((cdr @) Intent) ) ) )
+            (def 'bad *ResultProxy
+               '((Req Res)
+                  (del (asoq Req *ProxyResults) '*ProxyResults) ) ) )
          (let Req (inc (0))
             (push '*ProxyResults (cons Req Fun))
+            (java CONTEXT 'setResultProxy *ResultProxy)
             (java (; CONTEXT GUI) 'startActivityForResult Intent Req) ) ) ) )
 
 # GPS access
@@ -211,22 +218,27 @@
       (setq
          *LocMan (java CONTEXT 'getSystemService "location")
          *LocLsn (java T "android.location.LocationListener") )
-      (def 'onLocationChanged *LocLsn
-         '((Loc)
-            (msg Loc " onLocationChanged")
-            NIL ) )
-      (def 'onProviderDisabled *LocLsn
-         '((Prov)) )
-      (def 'onProviderEnabled *LocLsn
-         '((Prov)) )
-      (def 'onStatusChanged *LocLsn
-         '((Prov Stat Extras)) )
+      ## (def 'onLocationChanged *LocLsn
+      ##    '((Loc)) )
+      ## (def 'onProviderDisabled *LocLsn
+      ##    '((Prov)) )
+      ## (def 'onProviderEnabled *LocLsn
+      ##    '((Prov)) )
+      ## (def 'onStatusChanged *LocLsn
+      ##    '((Prov Stat Extras)) )
+      (java *LocMan 'requestLocationUpdates "network" '(L . 10000) (-3 . 100) *LocLsn)
       (java *LocMan 'requestLocationUpdates "gps" '(L . 20000) (-3 . 100) *LocLsn) )
-   (when (java *LocMan 'isProviderEnabled "gps")
-      (let? Loc (java *LocMan 'getLastKnownLocation "gps")
-         (cons
-            (+ (java Loc 'getLatitude) 90000000)
-            (+ (java Loc 'getLongitude) 180000000) ) ) ) )
+   (and
+      (or
+         (and
+            (java *LocMan 'isProviderEnabled "gps")
+            (java *LocMan 'getLastKnownLocation "gps") )
+         (and
+            (java *LocMan 'isProviderEnabled "network")
+            (java *LocMan 'getLastKnownLocation "network") ) )
+      (cons
+         (+ (java @ 'getLatitude) 90000000)
+         (+ (java @ 'getLongitude) 180000000) ) ) )
 
 # Camera access
 (local) [camera? hasSystemFeature]

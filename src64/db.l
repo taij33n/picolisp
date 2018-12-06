@@ -1,4 +1,4 @@
-# 01sep18abu
+# 16oct18abu
 # (c) Software Lab. Alexander Burger
 
 # 6 bytes in little endian format
@@ -1039,18 +1039,27 @@
    pop X
    ret
 
-# (journal 'any ..) -> T
+# (journal ['T] 'any ..) -> T
 (code 'doJournal 2)
    push X
    push Y
    push Z
    ld X E
    ld Y (E CDR)  # Y on args
+   push (DbJnl)  # Push journal
+   push (DbLog)  # and transaction log
+   call evSymY_E  # First arg
+   cmp E TSym  # T?
+   if eq  # Yes
+      ld (DbJnl) 0  # Stop journal
+      ld (DbLog) 0  # and transaction log
+      ld Y (Y CDR)  # Next arg
+      call evSymY_E  # as file name
+   end
    sub S (MaxBlkSize)  # <S /I> Buffer
+   cmp S (StkLimit)  # Stack check
+   jlt stkErr
    do
-      atom Y  # More args?
-   while z  # Yes
-      call evSymY_E  # Next file name
       call pathStringE_SZ  # Write to stack buffer
       cc fopen(S _r_)  # Open file
       ld S Z  # Drop buffer
@@ -1061,6 +1070,8 @@
          cc getc_unlocked(E)  # Next char
          nul4  # EOF?
       while ns  # No
+         cmp A (MaxBlkSize)
+         jgt jnlErrX
          ld C A  # Size in C
          cc fread(Buf 2 1 E)  # Read file number
          cmp A 1  # OK?
@@ -1086,8 +1097,13 @@
       loop
       cc fclose(E)  # Close file pointer
       ld Y (Y CDR)
+      atom Y  # More args?
+   while z  # Yes
+      call evSymY_E  # Next file name
    loop
    add S (MaxBlkSize)  # Drop buffer
+   pop (DbLog)  # Restore transaction log
+   pop (DbJnl)  # and journal
    ld E TSym  # Return T
    pop Z
    pop Y

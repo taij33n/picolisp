@@ -1,4 +1,4 @@
-# 03jul18abu
+# 25oct18abu
 # (c) Software Lab. Alexander Burger
 
 # *JS "*JS" *Style *SsEvts *Menu *Tab *ID
@@ -552,45 +552,48 @@
       (T (ht:Prin Str)) ) )
 
 # Links to previous and next object
-(de stepBtn (Var Cls Hook Msg)
-   (default Msg 'url>)
+# (stepBtn 'lst ['msg])
+# (stepBtn 'var 'cls [['hook] 'msg])
+(de stepBtn (X . @)
    (<span> 'step
-      (use (Rel S1 S2)
-         (if (isa '+Joint (setq Rel (meta *ID Var)))
-            (let Lst (get *ID Var (; Rel slot))
-               (setq
-                  S2 (lit (cadr (memq *ID Lst)))
-                  S1 (lit (car (seek '((L) (== *ID (cadr L))) Lst))) ) )
+      (use (S1 S2)
+         (if (pair X)
+            (let L (memq *ID X)
+               (setq S1 (car (prior L X))  S2 (cadr L)) )
             (let
-               (K
+               (Rel (meta *ID X)
+                  K
                   (cond
                      ((isa '+Key Rel)
-                        (get *ID Var) )
+                        (get *ID X) )
                      ((isa '+Fold Rel)
-                        (cons (fold (get *ID Var)) *ID) )
+                        (cons (fold (get *ID X)) *ID) )
                      (T
                         (cons
-                           (get *ID Var)
+                           (get *ID X)
                            (conc
                               (mapcar '((S) (get *ID S)) (; Rel aux))
                               *ID ) ) ) )
-                  Q1 (init (tree Var Cls Hook) K NIL)
-                  Q2 (init (tree Var Cls Hook) K T) )
+                  Cls (next)
+                  Hook (next)
+                  Q1 (init (tree X Cls Hook) K NIL)
+                  Q2 (init (tree X Cls Hook) K T) )
                (unless (get *ID T)
                   (step Q1 T)
                   (step Q2 T) )
                (setq
-                  S1 (list 'step (lit Q1) T)
-                  S2 (list 'step (lit Q2) T) ) ) )
-         (if (and (eval S1) (send Msg @ *Tab))
-            (<tip> ,"Next object of the same type"
-               (<href> "<<<" (mkUrl @)) )
-            (prin "&lt;&lt;&lt;") )
-         (prin "&nbsp;--&nbsp;")
-         (if (and (eval S2) (send Msg @ *Tab))
-            (<tip> ,"Next object of the same type"
-               (<href> ">>>" (mkUrl @)) )
-            (prin "&gt;&gt;&gt;") ) ) ) )
+                  S1 (step Q1 T)
+                  S2 (step Q2 T) ) ) )
+         (let Msg (or (next) 'url>)
+            (if (and S1 (send Msg @ *Tab))
+               (<tip> ,"Next object of the same type"
+                  (<href> "<<<" (mkUrl @)) )
+               (prin "&lt;&lt;&lt;") )
+            (prin "&nbsp;--&nbsp;")
+            (if (and S2 (send Msg @ *Tab))
+               (<tip> ,"Next object of the same type"
+                  (<href> ">>>" (mkUrl @)) )
+               (prin "&gt;&gt;&gt;") ) ) ) ) )
 
 # Character Separated Values
 (off "*CSV")
@@ -647,7 +650,11 @@
       "<form enctype=\"multipart/form-data\" action=\""
       (sesId Url)
       (and *JS "\" onkeydown=\"return formKey(event)\" onkeypress=\"return formKey(event)\" onsubmit=\"return doPost(this)")
-      "\" method=\"post\">" )
+      "\" method=\"post\""
+      (when (=T Attr)
+         (off Attr)
+         " target=\"_blank\"" )
+      ">" )
    (prin "<noscript><input type=\"hidden\" name=\"*JS\" value=\"\"/></noscript>")
    (tag 'fieldset Attr 2 Prg)
    (prinl "</form>") )

@@ -1,4 +1,4 @@
-# 10mar17abu
+# 16nov18abu
 # (c) Software Lab. Alexander Burger
 
 (allow "fonts/" T)
@@ -219,8 +219,7 @@
          (csStroke) ) ) )
 
 (de mk.svg (Page)
-   (httpHead "image/svg+xml" 0)
-   (ht:Out *Chunked (svg> Page (; Page zoom))) )
+   (svgOut (svg> Page (; Page zoom))) )
 
 (de drawPage ()
    (inc (:: cnt))
@@ -657,8 +656,7 @@
          (url (tmp (: home page ttl) ".tgz")) ) ) )
 
 (de fonts.svg (Page)
-   (httpHead "image/svg+xml" 0)
-   (ht:Out *Chunked
+   (svgOut
       (<svg> 1120 (* 120 (/ (+ 6 (length *FontFamilies)) 7)) "px"
          (<faces> *FontFaces)
          (for (I . F) *FontFamilies

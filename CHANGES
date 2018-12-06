@@ -1,4 +1,9 @@
 * XXdec18 picoLisp-18.12
+   Removed java/ (use PilBox instead)
+   File descriptor argument for 'wait'
+   Bug in 'prior'
+   Bug in setting checkbox values
+   Bug in gc for namespaces
    Bug in initial 'tasks' timeout
    'revolve/2' predicate
    Catch frame bug in coroutines (64-bit)

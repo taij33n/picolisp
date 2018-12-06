@@ -1,4 +1,4 @@
-# 25aug18abu
+# 27nov18abu
 # (c) Software Lab. Alexander Burger
 
 (symbols 'vip 'pico)
@@ -204,14 +204,14 @@
       (curses "wattrset" NIL (: ptr)
          (cond
             (*Flat 0)
-            ((=T (val C))  # A_UNDERLINE
+            ((=T (val C))
                (ifn (>= "^_" C "^A")
-                  131072
+                  131072  # A_UNDERLINE
                   (setq C (char (+ 64 (char C))))
-                  `(+ 131072 512) ) )  # COLOR_PAIR(2)
-            ((>= "^_" C "^A")  # COLOR_PAIR(2)
+                  `(+ 131072 512) ) )  # A_UNDERLINE + COLOR_PAIR(2)
+            ((>= "^_" C "^A")
                (setq C (char (+ 64 (char C))))
-               512 )
+               512 )  # COLOR_PAIR(2)
             ((gt0 (val C)) 256)  # COLOR_PAIR(1)
             (T 0) ) )
       (curses "waddnstr" NIL (: ptr) C  -1) ) )
@@ -457,11 +457,11 @@
             (length (get (: buffer text) (: posY))) ) ) ) )
 
 (de goUp (N)
-   (setq @@ (max 1 (- (: posY) N)))
+   (jmp@@ (max 1 (- (: posY) N)))
    (min1 (: posX) (length (get (: buffer text) @@))) )
 
 (de goDown (N I)
-   (setq @@
+   (jmp@@
       (min1
          (or (=T N) (+ (: posY) N))
          (+ (or I 0) (length (: buffer text))) ) )
@@ -482,7 +482,11 @@
          (beep) ) ) )
 
 (de word (L C)
-   (and (delim? C) (not (delim? (car L))) ) )
+   (and
+      (delim? C)
+      (or
+         (sub? (car L) "\"()[]")
+         (not (delim? (car L))) ) ) )
 
 (de lword (L C)
    (and (sp? C) (not (sp? (car L))) ) )
@@ -495,12 +499,15 @@
 
 (de getWord (Flg Str)
    (make
-      (let (Lst (get (: buffer text) (: posY))  L (nth Lst (: posX)))
+      (let Lst (get (: buffer text) (: posY))
          (when Flg
-            (for C L
+            (for C (nth Lst (: posX))
                (T (delim? C))
                (link C) ) )
-         (until (delim? (car (setq L (prior L Lst))) Str)
+         (for
+            (L (nth Lst (dec (: posX)))
+               (not (delim? (car L)))
+               (prior L Lst) )
             (yoke (car L)) ) ) ) )
 
 (de _forward (Lst C)
@@ -788,7 +795,10 @@
                         (cursor)
                         T ) ) )
                (("^H" "^?" `(char 263))  # [BACKSPACE]
-                  (when (> (: posX) (if (> (: posY) PosY1) 1 PosX1))
+                  (when
+                     (>
+                        (: posX)
+                        (if (= (: posY) PosY1) PosX1 1) )
                      (_bs)
                      (chgLine (car P)) )
                   T )
@@ -938,18 +948,21 @@
                   (match '@W L)
                   (not (fold (car "@Z"))) ) ) ) ) ) )
 
-(de parMatch (Fun1 Par Sup @ParO @ParC @SupO @SupC)
+(de parMatch (Fun1 @Par1 @Sup1 @ParO @ParC @SupO @SupC)
    (moveSearch Fun1
-      (curry (Par Sup @ParO @ParC @SupO @SupC) (L C)
-         (unless (caar L)
-            (case (car L)
-               (@ParO (nil (inc 'Par)))
-               (@ParC (or (not C) (=0 (dec 'Par) Sup)))
-               (@SupO (nil (push 'Sup Par) (zero Par)))
-               (@SupC
-                  (or
-                     (not C)
-                     (=0 (setq Par (++ Sup)) Sup) ) ) ) ) ) ) )
+      (let (Par @Par1  Sup @Sup1)
+         (curry (Par Sup @Par1 @Sup1 @ParO @ParC @SupO @SupC) (L C)
+            (unless (caar L)
+               (and
+                  (case (car L)
+                     (@ParO (nil (inc 'Par)))
+                     (@ParC (or (not C) (= (dec 'Par) 0 Sup)))
+                     (@SupO (nil (push 'Sup Par) (zero Par)))
+                     (@SupC
+                        (or
+                           (not C)
+                           (= (setq Par (++ Sup)) 0 Sup) ) ) )
+                  (setq Par @Par1  Sup @Sup1) ) ) ) ) ) )
 
 (de pipeN (Cnt Line)
    (evRpt
@@ -1172,9 +1185,9 @@
                               (cmdMode) ) )
                         ("." (if *Repeat (eval @) (beep)))  # Repeat last change
                         (("j" `(char 258)) (move 'goDown *Cnt))  # [DOWN] Move down
-                        ((" " "^F" `(char 338)) (move 'goDown *Lines))  # [NPAGE] Page down
+                        ((" " "^F" `(char 338)) (move 'goDown (: lines)))  # [NPAGE] Page down
                         (("k" `(char 259)) (move 'goUp *Cnt))  # [UP] Move up
-                        (("^B" `(char 339)) (move 'goUp *Lines))  # [PPAGE] Page up
+                        (("^B" `(char 339)) (move 'goUp (: lines)))  # [PPAGE] Page up
                         ("h" (move 'goLeft *Cnt))  # Move left
                         ("l" (move 'goRight *Cnt))  # Move right
                         (`(char 260)  # [LEFT] Scroll left

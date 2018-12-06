@@ -1,4 +1,4 @@
-# 15mar18abu
+# 03nov18abu
 # (c) Software Lab. Alexander Burger
 
 # Ersatz PicoLisp Functions
@@ -2980,7 +2980,7 @@ offset (i x y)
 prior (x y)
    y = (x = ex.Cdr).Car.eval();
    x = x.Cdr.Car.eval();
-   if (x != y)
+   if ((y instanceof Cell) && x != y)
       while (x instanceof Cell) {
          if (y == x.Cdr)
             return x;
@@ -3382,9 +3382,14 @@ read (x y)
    return x;
 
 # (wait 'cnt|NIL . prg) -> any
+# (wait 'cnt|NIL T 'fd) -> fd|NIL
 wait (i x y)
    i = (y = (x = ex.Cdr).Car.eval()) == Nil? -1 : xInt(y);
-   for (x = x.Cdr; (y = x.prog()) == Nil;)
+   if ((x = x.Cdr).Car == T) {
+      y = x.Cdr.Car.eval();
+      return waitFd(ex, ((Number)y).Cnt, i) == 0? y : Nil;
+   }
+   while ((y = x.prog()) == Nil)
       if ((i = waitFd(ex, -1, i)) == 0)
          return x.prog();
    return y;

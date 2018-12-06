@@ -1,4 +1,4 @@
-# 10mar17abu
+# 18nov18abu
 # (c) Software Lab. Alexander Burger
 
 # *DX *DY *Pos *Page *StrokeWidth
@@ -15,11 +15,11 @@
    *FontWeight "normal" )
 
 # SVG Element
-(de <svg> (*DX *DY Z . "Prg")
+(de <svg> (*DX *DY "Z" . "Prg")
    (prin
       "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink"
-      "\" width=\"" (if (num? Z) (* @ *DX) (pack *DX Z))
-      "\" height=\"" (if (num? Z) (* @ *DY) (pack *DY Z))
+      "\" width=\"" (if (num? "Z") (* @ *DX) (pack *DX "Z"))
+      "\" height=\"" (if (num? "Z") (* @ *DY) (pack *DY "Z"))
       "\" viewBox=\"0 0 " *DX " " *DY "\"" )
    (dfltCss "svg")
    (prinl ">")
@@ -79,9 +79,9 @@
    (and *Style (htStyle @))
    (prinl "/>") )
 
-(de xlink (Url . Prg)
-   (prinl "<a xlink:href=\"" Url "\">")
-   (run Prg 1)
+(de xlink ("Url" . "Prg")
+   (prinl "<a xlink:href=\"" "Url" "\">")
+   (run "Prg")
    (prinl "</a>") )
 
 # Text
@@ -139,7 +139,7 @@
       (run "Prg") ) )
 
 (de indent ("X" . "Prg")
-   (prinl "<g transform=\"translate(" "X" "," 0 ")\">")
+   (prinl "<g transform=\"translate(" "X" ",0)\">")
    (dec '*DX "X")
    (prog1
       (run "Prg")
@@ -155,8 +155,8 @@
    (prinl "<g transform=\"translate(" "X" "," "Y" ")\">")
    (let *Pos 0
       (prog1
-         (run "Prg") )
-         (prinl "</g>") ) )
+         (run "Prg")
+         (prinl "</g>") ) ) )
 
 (de ps @
    (let A (arg 1)
@@ -197,22 +197,32 @@
 (de down (N)
    (inc '*Pos (or N *FontSize)) )
 
-(de table (Lst . Prg)
+(de table (Fmt . Prg)
    (let (PosX 0  Max *FontSize)
-      (mapc
-         '((N Exe)
-            (when
-               (or
-                  (nT (car (pair Exe)))
-                  (setq Exe (run (cdr Exe) 2)) )
+      (ifn (=T Fmt)
+         (mapc
+            '((N Exe)
+               (when
+                  (or
+                     (nT (car (pair Exe)))
+                     (setq Exe (run (cdr Exe) 2)) )
+                  (window PosX *Pos N Max
+                     (if (atom Exe)
+                        (ps NIL (eval Exe 3))
+                        (eval Exe 3 '(*Pos *DX *DY)) )
+                     (inc 'PosX N)
+                     (setq Max (max *Pos Max)) ) ) )
+            Fmt
+            Prg )
+         (for
+            (N (co 'table (run Prg) (yield))
+               N
                (window PosX *Pos N Max
-                  (if (atom Exe)
-                     (ps NIL (eval Exe 2))
-                     (eval Exe 2 '(*Pos *DX *DY)) )
-                  (inc 'PosX N)
-                  (setq Max (max *Pos Max)) ) ) )
-         Lst
-         Prg )
+                  (prog1
+                     (co 'table T)
+                     (inc 'PosX N)
+                     (setq Max (max *Pos Max)) ) ) ) )
+         (co 'table) )
       (inc '*Pos Max) ) )
 
 (de hline (Y X2 X1)
@@ -234,7 +244,29 @@
    (window 60 102 220 10
       (font Font (ps 0 Abs)) )
    (window 65 125 210 90
-      (run Prg 1) ) )
+      (run Prg 2) ) )
+
+# Direct SVG display
+(de svgOut "Prg"
+   (httpHead "image/svg+xml" 0)
+   (ht:Out *Chunked (run "Prg")) )
+
+# Multipage SVG
+(de svg (*DX *DY "Dst" . "Prg")
+   (zero *Page)
+   (out "Dst"
+      (let page
+         '("Prg2"
+            (prin "<" (inc '*Page) ">")
+            (<svg> *DX *DY "pt"
+               (run "Prg2") ) )
+         (run "Prg") ) )
+   "Dst" )
+
+(de page.svg (File N)
+   (in File
+      (from (pack "<" N ">"))
+      (echo (pack "<" (inc N) ">")) ) )
 
 # Convert to PDF
 (de svgPdf ("Dst" . "Prg")
@@ -244,26 +276,33 @@
    "Dst" )
 
 # Multipage PDF
+# (pdf "src" "dst")
+# (pdf 'dx 'dy "dst" . prg)
 (de pdf (*DX *DY "Dst" . "Prg")
-   (zero *Page)
-   (run "Prg")
+   (if "Dst"
+      (let page  # Generate SVG files
+         '("Prg2"
+            (out (tmp "page" (inc '*Page) ".svg")
+               (<svg> *DX *DY "pt"
+                  (run "Prg2") ) ) )
+         (zero *Page)
+         (run "Prg") )
+      (in *DX  # Multipage SVG file
+         (when (echo (pack "<" (one *Page) ">"))
+            (while
+               (out (tmp "page" *Page ".svg")
+                  (when (echo (pack "<" (inc *Page) ">"))
+                     (inc '*Page) ) ) ) ) )
+      (setq "Dst" *DY) )
    (apply call
       (make
          (for I *Page
-            (link (tmp "pdf" I ".svg")) ) )
+            (link (tmp "page" I ".svg")) ) )
       "rsvg-convert"
       "--dpi-x" 72
       "--dpi-y" 72
       "-f" "pdf"
       "-o" "Dst" )
    "Dst" )
-
-(de page "Prg2"
-   (out (tmp "pdf" (inc '*Page) ".svg")
-      (<svg> *DX *DY "pt"
-         (run "Prg2") ) ) )
-
-(de httpPdf (File)
-   (httpEcho File "application/pdf" 1) )
 
 # vi:et:ts=3:sw=3
